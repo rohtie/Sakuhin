@@ -19,7 +19,7 @@ if __name__ == '__main__':
     shader_window.setAnimating(True)
 
     dashboard_window = DashboardWindow(shader_window)
-    dashboard_window.setFixedSize(desktop_size.width() * 0.5, desktop_size.height())
+    dashboard_window.resize(desktop_size.width() * 0.5, desktop_size.height())
     dashboard_window.show()
 
     sys.exit(app.exec_())
