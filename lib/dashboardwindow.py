@@ -1,0 +1,12 @@
+from PyQt5.QtWidgets import QMainWindow, QAction
+
+
+class DashboardWindow(QMainWindow):
+    def __init__(self, shader_window):
+        super(DashboardWindow, self).__init__()
+
+        toggle_fullscreen_action = QAction("&Toggle fullscreen", self)
+        toggle_fullscreen_action.triggered.connect(shader_window.toggle_fullscreen)
+
+        self.shader_window_menu = self.menuBar().addMenu("&Shader window")
+        self.shader_window_menu.addAction(toggle_fullscreen_action)

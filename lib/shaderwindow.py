@@ -21,6 +21,8 @@ class ShaderWindow(OpenGLWindow):
         file_watcher.addPath('default.frag')
         file_watcher.fileChanged.connect(self.on_file_change)
 
+        self.is_full_screen = False
+
 
     def compile_shaders(self):
         self.shader = QOpenGLShaderProgram(self)
@@ -55,7 +57,6 @@ class ShaderWindow(OpenGLWindow):
         self.shader.setUniformValue("time", self.time.elapsed() / 1000.0)
         self.shader.setUniformValue("resolution", width, height)
 
-        # Fullscreen quad
         gl.glBegin(gl.GL_QUADS)
         gl.glVertex2f(-1, -1)
         gl.glVertex2f(1, -1)
@@ -69,3 +70,13 @@ class ShaderWindow(OpenGLWindow):
     def on_file_change(self, filename):
         self.shader.removeAllShaders()
         self.compile_shaders()
+
+
+    def toggle_fullscreen(self):
+        if self.is_full_screen:
+            self.showNormal()
+            self.is_full_screen = False
+
+        else:
+            self.showFullScreen()
+            self.is_full_screen = True
