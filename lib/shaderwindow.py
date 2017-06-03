@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtCore import QFileSystemWatcher
+from PyQt5.QtCore import QFileSystemWatcher, QElapsedTimer
 from PyQt5.QtGui import (
     QOpenGLShader,
     QOpenGLShaderProgram
@@ -14,7 +14,7 @@ class ShaderWindow(OpenGLWindow):
 
         self.shader = 0
 
-        self.time = QtCore.QTime()
+        self.time = QElapsedTimer()
         self.time.start()
 
         file_watcher = QFileSystemWatcher(self)
@@ -54,7 +54,7 @@ class ShaderWindow(OpenGLWindow):
 
         self.shader.bind()
 
-        self.shader.setUniformValue("time", self.time.elapsed() / 1000.0)
+        self.shader.setUniformValue("time", self.time.nsecsElapsed() * 0.000000001)
         self.shader.setUniformValue("resolution", width, height)
 
         gl.glBegin(gl.GL_QUADS)
