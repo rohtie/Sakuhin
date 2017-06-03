@@ -1,4 +1,5 @@
 from PyQt5 import QtCore
+from PyQt5.QtCore import QFileSystemWatcher
 from PyQt5.QtGui import (
     QOpenGLShader,
     QOpenGLShaderProgram
@@ -12,11 +13,16 @@ class ShaderWindow(OpenGLWindow):
         super(ShaderWindow, self).__init__()
 
         self.shader = 0
+
         self.time = QtCore.QTime()
         self.time.start()
 
+        file_watcher = QFileSystemWatcher(self)
+        file_watcher.addPath('default.frag')
+        file_watcher.fileChanged.connect(self.on_file_change)
 
-    def initialize(self):
+
+    def compile_shaders(self):
         self.shader = QOpenGLShaderProgram(self)
 
         self.shader.addShaderFromSourceFile(
@@ -28,6 +34,10 @@ class ShaderWindow(OpenGLWindow):
             'default.frag')
 
         self.shader.link()
+
+
+    def initialize(self):
+        self.compile_shaders()
 
 
     def render(self, gl):
@@ -54,3 +64,8 @@ class ShaderWindow(OpenGLWindow):
         gl.glEnd()
 
         self.shader.release()
+
+
+    def on_file_change(self, filename):
+        self.shader.removeAllShaders()
+        self.compile_shaders()

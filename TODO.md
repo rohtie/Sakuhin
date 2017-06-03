@@ -4,4 +4,3 @@
     Maximizing might be better for separate screen:
     window.setFlags(QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.FramelessWindowHint)
     window.showMaximized()
-
