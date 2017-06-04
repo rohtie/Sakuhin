@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QAction, QDockWidget
+from PyQt5.QtWidgets import QMainWindow, QAction
 
 from lib.shaderpreviewwidget import ShaderPreviewWidget
 

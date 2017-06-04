@@ -1,10 +1,5 @@
-from PyQt5 import QtCore
 from PyQt5.QtCore import QFileSystemWatcher, QTimer
-from PyQt5.QtGui import (
-    QOpenGLVersionProfile,
-    QOpenGLShader,
-    QOpenGLShaderProgram
-)
+from PyQt5.QtGui import QOpenGLVersionProfile
 from PyQt5.QtWidgets import QOpenGLWidget
 
 from lib.shaderdisplaymixin import ShaderDisplayMixin
