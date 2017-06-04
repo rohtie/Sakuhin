@@ -13,28 +13,20 @@ class SharedContextOpenGLWindow(QWindow):
 
         self.share_context = share_context
 
-        self.m_update_pending = False
-        self.m_animating = False
-        self.m_context = None
-        self.m_gl = None
+        self.has_scheduled_update = False
+        self.gl_context = None
+        self.gl = None
 
         self.setSurfaceType(QWindow.OpenGLSurface)
 
 
-    def initialize(self):
+    def initializeGL(self):
         pass
 
 
-    def setAnimating(self, animating):
-        self.m_animating = animating
-
-        if animating:
-            self.renderLater()
-
-
     def renderLater(self):
-        if not self.m_update_pending:
-            self.m_update_pending = True
+        if not self.has_scheduled_update:
+            self.has_scheduled_update = True
             QGuiApplication.postEvent(self, QEvent(QEvent.UpdateRequest))
 
 
@@ -42,32 +34,32 @@ class SharedContextOpenGLWindow(QWindow):
         if not self.isExposed():
             return
 
-        self.m_update_pending = False
+        self.has_scheduled_update = False
 
         needsInitialize = False
 
-        if self.m_context is None:
-            self.m_context = QOpenGLContext(self)
-            self.m_context.setFormat(self.requestedFormat())
-            self.m_context.setShareContext(self.share_context)
-            self.m_context.create()
+        if self.gl_context is None:
+            self.gl_context = QOpenGLContext(self)
+            self.gl_context.setFormat(self.requestedFormat())
+            self.gl_context.setShareContext(self.share_context)
+            self.gl_context.create()
 
             needsInitialize = True
 
-        self.m_context.makeCurrent(self)
+        self.gl_context.makeCurrent(self)
 
         if needsInitialize:
             profile = QOpenGLVersionProfile()
             profile.setVersion(2, 1)
 
-            self.m_gl = self.m_context.versionFunctions(profile)
-            self.m_gl.initializeOpenGLFunctions()
+            self.gl = self.gl_context.versionFunctions(profile)
+            self.gl.initializeOpenGLFunctions()
 
-            self.initialize()
+            self.initializeGL()
 
-        self.render(self.m_gl)
+        self.paintGL()
 
-        self.m_context.swapBuffers(self)
+        self.gl_context.swapBuffers(self)
 
         self.renderLater()
 

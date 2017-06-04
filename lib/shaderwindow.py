@@ -24,12 +24,12 @@ class ShaderWindow(SharedContextOpenGLWindow, ShaderDisplayMixin):
         self.is_full_screen = False
 
 
-    def initialize(self):
+    def initializeGL(self):
         self.compile_shaders()
 
 
-    def render(self, gl):
-        self.draw_shaders(gl)
+    def paintGL(self):
+        self.draw_shaders(self.gl)
 
 
     def on_file_change(self, filename):
