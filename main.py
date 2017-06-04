@@ -19,6 +19,7 @@ if __name__ == '__main__':
     shader_window = ShaderWindow(dashboard_window)
     shader_window.setFormat(QSurfaceFormat())
     shader_window.setFlags(QtCore.Qt.WindowStaysOnTopHint)
+    shader_window.resize(512, 288)
     shader_window.show()
 
     sys.exit(app.exec_())

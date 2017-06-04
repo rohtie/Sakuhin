@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QEvent
+from PyQt5.QtCore import QEvent, pyqtSignal
 from PyQt5.QtGui import (
     QGuiApplication,
     QOpenGLContext,
@@ -8,6 +8,8 @@ from PyQt5.QtGui import (
 
 
 class SharedContextOpenGLWindow(QWindow):
+    change_window_size = pyqtSignal(int, int)
+
     def __init__(self, share_context, parent=None):
         super(SharedContextOpenGLWindow, self).__init__(parent)
 
@@ -77,4 +79,5 @@ class SharedContextOpenGLWindow(QWindow):
 
 
     def resizeEvent(self, event):
+        self.change_window_size.emit(self.width(), self.height())
         self.renderNow()

@@ -10,6 +10,10 @@ class ShaderWindow(SharedContextOpenGLWindow, ShaderDisplayMixin):
             dashboard_window.shader_preview_widget.context()
         )
 
+        self.change_window_size.connect(
+            dashboard_window.shader_preview_widget.on_shader_window_resize
+        )
+
         self.time = dashboard_window.time
 
         file_watcher = QFileSystemWatcher(self)
