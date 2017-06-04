@@ -1,5 +1,10 @@
 #version 120
 
+uniform sampler2D channel_0;
+uniform sampler2D channel_1;
+uniform sampler2D channel_2;
+uniform sampler2D channel_3;
+
 uniform float time;
 uniform vec2 resolution;
 
@@ -10,5 +15,9 @@ void main() {
     p -= 0.5;
     p.x *= resolution.x / resolution.y;
 
-    gl_FragColor = vec4(vec3(smoothstep(0.35, 0.35 + sin(time * 0.5) * 0.1, length(p))) + vec3(abs(p.x), p.y, 0.5), 1.0);
+    gl_FragColor = vec4(
+        vec3(smoothstep(0.35, 0.35 + sin(time * 0.5) * 0.1, length(p))) +
+        vec3(abs(p.x), p.y, 0.5), 1.0);
+
+    gl_FragColor -= texture2D(channel_0, p + 0.5);
 }

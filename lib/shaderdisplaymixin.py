@@ -5,6 +5,10 @@ from PyQt5.QtGui import (
 
 
 class ShaderDisplayMixin():
+    def __init__(self):
+        self.textures = []
+
+
     def compile_shaders(self, fragment_shader='default.frag'):
         self.shader = QOpenGLShaderProgram(self)
 
@@ -34,6 +38,10 @@ class ShaderDisplayMixin():
         self.shader.setUniformValue("time", self.time.elapsed() / 1000.0)
         self.shader.setUniformValue("resolution", width, height)
 
+        for i in range(len(self.textures)):
+            self.textures[i].bind(i)
+            self.shader.setUniformValue('channel_' + str(i), i)
+
         gl.glBegin(gl.GL_QUADS)
         gl.glVertex2f(-1, -1)
         gl.glVertex2f(1, -1)
@@ -42,3 +50,7 @@ class ShaderDisplayMixin():
         gl.glEnd()
 
         self.shader.release()
+
+
+    def add_texture(self, texture):
+        self.textures.append(texture)

@@ -22,6 +22,8 @@ class ShaderWindow(SharedContextOpenGLWindow, ShaderDisplayMixin):
 
         self.shader = 0
 
+        dashboard_window.load_texture.connect(self.add_texture)
+
         dashboard_window.toggle_fullscreen_action.triggered.connect(
             self.toggle_fullscreen
         )
