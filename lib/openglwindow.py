@@ -7,9 +7,11 @@ from PyQt5.QtGui import (
 )
 
 
-class OpenGLWindow(QWindow):
-    def __init__(self, parent=None):
-        super(OpenGLWindow, self).__init__(parent)
+class SharedContextOpenGLWindow(QWindow):
+    def __init__(self, share_context, parent=None):
+        super(SharedContextOpenGLWindow, self).__init__(parent)
+
+        self.share_context = share_context
 
         self.m_update_pending = False
         self.m_animating = False
@@ -47,6 +49,7 @@ class OpenGLWindow(QWindow):
         if self.m_context is None:
             self.m_context = QOpenGLContext(self)
             self.m_context.setFormat(self.requestedFormat())
+            self.m_context.setShareContext(self.share_context)
             self.m_context.create()
 
             needsInitialize = True
@@ -66,8 +69,7 @@ class OpenGLWindow(QWindow):
 
         self.m_context.swapBuffers(self)
 
-        if self.m_animating:
-            self.renderLater()
+        self.renderLater()
 
 
     def event(self, event):
@@ -75,7 +77,7 @@ class OpenGLWindow(QWindow):
             self.renderNow()
             return True
 
-        return super(OpenGLWindow, self).event(event)
+        return super(SharedContextOpenGLWindow, self).event(event)
 
 
     def exposeEvent(self, event):

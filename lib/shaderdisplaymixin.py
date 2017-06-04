@@ -1,15 +1,10 @@
-from PyQt5.QtCore import QElapsedTimer
 from PyQt5.QtGui import (
     QOpenGLShader,
     QOpenGLShaderProgram
 )
 
+
 class ShaderDisplayMixin():
-    def setup_shader_time(self):
-        self.time = QElapsedTimer()
-        self.time.start()
-
-
     def compile_shaders(self, fragment_shader='default.frag'):
         self.shader = QOpenGLShaderProgram(self)
 

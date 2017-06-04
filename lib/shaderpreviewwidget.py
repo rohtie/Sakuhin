@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QFileSystemWatcher, QTimer
+from PyQt5.QtCore import QTimer, QFileSystemWatcher
 from PyQt5.QtGui import QOpenGLVersionProfile
 from PyQt5.QtWidgets import QOpenGLWidget
 
@@ -6,20 +6,20 @@ from lib.shaderdisplaymixin import ShaderDisplayMixin
 
 
 class ShaderPreviewWidget(QOpenGLWidget, ShaderDisplayMixin):
-    def __init__(self, parent=None):
+    def __init__(self, time, parent=None):
         super(ShaderPreviewWidget, self).__init__(parent)
+
+        self.time = time
 
         timer = QTimer(self)
         timer.timeout.connect(self.update)
         timer.start(10)
 
-        self.shader = 0
-
-        self.setup_shader_time()
-
         file_watcher = QFileSystemWatcher(self)
         file_watcher.addPath('default.frag')
         file_watcher.fileChanged.connect(self.on_file_change)
+
+        self.shader = 0
 
 
     def initializeGL(self):
@@ -43,3 +43,4 @@ class ShaderPreviewWidget(QOpenGLWidget, ShaderDisplayMixin):
 
     def resizeGL(self, width, height):
         pass
+
