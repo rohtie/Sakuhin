@@ -8,7 +8,7 @@ ApplicationWindow {
     id: applicationWindow
     flags: Qt.FramelessWindowHint
     visible: true
-    width: 320
+    width: 382
     height: 748
     color: "#191919"
     title: "Shikaku"
@@ -26,7 +26,7 @@ ApplicationWindow {
 
         Image {
             id: preview
-            height: 180
+            height: 215
             anchors.right: parent.right
             anchors.rightMargin: 0
             anchors.left: parent.left
@@ -76,7 +76,23 @@ ApplicationWindow {
                 spacing: 10
 
                 Image {
+                    id: image30
+                    width: 52
+                    height: 52
+                    fillMode: Image.PreserveAspectCrop
+                    source: "tmp/MtXSzf.jpg"
+                }
+
+                Image {
                     id: image
+                    width: 52
+                    height: 52
+                    fillMode: Image.PreserveAspectCrop
+                    source: "tmp/XlscD4.jpg"
+                }
+
+                Image {
+                    id: image6
                     width: 52
                     height: 52
                     fillMode: Image.PreserveAspectCrop
@@ -124,13 +140,6 @@ ApplicationWindow {
                     source: "tmp/XlsyDn.jpg"
                 }
 
-                Image {
-                    id: image6
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XlscD4.jpg"
-                }
 
                 Image {
                     id: image7
@@ -173,6 +182,14 @@ ApplicationWindow {
                 }
 
                 Image {
+                    id: image16
+                    width: 52
+                    height: 52
+                    fillMode: Image.PreserveAspectCrop
+                    source: "tmp/XtsyWN.jpg"
+                }
+
+                Image {
                     id: image12
                     width: 52
                     height: 52
@@ -205,12 +222,13 @@ ApplicationWindow {
                 }
 
                 Image {
-                    id: image16
+                    id: image19
                     width: 52
                     height: 52
                     fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XtsyWN.jpg"
+                    source: "tmp/llsczl.jpg"
                 }
+
 
                 Image {
                     id: image17
@@ -229,12 +247,13 @@ ApplicationWindow {
                 }
 
                 Image {
-                    id: image19
+                    id: image24
                     width: 52
                     height: 52
                     fillMode: Image.PreserveAspectCrop
-                    source: "tmp/llsczl.jpg"
+                    source: "tmp/XlscD4.jpg"
                 }
+
 
                 Image {
                     id: image20
@@ -268,12 +287,13 @@ ApplicationWindow {
                     source: "tmp/XlsyDn.jpg"
                 }
 
+
                 Image {
-                    id: image24
+                    id: image31
                     width: 52
                     height: 52
                     fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XlscD4.jpg"
+                    source: "tmp/MtXSzf.jpg"
                 }
 
                 Image {
@@ -315,6 +335,8 @@ ApplicationWindow {
                     fillMode: Image.PreserveAspectCrop
                     source: "tmp/XlsyDn.jpg"
                 }
+
+
             }
         }
 
