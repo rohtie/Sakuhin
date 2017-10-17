@@ -1,11 +1,20 @@
 # Shikaku
 
-Software for live coding visuals
+Software for live coding visuals with OpenGL shaders
+
 
 #### Features
 
-* Input textures and video
-* Microphone analysis with FFT, converted to a 1D texture
-* Support using frames from the past to create delays
-* Use other shaders as input
-* Simple transitions, crossfade, etc
+* Small vertical GUI so that you can have your favorite text editor next to it
+* Channel input to shader
+    * Textures
+    * Shaders
+    * FFT analysed microphone
+    * Webcam
+
+* Integrated MIDI controller passing its values to the shader
+* Integration with [Splash](https://github.com/paperManu/splash) for advanced projection mapping
+
+#### Technology
+
+The UI is built with Qt Quick and has a C++ backend handling the OpenGL.
