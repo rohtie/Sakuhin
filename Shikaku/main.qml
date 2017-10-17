@@ -46,6 +46,11 @@ ApplicationWindow {
             font.pointSize: 8
             font.family: "Tahoma"
             anchors.right: parent.right
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: shaders.visible = !shaders.visible
+            }
         }
 
         ScrollView {
@@ -351,6 +356,11 @@ ApplicationWindow {
             anchors.rightMargin: 10
             font.family: "Tahoma"
             anchors.right: parent.right
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: channels.visible = !channels.visible
+            }
         }
 
         Flow {
@@ -418,10 +428,15 @@ ApplicationWindow {
             anchors.right: parent.right
             font.family: "Tahoma"
             anchors.leftMargin: 10
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: controllers.visible = !controllers.visible
+            }
         }
 
         RowLayout {
-            id: rowLayout
+            id: controllers
             height: 150
             spacing: 0
             anchors.right: parent.right
