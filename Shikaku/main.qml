@@ -10,7 +10,7 @@ ApplicationWindow {
     visible: true
     width: 382
     height: 748
-    color: "#191919"
+    color: "#111117"
     title: "Shikaku"
 
 
@@ -33,35 +33,6 @@ ApplicationWindow {
             anchors.leftMargin: 0
             fillMode: Image.PreserveAspectFit
             source: "tmp/XlscD4.jpg"
-
-            Rectangle {
-                id: overlay
-                y: 190
-                height: 25
-                color: "#80000000"
-                border.width: 0
-                anchors.bottom: parent.verticalCenter
-                anchors.bottomMargin: -107
-                anchors.right: parent.right
-                anchors.rightMargin: 0
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-
-                Label {
-                    id: fps
-                    height: 15
-                    color: "#dddddd"
-                    text: qsTr("60 fps")
-                    horizontalAlignment: Text.AlignRight
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.rightMargin: 10
-                    font.pointSize: 8
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    font.family: "Tahoma"
-                    anchors.leftMargin: 10
-                }
-            }
         }
 
         Label {
@@ -397,42 +368,42 @@ ApplicationWindow {
                 id: rectangle12
                 width: 52
                 height: 52
-                color: "#747474"
+                color: "#69697b"
             }
 
             Rectangle {
                 id: rectangle13
                 width: 52
                 height: 52
-                color: "#747474"
+                color: "#69697b"
             }
 
             Rectangle {
                 id: rectangle14
                 width: 52
                 height: 52
-                color: "#747474"
+                color: "#69697b"
             }
 
             Rectangle {
                 id: rectangle15
                 width: 52
                 height: 52
-                color: "#747474"
+                color: "#69697b"
             }
 
             Rectangle {
                 id: rectangle16
                 width: 52
                 height: 52
-                color: "#747474"
+                color: "#69697b"
             }
 
             Rectangle {
                 id: rectangle17
                 width: 52
                 height: 52
-                color: "#747474"
+                color: "#69697b"
             }
         }
 
@@ -480,7 +451,7 @@ ApplicationWindow {
                     width: implicitWidth
                     height: control.availableHeight
                     radius: 2
-                    color: "#747474"
+                    color: "#69697b"
 
                     Rectangle {
                         anchors.bottom: parent.bottom
@@ -506,7 +477,7 @@ ApplicationWindow {
                     y: control1.topPadding + control1.availableHeight / 2 - height / 2
                     width: implicitWidth
                     height: control1.availableHeight
-                    color: "#747474"
+                    color: "#69697b"
                     radius: 2
                     Rectangle {
                         width: parent.width
@@ -536,7 +507,7 @@ ApplicationWindow {
                     y: control2.topPadding + control2.availableHeight / 2 - height / 2
                     width: implicitWidth
                     height: control2.availableHeight
-                    color: "#747474"
+                    color: "#69697b"
                     radius: 2
                     Rectangle {
                         width: parent.width
@@ -566,7 +537,7 @@ ApplicationWindow {
                     y: control3.topPadding + control3.availableHeight / 2 - height / 2
                     width: implicitWidth
                     height: control3.availableHeight
-                    color: "#747474"
+                    color: "#69697b"
                     radius: 2
                     Rectangle {
                         width: parent.width
@@ -584,5 +555,23 @@ ApplicationWindow {
             }
         }
 
+    }
+
+    Label {
+        id: info
+        x: -5
+        y: -8
+        height: 15
+        color: "#dddddd"
+        text: qsTr("60 fps")
+        horizontalAlignment: Text.AlignRight
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 10
+        anchors.rightMargin: 10
+        font.pointSize: 8
+        anchors.left: parent.left
+        anchors.right: parent.right
+        font.family: "Tahoma"
+        anchors.leftMargin: 10
     }
 }
