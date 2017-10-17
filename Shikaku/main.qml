@@ -33,6 +33,35 @@ ApplicationWindow {
             anchors.leftMargin: 0
             fillMode: Image.PreserveAspectFit
             source: "tmp/XlscD4.jpg"
+
+            Rectangle {
+                id: overlay
+                y: 190
+                height: 25
+                color: "#80000000"
+                border.width: 0
+                anchors.bottom: parent.verticalCenter
+                anchors.bottomMargin: -107
+                anchors.right: parent.right
+                anchors.rightMargin: 0
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+
+                Label {
+                    id: fps
+                    height: 15
+                    color: "#dddddd"
+                    text: qsTr("60 fps")
+                    horizontalAlignment: Text.AlignRight
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.rightMargin: 10
+                    font.pointSize: 8
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    font.family: "Tahoma"
+                    anchors.leftMargin: 10
+                }
+            }
         }
 
         Label {
@@ -51,7 +80,7 @@ ApplicationWindow {
         ScrollView {
             id: shaders
             height: 155
-            contentHeight: 362
+            contentHeight: flow1.height
             rightPadding: 0
             topPadding: 0
             anchors.left: parent.left
@@ -356,7 +385,7 @@ ApplicationWindow {
         Flow {
             id: channels
             width: 300
-            height: 114
+            height: 52
             clip: true
             anchors.left: parent.left
             anchors.leftMargin: 10
@@ -405,47 +434,155 @@ ApplicationWindow {
                 height: 52
                 color: "#747474"
             }
+        }
 
-            Rectangle {
-                id: rectangle18
-                width: 52
-                height: 52
-                color: "#747474"
+        Label {
+            id: controller_label
+            height: 15
+            color: "#dddddd"
+            text: qsTr("Controller")
+            anchors.rightMargin: 10
+            font.pointSize: 8
+            anchors.left: parent.left
+            anchors.right: parent.right
+            font.family: "Tahoma"
+            anchors.leftMargin: 10
+        }
+
+        RowLayout {
+            id: rowLayout
+            height: 150
+            spacing: 0
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+
+            Slider {
+                id: control
+                width: 10
+                height: 133
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.fillHeight: true
+                wheelEnabled: true
+                value: 0.5
+                orientation: Qt.Vertical
+
+                onVisualPositionChanged: console.log(1. - control.visualPosition)
+
+                background: Rectangle {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    x: control.leftPadding
+                    y: control.topPadding + control.availableHeight / 2 - height / 2
+                    implicitWidth: 10
+                    implicitHeight: 100
+                    width: implicitWidth
+                    height: control.availableHeight
+                    radius: 2
+                    color: "#747474"
+
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+
+                        width: parent.width
+                        height: (1. - control.visualPosition) * parent.height
+                        color: "#21be2b"
+                        radius: 2
+                    }
+                }
             }
 
-            Rectangle {
-                id: rectangle19
-                width: 52
-                height: 52
-                color: "#747474"
+            Slider {
+                id: control1
+                width: 10
+                height: 133
+                Layout.fillWidth: true
+                value: 0.5
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.fillHeight: true
+                background: Rectangle {
+                    x: control1.leftPadding
+                    y: control1.topPadding + control1.availableHeight / 2 - height / 2
+                    width: implicitWidth
+                    height: control1.availableHeight
+                    color: "#747474"
+                    radius: 2
+                    Rectangle {
+                        width: parent.width
+                        height: (1. - control1.visualPosition) * parent.height
+                        color: "#21be2b"
+                        radius: 2
+                        anchors.bottom: parent.bottom
+                    }
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    implicitWidth: 10
+                    implicitHeight: 100
+                }
+                wheelEnabled: true
+                orientation: Qt.Vertical
             }
 
-            Rectangle {
-                id: rectangle20
-                width: 52
-                height: 52
-                color: "#747474"
+            Slider {
+                id: control2
+                width: 10
+                height: 133
+                Layout.fillWidth: true
+                value: 0.5
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.fillHeight: true
+                background: Rectangle {
+                    x: control2.leftPadding
+                    y: control2.topPadding + control2.availableHeight / 2 - height / 2
+                    width: implicitWidth
+                    height: control2.availableHeight
+                    color: "#747474"
+                    radius: 2
+                    Rectangle {
+                        width: parent.width
+                        height: (1. - control2.visualPosition) * parent.height
+                        color: "#21be2b"
+                        radius: 2
+                        anchors.bottom: parent.bottom
+                    }
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    implicitWidth: 10
+                    implicitHeight: 100
+                }
+                wheelEnabled: true
+                orientation: Qt.Vertical
             }
 
-            Rectangle {
-                id: rectangle21
-                width: 52
-                height: 52
-                color: "#747474"
+            Slider {
+                id: control3
+                width: 10
+                height: 133
+                Layout.fillWidth: true
+                value: 0.5
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.fillHeight: true
+                background: Rectangle {
+                    x: control3.leftPadding
+                    y: control3.topPadding + control3.availableHeight / 2 - height / 2
+                    width: implicitWidth
+                    height: control3.availableHeight
+                    color: "#747474"
+                    radius: 2
+                    Rectangle {
+                        width: parent.width
+                        height: (1. - control3.visualPosition) * parent.height
+                        color: "#21be2b"
+                        radius: 2
+                        anchors.bottom: parent.bottom
+                    }
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    implicitWidth: 10
+                    implicitHeight: 100
+                }
+                wheelEnabled: true
+                orientation: Qt.Vertical
             }
         }
 
-
-
-
-
     }
-
-
-
-
-
-
-
-
 }
