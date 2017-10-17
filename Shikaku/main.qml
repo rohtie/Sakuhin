@@ -525,6 +525,8 @@ ApplicationWindow {
                 value: 0.5
                 orientation: Qt.Vertical
 
+                // TODO: Find a way to do this without having to
+                //       invert the slider values
                 onVisualPositionChanged: console.log(1. - control.visualPosition)
 
                 background: Rectangle {
