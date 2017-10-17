@@ -35,11 +35,15 @@ ApplicationWindow {
             source: "tmp/XlscD4.jpg"
         }
 
+
+
+
+
         Label {
             id: shaders_label
             height: 15
             color: "#dddddd"
-            text: qsTr("Shaders")
+            text: "Shaders"
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.rightMargin: 10
@@ -49,7 +53,26 @@ ApplicationWindow {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: shaders.visible = !shaders.visible
+                onClicked: {
+                    shaders.visible = !shaders.visible
+                    shaders_icon.text = shaders.visible ? '-' : '+'
+                }
+            }
+
+            Label {
+                id: shaders_icon
+                x: 0
+                y: 0
+                height: 15
+                color: "#dddddd"
+                text: '-'
+                horizontalAlignment: Text.AlignRight
+                anchors.rightMargin: 0
+                font.pointSize: 8
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.family: "Tahoma"
+                anchors.leftMargin: 0
             }
         }
 
@@ -349,7 +372,7 @@ ApplicationWindow {
             id: channels_label
             height: 15
             color: "#dddddd"
-            text: qsTr("Channels")
+            text: 'Channels'
             font.pointSize: 8
             anchors.left: parent.left
             anchors.leftMargin: 10
@@ -359,7 +382,26 @@ ApplicationWindow {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: channels.visible = !channels.visible
+                onClicked: {
+                    channels.visible = !channels.visible
+                    channels_icon.text = channels.visible ? '-' : '+'
+                }
+            }
+
+            Label {
+                id: channels_icon
+                x: 0
+                y: 0
+                height: 15
+                color: "#dddddd"
+                text: '-'
+                horizontalAlignment: Text.AlignRight
+                anchors.rightMargin: 0
+                font.pointSize: 8
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.family: "Tahoma"
+                anchors.leftMargin: 0
             }
         }
 
@@ -421,22 +463,41 @@ ApplicationWindow {
             id: controller_label
             height: 15
             color: "#dddddd"
-            text: qsTr("Controller")
+            text: "Controllers"
+            anchors.left: parent.left
+            anchors.leftMargin: 10
             anchors.rightMargin: 10
             font.pointSize: 8
-            anchors.left: parent.left
-            anchors.right: parent.right
             font.family: "Tahoma"
-            anchors.leftMargin: 10
+            anchors.right: parent.right
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: controllers.visible = !controllers.visible
+                onClicked: {
+                    controller.visible = !controller.visible
+                    controller_icon.text = controller.visible ? '-' : '+'
+                }
+            }
+
+            Label {
+                id: controller_icon
+                x: 0
+                y: 0
+                height: 15
+                color: "#dddddd"
+                text: '-'
+                horizontalAlignment: Text.AlignRight
+                anchors.rightMargin: 0
+                font.pointSize: 8
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.family: "Tahoma"
+                anchors.leftMargin: 0
             }
         }
 
         RowLayout {
-            id: controllers
+            id: controller
             height: 150
             spacing: 0
             anchors.right: parent.right
@@ -569,6 +630,7 @@ ApplicationWindow {
                 orientation: Qt.Vertical
             }
         }
+
 
     }
 
