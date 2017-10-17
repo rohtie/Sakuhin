@@ -37,7 +37,16 @@ ApplicationWindow {
 
 
 
-
+        Image {
+            id: spectrum
+            height: 25
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            fillMode: Image.PreserveAspectFit
+            source: "tmp/spectrum.jpg"
+        }
 
         Label {
             id: shaders_label
