@@ -13,3 +13,5 @@
 
     * Every sound from the configured microphones are recorded and added to the git repo
 
+* Inline error display through sublime text using its phantom API
+	* https://www.sublimetext.com/docs/3/api_reference.html#sublime.Phantom
