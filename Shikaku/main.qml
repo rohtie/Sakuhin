@@ -3,9 +3,10 @@ import QtQuick.Controls 2.2
 import QtQuick.Extras 1.4
 import QtQuick.Layouts 1.3
 import QtQuick.Templates 2.2
+import shikaku.backend 1.0
 
 ApplicationWindow {
-    id: applicationWindow
+    id: root
     flags: Qt.FramelessWindowHint
     visible: true
     width: 382
@@ -13,11 +14,9 @@ ApplicationWindow {
     color: "#111117"
     title: "Shikaku"
 
-
-
-
-
-
+    BackEnd {
+        id: backend
+    }
 
     Column {
         id: column
@@ -522,12 +521,10 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Layout.fillHeight: true
                 wheelEnabled: true
-                value: 0.5
                 orientation: Qt.Vertical
+                value: backend.sliderValue
 
-                // TODO: Find a way to do this without having to
-                //       invert the slider values
-                onVisualPositionChanged: console.log(1. - control.visualPosition)
+                onValueChanged: backend.sliderValue = value
 
                 background: Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -643,6 +640,7 @@ ApplicationWindow {
         }
 
 
+
     }
 
     Label {
@@ -662,4 +660,5 @@ ApplicationWindow {
         font.family: "Tahoma"
         anchors.leftMargin: 10
     }
+
 }
