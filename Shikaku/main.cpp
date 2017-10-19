@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 
 #include "backend.h"
+#include "window.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +15,16 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
+
+    QSurfaceFormat format;
+    format.setRenderableType(QSurfaceFormat::OpenGL);
+    format.setProfile(QSurfaceFormat::CoreProfile);
+    format.setVersion(4, 5);
+
+    Window window;
+    window.setFormat(format);
+    window.resize(QSize(800, 600));
+    window.show();
 
     return app.exec();
 }
