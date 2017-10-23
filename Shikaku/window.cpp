@@ -29,10 +29,13 @@ void Window::initializeGL() {
 
     shader.addShaderFromSourceCode(QOpenGLShader::Fragment,
         "#version 450 core\n"
+
+        "uniform vec2 resolution;\n"
+
         "out vec4 color;\n"
 
         "void main() {\n"
-        "   color = vec4(0., 1., 0., 1.);\n"
+        "   color = vec4(resolution.x / 1024., 1., resolution.y / 1024, 1.);\n"
         "}\n"
     );
 
@@ -53,14 +56,12 @@ void Window::initializeGL() {
     shader.release();
 }
 
-void Window::resizeGL(int width, int height) {
-    qDebug() << "GL window" << width << "x" << height;
-}
-
 void Window::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     shader.bind();
+    shader.setUniformValue("resolution", width(), height());
+
         vao.bind();
             glDrawArrays(GL_TRIANGLES, 0, 6);
         vao.release();

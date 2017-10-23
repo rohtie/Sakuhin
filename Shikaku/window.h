@@ -14,7 +14,6 @@ class Window : public QOpenGLWindow,
 
     public:
         void initializeGL();
-        void resizeGL(int width, int height);
         void paintGL();
 
     private:
