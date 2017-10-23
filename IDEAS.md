@@ -14,46 +14,76 @@
     * Every sound from the configured microphones are recorded and added to the git repo
 
     * Folder structure
-    	sessions
-    		unixtime_day-month-year
-    			session.json
+        * sessions
+            * `unixtime_sec`_`day`-`month`-`year`
+                * .git (git repo)
+                * session.json (metadata about the session)
+                * controller.json (log of controller input changes)
+                * session.glsl (The file edited by user)
+                * shaders (directory of shaders created this session)
+                    * `unixtime_sec`.glsl
+                    * `unixtime_sec`.glsl
+                    * [...]
+                    * `unixtime_sec`.glsl
+                * audio (directory of audio clips recorded this session)
+                    * `unixtime_sec`.wav
+                    * `unixtime_sec`.wav
+                    * [...]
+                    * `unixtime_sec`.wav
+
+    * Everything is saved and committed each time shader is recompiled
+        * Audio clips saved to the audio directory
 
     * session.json
-    	{
-    		"group": "Mary & the merry ferry men",
-    		"event": "Døgnfluer",
-    		"location": "Ingensteds",
-    		"time": 1508747965,
-    		"media": [
-    			"https://vimeo.com/234113971",
-    			"https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/21728190_1022594971210987_8230294931162665398_n.jpg?oh=e602ba82cf5bdd141d4cf79a1b81bdca&oe=5A6A9DF6"
-    		],
-    		"credits": {
-    			"Thor Merlin Lervik": [
-    				"visuals",
-    			],
+        ~~~~
+        {
+            "group": "Mary & the merry ferry men",
+            "event": "Døgnfluer",
+            "location": "Ingensteds",
+            "time": unixtime_sec,
+            "media": [
+                "https://vimeo.com/234113971"
+            ],
+            "credits": {
+                "Thor Merlin Lervik": [
+                    "visuals",
+                ],
 
-    			"Signe Krunderup Emmeluth": [
-    				"sax",
-    				"lead vocals",
-    				"keyboard"
-    			],
+                "Signe Krunderup Emmeluth": [
+                    "sax",
+                    "lead vocals",
+                    "keyboard"
+                ],
 
-    			"Jon Fosmark": [
-    				"drums",
-    				"congas",
-    				"synth",
-    				"typewriter",
-    				"backing vocals"
-    			],
+                "Jon Fosmark": [
+                    "drums",
+                    "congas",
+                    "synth",
+                    "typewriter",
+                    "backing vocals"
+                ],
 
-    			"Elias Tafjord": [
-    				"drums",
-    				"kalimba",
-    				"backing vocals"
-    			]
-    		}
-    	}
+                "Elias Tafjord": [
+                    "drums",
+                    "kalimba",
+                    "backing vocals"
+                ]
+            }
+        }
+        ~~~~
+
+    * controller.json (saved on every change)
+        ~~~~
+        {
+            "unixtime_msec": {
+                "slider0": 0.50,
+                "slider1": 0.39,
+                "slider2": 0.25,
+                "slider3": 0.99
+            }
+        }
+        ~~~~
+
 
 * Inline error display through sublime text using its phantom API
-	* https://www.sublimetext.com/docs/3/api_reference.html#sublime.Phantom
+    * https://www.sublimetext.com/docs/3/api_reference.html#sublime.Phantom
