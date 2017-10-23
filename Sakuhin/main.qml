@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Extras 1.4
 import QtQuick.Layouts 1.3
 import QtQuick.Templates 2.2
-import shikaku.backend 1.0
+import sakuhin.backend 1.0
 
 ApplicationWindow {
     id: root
@@ -12,7 +12,7 @@ ApplicationWindow {
     width: 382
     height: 748
     color: "#111117"
-    title: "Shikaku"
+    title: "Sakuhin"
 
     BackEnd {
         id: backend

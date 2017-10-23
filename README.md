@@ -1,4 +1,4 @@
-# Shikaku
+# Sakuhin
 
 Software for live coding visuals with OpenGL shaders
 
