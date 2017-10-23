@@ -18,6 +18,8 @@ ApplicationWindow {
         id: backend
     }
 
+    Component.onCompleted: backend.createSession();
+
     Column {
         id: column
         spacing: 10
@@ -33,8 +35,6 @@ ApplicationWindow {
             fillMode: Image.PreserveAspectFit
             source: "tmp/XlscD4.jpg"
         }
-
-
 
         Image {
             id: spectrum
@@ -371,8 +371,6 @@ ApplicationWindow {
                     fillMode: Image.PreserveAspectCrop
                     source: "tmp/XlsyDn.jpg"
                 }
-
-
             }
         }
 
@@ -638,9 +636,6 @@ ApplicationWindow {
                 orientation: Qt.Vertical
             }
         }
-
-
-
     }
 
     Label {
@@ -660,5 +655,4 @@ ApplicationWindow {
         font.family: "Tahoma"
         anchors.leftMargin: 10
     }
-
 }

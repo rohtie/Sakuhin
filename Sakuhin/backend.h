@@ -3,8 +3,7 @@
 
 #include <QObject>
 
-class BackEnd : public QObject
-{
+class BackEnd : public QObject {
     Q_OBJECT
     Q_PROPERTY(
     	double sliderValue
@@ -13,17 +12,18 @@ class BackEnd : public QObject
     	NOTIFY sliderValueChanged
     )
 
-public:
-    explicit BackEnd(QObject *parent = nullptr);
+    public:
+        explicit BackEnd(QObject *parent = nullptr);
 
-    double sliderValue();
-    void setSliderValue(const double &sliderValue);
+        double sliderValue();
+        void setSliderValue(const double &sliderValue);
+        Q_INVOKABLE void createSession();
 
-signals:
-    void sliderValueChanged();
+    signals:
+        void sliderValueChanged();
 
-private:
-    double m_sliderValue;
+    private:
+        double m_sliderValue;
 };
 
 #endif // BACKEND_H
