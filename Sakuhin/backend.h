@@ -16,6 +16,7 @@ class BackEnd : public QObject {
         explicit BackEnd(QObject *parent = nullptr);
 
         double sliderValue();
+        QString getSessionID();
         void setSliderValue(const double &sliderValue);
         Q_INVOKABLE void createSession();
 
@@ -24,6 +25,7 @@ class BackEnd : public QObject {
 
     private:
         double m_sliderValue;
+        QString sessionID;
 };
 
 #endif // BACKEND_H

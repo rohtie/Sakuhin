@@ -10,5 +10,8 @@
         <file>tmp/XlscD4.jpg</file>
         <file>tmp/XlsyDn.jpg</file>
         <file>tmp/XtsyWN.jpg</file>
+        <file>templates/default.glsl</file>
+        <file>footer.glsl</file>
+        <file>header.glsl</file>
     </qresource>
 </RCC>

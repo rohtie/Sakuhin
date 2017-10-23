@@ -26,15 +26,17 @@ void BackEnd::setSliderValue(const double &sliderValue) {
 
 void BackEnd::createSession() {
     QString creationTime = QString::number(QDateTime::currentSecsSinceEpoch());
+    sessionID = creationTime;
+    QString sessionPath = "sessions/" + sessionID;
 
     QDir rootDirectory(QDir::currentPath());
 
-    if (!rootDirectory.mkpath("sessions/" + creationTime)) {
+    if (!rootDirectory.mkpath(sessionPath)) {
         qDebug() << "Couldn't make path";
         return;
     }
 
-    QFile sessionFile("sessions/" + creationTime + "/session.json");
+    QFile sessionFile(sessionPath + "/session.json");
 
     if (!sessionFile.open(QIODevice::WriteOnly)) {
         qDebug() << "Couldn't open save file";
@@ -47,5 +49,15 @@ void BackEnd::createSession() {
     QJsonDocument sessionDocument(session);
     sessionFile.write(sessionDocument.toJson());
 
+    QFile shaderFile(":/templates/default.glsl");
+    if (!shaderFile.copy(sessionPath + "/session.glsl")) {
+        qDebug() << "Couldn't copy default template to session folder";
+        return;
+    }
+
     qDebug() << "Session is created";
+}
+
+QString BackEnd::getSessionID() {
+    return sessionID;
 }

@@ -1,6 +1,10 @@
 #include "window.h"
 #include <QDebug>
 #include <QString>
+#include <QFile>
+
+
+#include "backend.h"
 
 static GLfloat const rectangle[] = {
     -1.0f,  1.0f, 0.0f,
@@ -11,6 +15,23 @@ static GLfloat const rectangle[] = {
      1.0f,  1.0f, 0.0f,
      1.0f, -1.0f, 0.0f
 };
+
+Window::Window(BackEnd *_backend) {
+    backend = _backend;
+}
+
+QString Window::buildShader() {
+    QFile header(":/header.glsl");
+    header.open(QIODevice::ReadOnly);
+
+    QFile session("sessions/" + backend->getSessionID() + "/session.glsl");
+    session.open(QIODevice::ReadOnly);
+
+    QFile footer(":/footer.glsl");
+    footer.open(QIODevice::ReadOnly);
+
+    return QString(header.readAll()) + QString(session.readAll()) + QString(footer.readAll());
+}
 
 void Window::initializeGL() {
     initializeOpenGLFunctions();
@@ -27,17 +48,7 @@ void Window::initializeGL() {
         "}\n"
     );
 
-    shader.addShaderFromSourceCode(QOpenGLShader::Fragment,
-        "#version 450 core\n"
-
-        "uniform vec2 resolution;\n"
-
-        "out vec4 color;\n"
-
-        "void main() {\n"
-        "   color = vec4(resolution.x / 1024., 1., resolution.y / 1024, 1.);\n"
-        "}\n"
-    );
+    shader.addShaderFromSourceCode(QOpenGLShader::Fragment, buildShader());
 
     shader.link();
 
