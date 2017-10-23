@@ -11,6 +11,8 @@
           for live replayability
         * libgit2 provides an easy code-oriented way to interact with git
 
+    * Replay of session can be exported as a executable demo
+
     * Every sound from the configured microphones are recorded and added to the git repo
 
     * Folder structure
