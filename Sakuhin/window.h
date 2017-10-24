@@ -6,6 +6,8 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLShaderProgram>
+#include <QFileSystemWatcher>
+#include <QDateTime>
 
 #include "backend.h"
 
@@ -22,8 +24,16 @@ class Window : public QOpenGLWindow,
         void initializeGL();
         void paintGL();
 
+    public slots:
+        void onSessionFileChange(const QString &path);
+
     private:
     	BackEnd *backend;
+
+        QString sessionPath;
+        QFileSystemWatcher fileWatcher;
+        QDateTime lastSessionModification;
+        QByteArray sessionContents;
 
         QOpenGLBuffer vbo;
         QOpenGLVertexArrayObject vao;

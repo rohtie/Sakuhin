@@ -2,7 +2,9 @@
 #include <QDebug>
 #include <QString>
 #include <QFile>
-
+#include <QFileSystemWatcher>
+#include <QFileInfo>
+#include <QDateTime>
 
 #include "backend.h"
 
@@ -18,19 +20,31 @@ static GLfloat const rectangle[] = {
 
 Window::Window(BackEnd *_backend) {
     backend = _backend;
+
+    sessionPath = "sessions/" + backend->getSessionID() + "/session.glsl";
+    fileWatcher.addPath(sessionPath);
+
+    QObject::connect(&fileWatcher, &QFileSystemWatcher::fileChanged,
+                     this, &Window::onSessionFileChange);
 }
 
 QString Window::buildShader() {
+    // TODO: Use QTextStream and cache file contents
     QFile header(":/header.glsl");
     header.open(QIODevice::ReadOnly);
 
-    QFile session("sessions/" + backend->getSessionID() + "/session.glsl");
+    QFile session(sessionPath);
     session.open(QIODevice::ReadOnly);
+    sessionContents = session.readAll();
 
     QFile footer(":/footer.glsl");
     footer.open(QIODevice::ReadOnly);
 
-    return QString(header.readAll()) + QString(session.readAll()) + QString(footer.readAll());
+    return (
+        QString(header.readAll()) +
+        QString(sessionContents) +
+        QString(footer.readAll())
+    );
 }
 
 void Window::initializeGL() {
@@ -77,4 +91,28 @@ void Window::paintGL() {
             glDrawArrays(GL_TRIANGLES, 0, 6);
         vao.release();
     shader.release();
+}
+
+void Window::onSessionFileChange(const QString &path) {
+    QFileInfo fileInfo(path);
+
+    if (fileInfo.lastModified() > lastSessionModification) {
+        lastSessionModification = fileInfo.lastModified();
+
+        QFile session(sessionPath);
+        session.open(QIODevice::ReadOnly);
+        QByteArray newSessionContents = session.readAll();
+
+        if (newSessionContents != sessionContents) {
+            sessionContents = newSessionContents;
+
+            qDebug() << "File contents are changed";
+        }
+    }
+
+    // On some systems, files are replaced by an entirely new file when
+    // modified. thus we need to add it to the file watcher again.
+    if(!fileWatcher.files().contains(path) && fileInfo.exists()) {
+        fileWatcher.addPath(path);
+    }
 }
