@@ -42,6 +42,8 @@ class Window : public QOpenGLWindow,
         QOpenGLShaderProgram shader;
 
         QElapsedTimer time;
+        int frameCounter;
+        qint64 lastTime;
 };
 
 #endif // WINDOW_H

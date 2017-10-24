@@ -102,6 +102,17 @@ void Window::initializeGL() {
 }
 
 void Window::paintGL() {
+    qint64 currentTime = time.elapsed();
+    frameCounter++;
+
+    if (currentTime - lastTime >= 1000) {
+        qDebug() << "mpf" << 1000.0f / double(frameCounter);
+        qDebug() << "fps" << frameCounter * 1000.0f / double(currentTime - lastTime);
+
+        frameCounter = 0;
+        lastTime += 1000;
+    }
+
     glClear(GL_COLOR_BUFFER_BIT);
 
     shader.bind();
