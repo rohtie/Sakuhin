@@ -20,6 +20,7 @@ class Window : public QOpenGLWindow,
         explicit Window(BackEnd *backend);
 
         QString buildShader();
+        void recompileShader();
 
         void initializeGL();
         void paintGL();

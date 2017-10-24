@@ -29,7 +29,7 @@ Window::Window(BackEnd *_backend) {
 }
 
 QString Window::buildShader() {
-    // TODO: Use QTextStream and cache file contents
+    // TODO: Use QTextStream and cache static files
     QFile header(":/header.glsl");
     header.open(QIODevice::ReadOnly);
 
@@ -47,6 +47,13 @@ QString Window::buildShader() {
     );
 }
 
+void Window::recompileShader() {
+    // TODO: Reuse old shader if code doesn't compile
+    shader.removeShader(shader.shaders()[1]);
+    shader.addShaderFromSourceCode(QOpenGLShader::Fragment, buildShader());
+    shader.link();
+}
+
 void Window::initializeGL() {
     initializeOpenGLFunctions();
 
@@ -62,6 +69,8 @@ void Window::initializeGL() {
         "}\n"
     );
 
+    // TODO: Find out if it is better to only compile the session glsl and link
+    // it together with header and footer files, instead of concatenating them
     shader.addShaderFromSourceCode(QOpenGLShader::Fragment, buildShader());
 
     shader.link();
@@ -91,6 +100,8 @@ void Window::paintGL() {
             glDrawArrays(GL_TRIANGLES, 0, 6);
         vao.release();
     shader.release();
+
+    update();
 }
 
 void Window::onSessionFileChange(const QString &path) {
@@ -106,6 +117,7 @@ void Window::onSessionFileChange(const QString &path) {
         if (newSessionContents != sessionContents) {
             sessionContents = newSessionContents;
 
+            recompileShader();
             qDebug() << "File contents are changed";
         }
     }
