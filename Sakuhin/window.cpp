@@ -48,9 +48,18 @@ QString Window::buildShader() {
 }
 
 void Window::recompileShader() {
-    // TODO: Reuse old shader if code doesn't compile
-    shader.removeShader(shader.shaders()[1]);
-    shader.addShaderFromSourceCode(QOpenGLShader::Fragment, buildShader());
+    QOpenGLShader *oldShader = shader.shaders()[1];
+
+    shader.removeShader(oldShader);
+
+    QString shaderCode = buildShader();
+
+    if (!shader.addShaderFromSourceCode(QOpenGLShader::Fragment, shaderCode)) {
+        qDebug() << shader.log();
+
+        shader.addShader(oldShader);
+    };
+
     shader.link();
 }
 
@@ -118,7 +127,6 @@ void Window::onSessionFileChange(const QString &path) {
             sessionContents = newSessionContents;
 
             recompileShader();
-            qDebug() << "File contents are changed";
         }
     }
 
