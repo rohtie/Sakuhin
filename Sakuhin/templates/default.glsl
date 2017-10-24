@@ -3,6 +3,8 @@ vec4 pixel(vec2 p) {
     p -= 0.5;
     p.x *= resolution.x / resolution.y;
 
+    p.x -= sin(p.y * 4. + time) * 0.5;
+
     float circle = smoothstep(0.005, 0., length(p) - 0.3);
     float bg = 1. - circle;
 

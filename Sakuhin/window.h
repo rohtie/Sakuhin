@@ -8,6 +8,7 @@
 #include <QOpenGLShaderProgram>
 #include <QFileSystemWatcher>
 #include <QDateTime>
+#include <QElapsedTimer>
 
 #include "backend.h"
 
@@ -39,6 +40,8 @@ class Window : public QOpenGLWindow,
         QOpenGLBuffer vbo;
         QOpenGLVertexArrayObject vao;
         QOpenGLShaderProgram shader;
+
+        QElapsedTimer time;
 };
 
 #endif // WINDOW_H

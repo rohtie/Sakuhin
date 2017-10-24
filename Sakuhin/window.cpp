@@ -97,6 +97,8 @@ void Window::initializeGL() {
             vao.release();
         vbo.release();
     shader.release();
+
+    time.start();
 }
 
 void Window::paintGL() {
@@ -104,6 +106,7 @@ void Window::paintGL() {
 
     shader.bind();
     shader.setUniformValue("resolution", width(), height());
+    shader.setUniformValue("time", time.elapsed() / 1000.0f);
 
         vao.bind();
             glDrawArrays(GL_TRIANGLES, 0, 6);
