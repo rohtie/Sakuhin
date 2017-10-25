@@ -26,6 +26,9 @@ Window::Window(BackEnd *_backend) {
 
     QObject::connect(&fileWatcher, &QFileSystemWatcher::fileChanged,
                      this, &Window::onSessionFileChange);
+
+    QObject::connect(this, &Window::shaderRecompiled,
+                     backend, &BackEnd::onShaderRecompile);
 }
 
 QString Window::buildShader() {
@@ -58,7 +61,10 @@ void Window::recompileShader() {
         qDebug() << shader.log();
 
         shader.addShader(oldShader);
-    };
+    }
+    else {
+        emit shaderRecompiled();
+    }
 
     shader.link();
 }

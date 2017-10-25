@@ -77,12 +77,12 @@
     * controller.json (saved on every change)
         ~~~~
         {
-            "unixtime_msec": {
-                "slider0": 0.50,
-                "slider1": 0.39,
-                "slider2": 0.25,
-                "slider3": 0.99
-            }
+            "unixtime_msec": [
+                {
+                    "id": id,
+                    "value": value
+                }
+            ]
         }
         ~~~~
 

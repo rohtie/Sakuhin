@@ -2,6 +2,9 @@
 #define BACKEND_H
 
 #include <QObject>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QFile>
 
 class BackEnd : public QObject {
     Q_OBJECT
@@ -17,9 +20,16 @@ class BackEnd : public QObject {
 
         Q_INVOKABLE void createSession();
 
+    public slots:
+        void onShaderRecompile();
+
     private:
         float slider[4] = {};
         QString sessionID;
+        QString sessionPath;
+
+        QJsonObject controllerLog;
+        QFile controllerLogFile;
 };
 
 #endif // BACKEND_H

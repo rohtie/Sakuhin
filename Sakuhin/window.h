@@ -29,6 +29,9 @@ class Window : public QOpenGLWindow,
     public slots:
         void onSessionFileChange(const QString &path);
 
+    signals:
+        void shaderRecompiled();
+
     private:
     	BackEnd *backend;
 
