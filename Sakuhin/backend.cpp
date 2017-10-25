@@ -54,8 +54,6 @@ void BackEnd::createSession() {
         qDebug() << "Couldn't copy default template to session folder";
         return;
     }
-
-    qDebug() << "Session is created";
 }
 
 QString BackEnd::getSessionID() {

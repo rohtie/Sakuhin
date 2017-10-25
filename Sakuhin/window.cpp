@@ -125,6 +125,7 @@ void Window::paintGL() {
     shader.bind();
         shader.setUniformValue("resolution", width(), height());
         shader.setUniformValue("time", time.elapsed() / 1000.0f);
+        shader.setUniformValue("slider", (GLfloat) backend->sliderValue());
 
         vao.bind();
             glDrawArrays(GL_TRIANGLES, 0, 6);
