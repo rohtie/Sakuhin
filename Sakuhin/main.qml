@@ -520,9 +520,12 @@ ApplicationWindow {
                 Layout.fillHeight: true
                 wheelEnabled: true
                 orientation: Qt.Vertical
-                value: backend.sliderValue
 
-                onValueChanged: backend.sliderValue = value
+                property int sliderID: 0
+
+                onValueChanged: {
+                    backend.setSlider(sliderID, value)
+                }
 
                 background: Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter

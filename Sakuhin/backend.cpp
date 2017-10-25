@@ -10,18 +10,12 @@ BackEnd::BackEnd(QObject *parent) : QObject(parent) {
 
 }
 
-double BackEnd::sliderValue() {
-    return m_sliderValue;
+void BackEnd::setSlider(const int &id, const float &value) {
+    slider[id] = value;
 }
 
-void BackEnd::setSliderValue(const double &sliderValue) {
-    if (sliderValue == m_sliderValue)
-        return;
-
-    qDebug() << sliderValue;
-
-    m_sliderValue = sliderValue;
-    emit sliderValueChanged();
+float* BackEnd::getSliders() {
+    return slider;
 }
 
 void BackEnd::createSession() {
