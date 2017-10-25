@@ -120,7 +120,7 @@ void Window::paintGL() {
         double ms = timeSinceLastTime / frameCounter;
         double fps = frameCounter * 1000 / timeSinceLastTime;
 
-        qDebug() << ms << "ms" << fps << "fps";
+        backend->setPerformanceInformation(QString::number(ms) + " ms " + QString::number(fps) + " fps");
 
         frameCounter = 0;
         lastTime += 1000;

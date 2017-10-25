@@ -1,4 +1,5 @@
 #include "backend.h"
+
 #include <QDateTime>
 #include <QDir>
 #include <QFile>
@@ -6,6 +7,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QtDebug>
+#include <QString>
 
 BackEnd::BackEnd(QObject *parent) : QObject(parent) {
 
@@ -29,6 +31,16 @@ void BackEnd::setSlider(const int &id, const float &value) {
 
 float* BackEnd::getSliders() {
     return slider;
+}
+
+QString BackEnd::performanceInformation() {
+    return m_performanceInformation;
+}
+
+void BackEnd::setPerformanceInformation(const QString &performanceInformation) {
+    m_performanceInformation = performanceInformation;
+
+    emit performanceInformationChanged();
 }
 
 void BackEnd::onShaderRecompile() {

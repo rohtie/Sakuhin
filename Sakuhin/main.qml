@@ -540,7 +540,7 @@ ApplicationWindow {
         y: -8
         height: 15
         color: "#dddddd"
-        text: qsTr("60 fps")
+        text: backend.performanceInformation
         horizontalAlignment: Text.AlignRight
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
