@@ -4,6 +4,7 @@ import QtQuick.Extras 1.4
 import QtQuick.Layouts 1.3
 import QtQuick.Templates 2.2
 import sakuhin.backend 1.0
+import "qml"
 
 ApplicationWindow {
     id: root
@@ -511,132 +512,24 @@ ApplicationWindow {
             anchors.left: parent.left
             anchors.leftMargin: 10
 
-            Slider {
-                id: control
-                width: 10
-                height: 133
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.fillHeight: true
-                wheelEnabled: true
-                orientation: Qt.Vertical
-
-                property int sliderID: 0
-
-                onValueChanged: {
-                    backend.setSlider(sliderID, value)
-                }
-
-                background: Rectangle {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    x: control.leftPadding
-                    y: control.topPadding + control.availableHeight / 2 - height / 2
-                    implicitWidth: 10
-                    implicitHeight: 100
-                    width: implicitWidth
-                    height: control.availableHeight
-                    radius: 2
-                    color: "#69697b"
-
-                    Rectangle {
-                        anchors.bottom: parent.bottom
-
-                        width: parent.width
-                        height: (1. - control.visualPosition) * parent.height
-                        color: "#21be2b"
-                        radius: 2
-                    }
-                }
+            SliderControllerForm {
+                id: slider0
+                onValueChanged: backend.setSlider(0, value)
             }
 
-            Slider {
-                id: control1
-                width: 10
-                height: 133
-                Layout.fillWidth: true
-                value: 0.5
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.fillHeight: true
-                background: Rectangle {
-                    x: control1.leftPadding
-                    y: control1.topPadding + control1.availableHeight / 2 - height / 2
-                    width: implicitWidth
-                    height: control1.availableHeight
-                    color: "#69697b"
-                    radius: 2
-                    Rectangle {
-                        width: parent.width
-                        height: (1. - control1.visualPosition) * parent.height
-                        color: "#21be2b"
-                        radius: 2
-                        anchors.bottom: parent.bottom
-                    }
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    implicitWidth: 10
-                    implicitHeight: 100
-                }
-                wheelEnabled: true
-                orientation: Qt.Vertical
+            SliderControllerForm {
+                id: slider1
+                onValueChanged: backend.setSlider(1, value)
             }
 
-            Slider {
-                id: control2
-                width: 10
-                height: 133
-                Layout.fillWidth: true
-                value: 0.5
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.fillHeight: true
-                background: Rectangle {
-                    x: control2.leftPadding
-                    y: control2.topPadding + control2.availableHeight / 2 - height / 2
-                    width: implicitWidth
-                    height: control2.availableHeight
-                    color: "#69697b"
-                    radius: 2
-                    Rectangle {
-                        width: parent.width
-                        height: (1. - control2.visualPosition) * parent.height
-                        color: "#21be2b"
-                        radius: 2
-                        anchors.bottom: parent.bottom
-                    }
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    implicitWidth: 10
-                    implicitHeight: 100
-                }
-                wheelEnabled: true
-                orientation: Qt.Vertical
+            SliderControllerForm {
+                id: slider2
+                onValueChanged: backend.setSlider(2, value)
             }
 
-            Slider {
-                id: control3
-                width: 10
-                height: 133
-                Layout.fillWidth: true
-                value: 0.5
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.fillHeight: true
-                background: Rectangle {
-                    x: control3.leftPadding
-                    y: control3.topPadding + control3.availableHeight / 2 - height / 2
-                    width: implicitWidth
-                    height: control3.availableHeight
-                    color: "#69697b"
-                    radius: 2
-                    Rectangle {
-                        width: parent.width
-                        height: (1. - control3.visualPosition) * parent.height
-                        color: "#21be2b"
-                        radius: 2
-                        anchors.bottom: parent.bottom
-                    }
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    implicitWidth: 10
-                    implicitHeight: 100
-                }
-                wheelEnabled: true
-                orientation: Qt.Vertical
+            SliderControllerForm {
+                id: slider3
+                onValueChanged: backend.setSlider(3, value)
             }
         }
     }

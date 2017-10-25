@@ -33,3 +33,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     backend.h \
     window.h
+
+DISTFILES += \
+    SliderControllerForm.ui.qml
