@@ -24,6 +24,10 @@ int main(int argc, char *argv[]) {
     format.setProfile(QSurfaceFormat::CoreProfile);
     format.setVersion(4, 5);
 
+    // Disable vsync for more accurate performance measures
+    // and getting rid of screen tearing
+    format.setSwapInterval(0);
+
     Window window(backend);
     window.setFormat(format);
     window.resize(QSize(800, 600));
