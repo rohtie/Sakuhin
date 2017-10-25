@@ -103,11 +103,18 @@ void Window::initializeGL() {
 
 void Window::paintGL() {
     qint64 currentTime = time.elapsed();
+    double timeSinceLastTime = double(currentTime - lastTime);
     frameCounter++;
 
-    if (currentTime - lastTime >= 1000) {
-        qDebug() << "mpf" << 1000.0f / double(frameCounter);
-        qDebug() << "fps" << frameCounter * 1000.0f / double(currentTime - lastTime);
+    if (timeSinceLastTime >= 1000) {
+
+        // Approximate time elapsed to 1 second for more stable numbers
+        timeSinceLastTime = 1000.0f;
+
+        double ms = timeSinceLastTime / frameCounter;
+        double fps = frameCounter * 1000 / timeSinceLastTime;
+
+        qDebug() << ms << "ms" << fps << "fps";
 
         frameCounter = 0;
         lastTime += 1000;
@@ -116,8 +123,8 @@ void Window::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     shader.bind();
-    shader.setUniformValue("resolution", width(), height());
-    shader.setUniformValue("time", time.elapsed() / 1000.0f);
+        shader.setUniformValue("resolution", width(), height());
+        shader.setUniformValue("time", time.elapsed() / 1000.0f);
 
         vao.bind();
             glDrawArrays(GL_TRIANGLES, 0, 6);
