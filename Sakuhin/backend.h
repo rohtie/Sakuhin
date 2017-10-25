@@ -18,7 +18,7 @@ class BackEnd : public QObject {
         Q_INVOKABLE void createSession();
 
     private:
-        float slider[4];
+        float slider[4] = {};
         QString sessionID;
 };
 
