@@ -1,7 +1,8 @@
 import QtQuick 2.7
 import QtQuick.Extras 1.4
 import QtQuick.Layouts 1.3
-import QtQuick.Templates 2.2
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls 2.2
 import sakuhin.backend 1.0
 import "qml"
 
@@ -84,7 +85,7 @@ ApplicationWindow {
             }
         }
 
-        ScrollView {
+        T.ScrollView {
             id: shaders
             height: 155
             contentHeight: flow1.height
@@ -523,20 +524,20 @@ ApplicationWindow {
 
     Label {
         id: info
-        x: -5
-        y: -8
+        x: 0
+        y: 0
         height: 15
         color: "#dddddd"
         text: backend.performanceInformation
         horizontalAlignment: Text.AlignRight
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
-        anchors.rightMargin: 10
-        font.pointSize: 8
         anchors.left: parent.left
         anchors.right: parent.right
-        font.family: "Tahoma"
+        anchors.bottomMargin: 10
+        anchors.rightMargin: 10
         anchors.leftMargin: 10
+        font.family: "Tahoma"
+        font.pointSize: 8
     }
 
     Popup {
@@ -545,15 +546,82 @@ ApplicationWindow {
         y: 0
         width: parent.width
         height: parent.height
+        rightPadding: 0
+        leftPadding: 0
+        bottomPadding: 0
+        topPadding: 0
+        spacing: 0
         modal: true
         focus: true
         closePolicy: Popup.CloseOnEscape
 
-        Rectangle {
-            width: parent.width
-            height: parent.height
-
+        background: Rectangle {
             color: "#111117"
         }
+
+        Column {
+            spacing: 0
+            anchors.fill: parent
+
+            StackLayout {
+                width: parent.width
+                height: parent.height - bar.height
+                visible: true
+                currentIndex: bar.currentIndex
+
+                Item {
+                    id: hardwareTab
+
+                    Rectangle {
+                        width: parent.width
+                        height: parent.height
+                        color: "#ff0000"
+                    }
+                }
+                Item {
+                    id: textureTab
+
+                    Rectangle {
+                        width: parent.width
+                        height: parent.height
+                        color: "#00ff00"
+                    }
+                }
+                Item {
+                    id: shaderTab
+
+                    Rectangle {
+                        width: parent.width
+                        height: parent.height
+                        color: "#0000ff"
+                    }
+                }
+            }
+
+            TabBar {
+                id: bar
+                height: 40
+                anchors.right: parent.right
+                anchors.rightMargin: 0
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+
+                background: Rectangle {
+                    color: "#111117"
+                }
+
+                TabForm {
+                    text: qsTr("Hardware")
+                }
+                TabForm {
+                    text: qsTr("Textures")
+                }
+                TabForm {
+                    text: qsTr("Shaders")
+                }
+            }
+
+        }
     }
+
 }
