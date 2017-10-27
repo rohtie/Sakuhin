@@ -15,5 +15,7 @@
         <file>header.glsl</file>
         <file>qml/SliderController.qml</file>
         <file>qml/SliderControllerForm.ui.qml</file>
+        <file>qml/Channel.qml</file>
+        <file>qml/ChannelForm.ui.qml</file>
     </qresource>
 </RCC>

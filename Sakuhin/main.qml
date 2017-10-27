@@ -422,46 +422,28 @@ ApplicationWindow {
             anchors.rightMargin: 10
             spacing: 10
 
-            Rectangle {
-                id: rectangle12
-                width: 52
-                height: 52
-                color: "#69697b"
+            ChannelForm {
+
             }
 
-            Rectangle {
-                id: rectangle13
-                width: 52
-                height: 52
-                color: "#69697b"
+            ChannelForm {
+
             }
 
-            Rectangle {
-                id: rectangle14
-                width: 52
-                height: 52
-                color: "#69697b"
+            ChannelForm {
+
             }
 
-            Rectangle {
-                id: rectangle15
-                width: 52
-                height: 52
-                color: "#69697b"
+            ChannelForm {
+
             }
 
-            Rectangle {
-                id: rectangle16
-                width: 52
-                height: 52
-                color: "#69697b"
+            ChannelForm {
+
             }
 
-            Rectangle {
-                id: rectangle17
-                width: 52
-                height: 52
-                color: "#69697b"
+            ChannelForm {
+
             }
         }
 
