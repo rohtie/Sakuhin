@@ -424,26 +424,32 @@ ApplicationWindow {
 
             ChannelForm {
 
+                channel.onClicked: channelPopup.open()
             }
 
             ChannelForm {
 
+                channel.onClicked: channelPopup.open()
             }
 
             ChannelForm {
 
+                channel.onClicked: channelPopup.open()
             }
 
             ChannelForm {
 
+                channel.onClicked: channelPopup.open()
             }
 
             ChannelForm {
 
+                channel.onClicked: channelPopup.open()
             }
 
             ChannelForm {
 
+                channel.onClicked: channelPopup.open()
             }
         }
 
@@ -531,5 +537,23 @@ ApplicationWindow {
         anchors.right: parent.right
         font.family: "Tahoma"
         anchors.leftMargin: 10
+    }
+
+    Popup {
+        id: channelPopup
+        x: 0
+        y: 0
+        width: parent.width
+        height: parent.height
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape
+
+        Rectangle {
+            width: parent.width
+            height: parent.height
+
+            color: "#111117"
+        }
     }
 }
