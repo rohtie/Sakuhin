@@ -9,6 +9,8 @@
 #include <QFileSystemWatcher>
 #include <QDateTime>
 #include <QElapsedTimer>
+#include <QOpenGLTexture>
+#include <QVector>
 
 #include "backend.h"
 
@@ -43,6 +45,8 @@ class Window : public QOpenGLWindow,
         QOpenGLBuffer vbo;
         QOpenGLVertexArrayObject vao;
         QOpenGLShaderProgram shader;
+
+        QVector<QOpenGLTexture*> textures;
 
         QElapsedTimer time;
         int frameCounter;

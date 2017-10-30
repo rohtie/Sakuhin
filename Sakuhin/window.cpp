@@ -104,6 +104,9 @@ void Window::initializeGL() {
         vbo.release();
     shader.release();
 
+    textures.append(new QOpenGLTexture(QImage(":/textures/hedge.png").mirrored()));
+    textures.append(new QOpenGLTexture(QImage(":/textures/cement.png").mirrored()));
+
     time.start();
 }
 
@@ -133,7 +136,20 @@ void Window::paintGL() {
         shader.setUniformValue("time", time.elapsed() / 1000.0f);
         shader.setUniformValueArray("slider", (GLfloat*) backend->getSliders(), 4, 1);
 
+
+        shader.setUniformValue("channel0", 0);
+        shader.setUniformValue("channel1", 1);
+        shader.setUniformValue("channel2", 2);
+        shader.setUniformValue("channel3", 3);
+        shader.setUniformValue("channel4", 4);
+        shader.setUniformValue("channel5", 5);
+
+        for (int i = 0; i < textures.length(); i++) {
+            textures[i]->bind(i);
+        }
+
         vao.bind();
+
             glDrawArrays(GL_TRIANGLES, 0, 6);
         vao.release();
     shader.release();

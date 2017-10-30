@@ -19,5 +19,7 @@
         <file>qml/ChannelForm.ui.qml</file>
         <file>qml/Tab.qml</file>
         <file>qml/TabForm.ui.qml</file>
+        <file>textures/hedge.png</file>
+        <file>textures/cement.png</file>
     </qresource>
 </RCC>
