@@ -497,22 +497,18 @@ ApplicationWindow {
             anchors.leftMargin: 10
 
             SliderControllerForm {
-                id: slider0
                 onValueChanged: backend.setSlider(0, value)
             }
 
             SliderControllerForm {
-                id: slider1
                 onValueChanged: backend.setSlider(1, value)
             }
 
             SliderControllerForm {
-                id: slider2
                 onValueChanged: backend.setSlider(2, value)
             }
 
             SliderControllerForm {
-                id: slider3
                 onValueChanged: backend.setSlider(3, value)
             }
         }
