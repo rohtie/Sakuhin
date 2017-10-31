@@ -50,7 +50,7 @@ class Window : public QOpenGLWindow,
 
         QElapsedTimer time;
         int frameCounter;
-        qint64 lastTime;
+        qint64 lastTime = 0;
 };
 
 #endif // WINDOW_H
