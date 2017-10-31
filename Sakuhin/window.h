@@ -30,6 +30,7 @@ class Window : public QOpenGLWindow,
 
     public slots:
         void onSessionFileChange(const QString &path);
+        void onChannelChange(const int &channelID, BackEnd::ChannelType &channelType, const QString &fileUrl);
 
     signals:
         void shaderRecompiled();

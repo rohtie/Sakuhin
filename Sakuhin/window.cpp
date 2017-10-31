@@ -29,6 +29,9 @@ Window::Window(BackEnd *_backend) {
 
     QObject::connect(this, &Window::shaderRecompiled,
                      backend, &BackEnd::onShaderRecompile);
+
+    QObject::connect(backend, &BackEnd::channelChanged,
+                     this, &Window::onChannelChange);
 }
 
 QString Window::buildShader() {
@@ -104,8 +107,7 @@ void Window::initializeGL() {
         vbo.release();
     shader.release();
 
-    textures.append(new QOpenGLTexture(QImage("data/textures/hedge.png").mirrored()));
-    textures.append(new QOpenGLTexture(QImage("data/textures/cement.png").mirrored()));
+    textures.resize(6);
 
     time.start();
 }
@@ -145,7 +147,9 @@ void Window::paintGL() {
         shader.setUniformValue("channel5", 5);
 
         for (int i = 0; i < textures.length(); i++) {
-            textures[i]->bind(i);
+            if (textures[i]) {
+                textures[i]->bind(i);
+            }
         }
 
         vao.bind();
@@ -179,4 +183,8 @@ void Window::onSessionFileChange(const QString &path) {
     if(!fileWatcher.files().contains(path) && fileInfo.exists()) {
         fileWatcher.addPath(path);
     }
+}
+
+void Window::onChannelChange(const int &channelID, BackEnd::ChannelType &channelType, const QString &fileUrl) {
+    textures[channelID] = new QOpenGLTexture(QImage(fileUrl).mirrored());
 }

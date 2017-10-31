@@ -369,6 +369,11 @@ ApplicationWindow {
 
                                 fillMode: Image.PreserveAspectFit
                                 source: fileURL
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: backend.setChannel(channelPopup.currentChannelID, BackEnd.Texture, filePath)
+                                }
                             }
                         }
                     }
