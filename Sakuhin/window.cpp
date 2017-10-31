@@ -104,8 +104,8 @@ void Window::initializeGL() {
         vbo.release();
     shader.release();
 
-    textures.append(new QOpenGLTexture(QImage(":/textures/hedge.png").mirrored()));
-    textures.append(new QOpenGLTexture(QImage(":/textures/cement.png").mirrored()));
+    textures.append(new QOpenGLTexture(QImage("data/textures/hedge.png").mirrored()));
+    textures.append(new QOpenGLTexture(QImage("data/textures/cement.png").mirrored()));
 
     time.start();
 }
