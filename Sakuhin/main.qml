@@ -87,292 +87,40 @@ ApplicationWindow {
             }
         }
 
-        T.ScrollView {
+        GridView {
             id: shaders
             height: 155
-            contentHeight: flow1.height
-            rightPadding: 0
-            topPadding: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            antialiasing: false
-            padding: 0
-            leftPadding: 0
             clip: true
+            maximumFlickVelocity: 3000
+            flickDeceleration: 1500
+            boundsBehavior: Flickable.StopAtBounds
+            snapMode: GridView.NoSnap
+            cellHeight: 124
+            cellWidth: 124
 
-            Flow {
-                id: flow1
-                anchors.left: parent.left
-                anchors.leftMargin: 10
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                anchors.top: parent.top
-                anchors.topMargin: 0
-                layoutDirection: Qt.LeftToRight
-                flow: Flow.LeftToRight
-                spacing: 10
+            anchors.left: parent.left
+            anchors.leftMargin: 5
 
-                Image {
-                    id: image30
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/MtXSzf.jpg"
-                }
+            anchors.right: parent.right
+            anchors.rightMargin: 5
 
-                Image {
-                    id: image
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XlscD4.jpg"
-                }
+            model: FolderListModel {
+                folder: "tmp/"
+            }
+
+            delegate: Item {
+                width: textureGrid.cellWidth
+                height: textureGrid.cellHeight
 
                 Image {
-                    id: image6
-                    width: 52
-                    height: 52
+                    anchors.fill: parent
+                    anchors.topMargin: 0
+                    anchors.rightMargin: 5
+                    anchors.leftMargin: 5
+                    anchors.bottomMargin: 10
+
                     fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XlscD4.jpg"
-                }
-
-                Image {
-                    id: image1
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/llsczl.jpg"
-                }
-
-                Image {
-                    id: image2
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/llXyWN.jpg"
-                }
-
-                Image {
-                    id: image3
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XdjyR1.jpg"
-                }
-
-                Image {
-                    id: image4
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XtsyWN.jpg"
-                }
-
-
-                Image {
-                    id: image5
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XlsyDn.jpg"
-                }
-
-
-                Image {
-                    id: image7
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/llsczl.jpg"
-                }
-
-                Image {
-                    id: image8
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/llXyWN.jpg"
-                }
-
-                Image {
-                    id: image9
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XdjyR1.jpg"
-                }
-
-                Image {
-                    id: image10
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XtsyWN.jpg"
-                }
-
-                Image {
-                    id: image11
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XlsyDn.jpg"
-                }
-
-                Image {
-                    id: image16
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XtsyWN.jpg"
-                }
-
-                Image {
-                    id: image12
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XlscD4.jpg"
-                }
-
-                Image {
-                    id: image13
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/llsczl.jpg"
-                }
-
-                Image {
-                    id: image14
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/llXyWN.jpg"
-                }
-
-                Image {
-                    id: image15
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XdjyR1.jpg"
-                }
-
-                Image {
-                    id: image19
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/llsczl.jpg"
-                }
-
-
-                Image {
-                    id: image17
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XlsyDn.jpg"
-                }
-
-                Image {
-                    id: image18
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XlscD4.jpg"
-                }
-
-                Image {
-                    id: image24
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XlscD4.jpg"
-                }
-
-
-                Image {
-                    id: image20
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/llXyWN.jpg"
-                }
-
-                Image {
-                    id: image21
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XdjyR1.jpg"
-                }
-
-                Image {
-                    id: image22
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XtsyWN.jpg"
-                }
-
-                Image {
-                    id: image23
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XlsyDn.jpg"
-                }
-
-
-                Image {
-                    id: image31
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/MtXSzf.jpg"
-                }
-
-                Image {
-                    id: image25
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/llsczl.jpg"
-                }
-
-                Image {
-                    id: image26
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/llXyWN.jpg"
-                }
-
-                Image {
-                    id: image27
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XdjyR1.jpg"
-                }
-
-                Image {
-                    id: image28
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XtsyWN.jpg"
-                }
-
-                Image {
-                    id: image29
-                    width: 52
-                    height: 52
-                    fillMode: Image.PreserveAspectCrop
-                    source: "tmp/XlsyDn.jpg"
+                    source: fileURL
                 }
             }
         }
@@ -591,6 +339,7 @@ ApplicationWindow {
 
                     GridView {
                         id: textureGrid
+                        clip: true
                         maximumFlickVelocity: 3000
                         flickDeceleration: 1500
                         boundsBehavior: Flickable.StopAtBounds
@@ -601,7 +350,7 @@ ApplicationWindow {
                         anchors.rightMargin: 5
                         anchors.leftMargin: 5
                         anchors.bottomMargin: 10
-                        anchors.topMargin: 5
+                        anchors.topMargin: 10
                         anchors.fill: parent
 
                         model: FolderListModel {
@@ -614,14 +363,13 @@ ApplicationWindow {
 
                             Image {
                                 anchors.fill: parent
-                                anchors.topMargin: 5
+                                anchors.topMargin: 0
                                 anchors.rightMargin: 5
                                 anchors.leftMargin: 5
-                                anchors.bottomMargin: 0
+                                anchors.bottomMargin: 10
 
                                 fillMode: Image.PreserveAspectFit
-
-                                source: "file:" + filePath
+                                source: fileURL
                             }
                         }
                     }
