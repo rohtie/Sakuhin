@@ -1,7 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Extras 1.4
 import QtQuick.Layouts 1.3
-import QtQuick.Templates 2.2 as T
 import QtQuick.Controls 2.2
 import sakuhin.backend 1.0
 import Qt.labs.folderlistmodel 2.2
