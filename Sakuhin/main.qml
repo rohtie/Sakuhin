@@ -426,33 +426,27 @@ ApplicationWindow {
             spacing: 10
 
             ChannelForm {
-
-                channel.onClicked: channelPopup.open()
+                channel.onClicked: channelPopup.activate(0)
             }
 
             ChannelForm {
-
-                channel.onClicked: channelPopup.open()
+                channel.onClicked: channelPopup.activate(1)
             }
 
             ChannelForm {
-
-                channel.onClicked: channelPopup.open()
+                channel.onClicked: channelPopup.activate(2)
             }
 
             ChannelForm {
-
-                channel.onClicked: channelPopup.open()
+                channel.onClicked: channelPopup.activate(3)
             }
 
             ChannelForm {
-
-                channel.onClicked: channelPopup.open()
+                channel.onClicked: channelPopup.activate(4)
             }
 
             ChannelForm {
-
-                channel.onClicked: channelPopup.open()
+                channel.onClicked: channelPopup.activate(5)
             }
         }
 
@@ -556,6 +550,13 @@ ApplicationWindow {
         modal: true
         focus: true
         closePolicy: Popup.CloseOnEscape
+
+        property int currentChannelID: 0
+
+        function activate(channelID) {
+            currentChannelID = channelID
+            channelPopup.open()
+        }
 
         background: Rectangle {
             color: "#111117"
