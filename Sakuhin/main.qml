@@ -137,6 +137,18 @@ ApplicationWindow {
                     }
                 }
             }
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.RightButton
+
+                onClicked: {
+                    shaderContextmenu.x = parent.x + mouse.x
+                    shaderContextmenu.y = parent.y + mouse.y
+
+                    shaderContextmenu.open()
+                }
+            }
         }
 
         Label {
@@ -269,6 +281,28 @@ ApplicationWindow {
         anchors.leftMargin: 10
         font.family: "Tahoma"
         font.pointSize: 8
+    }
+
+    Menu {
+        id: shaderContextmenu
+        title: "New shader"
+
+        background: Rectangle {
+            implicitWidth: 133
+            implicitHeight: 10
+            color: "#111117"
+        }
+
+        StyledMenuItem {
+            text: "Minimal"
+            onTriggered: console.log("Add minimal shader")
+        }
+        StyledMenuItem {
+            text: "Feedback"
+        }
+        StyledMenuItem {
+            text: "Raymarch"
+        }
     }
 
     Popup {
@@ -414,5 +448,4 @@ ApplicationWindow {
         }
 
     }
-
 }

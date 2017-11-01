@@ -19,5 +19,6 @@
         <file>qml/ChannelForm.ui.qml</file>
         <file>qml/Tab.qml</file>
         <file>qml/TabForm.ui.qml</file>
+        <file>qml/StyledMenuItem.qml</file>
     </qresource>
 </RCC>
