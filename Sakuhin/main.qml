@@ -172,28 +172,13 @@ ApplicationWindow {
             anchors.rightMargin: 10
             spacing: 10
 
-            ChannelForm {
-                channel.onClicked: channelPopup.activate(0)
-            }
+            Repeater {
+                id: channelRepeater
+                model: 6
 
-            ChannelForm {
-                channel.onClicked: channelPopup.activate(1)
-            }
-
-            ChannelForm {
-                channel.onClicked: channelPopup.activate(2)
-            }
-
-            ChannelForm {
-                channel.onClicked: channelPopup.activate(3)
-            }
-
-            ChannelForm {
-                channel.onClicked: channelPopup.activate(4)
-            }
-
-            ChannelForm {
-                channel.onClicked: channelPopup.activate(5)
+                ChannelForm {
+                    channel.onClicked: channelPopup.activate(index)
+                }
             }
         }
 
@@ -326,8 +311,6 @@ ApplicationWindow {
                     id: hardwareTab
 
                     Rectangle {
-                        x: -9
-                        y: 6
                         width: parent.width
                         height: parent.height
                         color: "#ff0000"
@@ -372,7 +355,13 @@ ApplicationWindow {
 
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: backend.setChannel(channelPopup.currentChannelID, BackEnd.Texture, filePath)
+                                    onClicked: {
+                                        var channelID = channelPopup.currentChannelID
+
+                                        backend.setChannel(channelID, BackEnd.Texture, filePath)
+                                        channelRepeater.itemAt(channelID).channelImage.source = fileURL
+                                        channelPopup.close()
+                                    }
                                 }
                             }
                         }

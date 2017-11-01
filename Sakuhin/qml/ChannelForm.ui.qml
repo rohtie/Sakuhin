@@ -7,7 +7,9 @@ Button {
 
     width: 52
     height: 52
+
     property alias channel: channel
+    property alias channelImage: channelImage
 
     background: Rectangle {
         anchors.fill: parent
