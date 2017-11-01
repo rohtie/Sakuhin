@@ -228,20 +228,12 @@ ApplicationWindow {
             anchors.left: parent.left
             anchors.leftMargin: 10
 
-            SliderControllerForm {
-                onValueChanged: backend.setSlider(0, value)
-            }
+            Repeater {
+                model: 4
 
-            SliderControllerForm {
-                onValueChanged: backend.setSlider(1, value)
-            }
-
-            SliderControllerForm {
-                onValueChanged: backend.setSlider(2, value)
-            }
-
-            SliderControllerForm {
-                onValueChanged: backend.setSlider(3, value)
+                SliderControllerForm {
+                    onValueChanged: backend.setSlider(index, value)
+                }
             }
         }
     }
