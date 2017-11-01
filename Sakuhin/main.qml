@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import sakuhin.backend 1.0
 import Qt.labs.folderlistmodel 2.2
+import QtGraphicalEffects 1.0
 
 import "qml"
 
@@ -94,8 +95,8 @@ ApplicationWindow {
             flickDeceleration: 1500
             boundsBehavior: Flickable.StopAtBounds
             snapMode: GridView.NoSnap
-            cellHeight: 124
-            cellWidth: 124
+            cellHeight: 93
+            cellWidth: 93
 
             anchors.left: parent.left
             anchors.leftMargin: 5
@@ -108,10 +109,11 @@ ApplicationWindow {
             }
 
             delegate: Item {
-                width: textureGrid.cellWidth
-                height: textureGrid.cellHeight
+                width: shaders.cellWidth
+                height: shaders.cellHeight
 
                 Image {
+                    id: shaderImage
                     anchors.fill: parent
                     anchors.topMargin: 0
                     anchors.rightMargin: 5
@@ -120,6 +122,19 @@ ApplicationWindow {
 
                     fillMode: Image.PreserveAspectCrop
                     source: fileURL
+
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        maskSource: Item {
+                            width: shaderImage.width
+                            height: shaderImage.height
+
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: 2
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -262,6 +277,7 @@ ApplicationWindow {
         y: 0
         width: parent.width
         height: parent.height
+        visible: false
         rightPadding: 0
         leftPadding: 0
         bottomPadding: 0
