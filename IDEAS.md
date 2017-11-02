@@ -5,6 +5,14 @@
 * Choose source for spectrum analyser visualization
     * Right click on it and choose source from context menu
 
+* Transitions between shaders
+
+    * Trivial implementation
+        * Render both shaders and input them to a third shader
+
+    * Efficient implementation
+        * Combine the code of both shaders into one shader and use their main functions to only render parts of each shader as needed
+
 * Session manager with visuals history so that the whole concert can be replayed
     * Everytime a shader is saved, it is committed to the git repo
         * git timestamp precision is 1 second, which is precise enough
