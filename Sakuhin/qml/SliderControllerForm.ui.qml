@@ -5,7 +5,7 @@ import QtQuick.Templates 2.2
 Slider {
     id: control
     width: 10
-    height: 133
+    height: 150
     Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
     Layout.fillHeight: true

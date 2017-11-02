@@ -23,31 +23,37 @@ ApplicationWindow {
 
     Component.onCompleted: backend.createSession();
 
+
     Column {
         id: column
+        anchors.topMargin: 10
+        clip: false
+        anchors.bottomMargin: 30
         spacing: 10
         anchors.fill: parent
 
         Image {
             id: preview
-            height: 215
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            fillMode: Image.PreserveAspectFit
-            source: "tmp/XlscD4.jpg"
-        }
-
-        Image {
-            id: spectrum
-            height: 25
+            height: 200
             anchors.right: parent.right
             anchors.rightMargin: 10
             anchors.left: parent.left
             anchors.leftMargin: 10
-            fillMode: Image.PreserveAspectFit
-            source: "tmp/spectrum.jpg"
+            fillMode: Image.PreserveAspectCrop
+            source: "tmp/XlscD4.jpg"
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Item {
+                    width: preview.width
+                    height: preview.height
+
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: 2
+                    }
+                }
+            }
         }
 
         Label {
@@ -89,14 +95,14 @@ ApplicationWindow {
 
         GridView {
             id: shaders
-            height: 155
+            height: 70
             clip: true
             maximumFlickVelocity: 3000
             flickDeceleration: 1500
             boundsBehavior: Flickable.StopAtBounds
             snapMode: GridView.NoSnap
-            cellHeight: 93
-            cellWidth: 93
+            cellHeight: 52
+            cellWidth: 52
 
             anchors.left: parent.left
             anchors.leftMargin: 5
@@ -147,6 +153,90 @@ ApplicationWindow {
                     shaderContextmenu.y = parent.y + mouse.y
 
                     shaderContextmenu.open()
+                }
+            }
+        }
+
+        Label {
+            id: transitions_label
+            height: 15
+            color: "#dddddd"
+            text: "Transitions"
+            font.family: "Tahoma"
+            anchors.rightMargin: 10
+            font.pointSize: 8
+            anchors.leftMargin: 10
+            MouseArea {
+                anchors.fill: parent
+            }
+
+            Label {
+                id: shaders_icon1
+                x: 0
+                y: 0
+                height: 15
+                color: "#dddddd"
+                text: "-"
+                font.family: "Tahoma"
+                anchors.rightMargin: 0
+                font.pointSize: 8
+                anchors.leftMargin: 0
+                horizontalAlignment: Text.AlignRight
+                anchors.left: parent.left
+                anchors.right: parent.right
+            }
+            anchors.left: parent.left
+            anchors.right: parent.right
+        }
+
+        GridView {
+            id: trans
+            height: 70
+            clip: true
+            maximumFlickVelocity: 3000
+            flickDeceleration: 1500
+            boundsBehavior: Flickable.StopAtBounds
+            snapMode: GridView.NoSnap
+            cellHeight: 52
+            cellWidth: 52
+
+            anchors.left: parent.left
+            anchors.leftMargin: 5
+
+            anchors.right: parent.right
+            anchors.rightMargin: 5
+
+            model: FolderListModel {
+                folder: "tmp/"
+            }
+
+            delegate: Item {
+                width: trans.cellWidth
+                height: trans.cellHeight
+
+                Image {
+                    id: transitionImage
+                    anchors.fill: parent
+                    anchors.topMargin: 0
+                    anchors.rightMargin: 5
+                    anchors.leftMargin: 5
+                    anchors.bottomMargin: 10
+
+                    fillMode: Image.PreserveAspectCrop
+                    source: fileURL
+
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        maskSource: Item {
+                            width: transitionImage.width
+                            height: transitionImage.height
+
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: 2
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -248,7 +338,6 @@ ApplicationWindow {
 
         RowLayout {
             id: controller
-            height: 150
             spacing: 0
             anchors.right: parent.right
             anchors.rightMargin: 10
@@ -263,25 +352,43 @@ ApplicationWindow {
                 }
             }
         }
+
+
     }
 
-    Label {
-        id: info
-        x: 0
-        y: 0
-        height: 15
-        color: "#dddddd"
-        text: backend.performanceInformation
-        horizontalAlignment: Text.AlignRight
+    Image {
+        id: spectrum
+        x: 10
+        y: 225
+        height: 35
         anchors.bottom: parent.bottom
-        anchors.left: parent.left
+        anchors.bottomMargin: 0
         anchors.right: parent.right
-        anchors.bottomMargin: 10
-        anchors.rightMargin: 10
-        anchors.leftMargin: 10
-        font.family: "Tahoma"
-        font.pointSize: 8
+        anchors.rightMargin: 0
+        anchors.left: parent.left
+        anchors.leftMargin: 0
+        fillMode: Image.PreserveAspectCrop
+        source: "tmp/spectrum.jpg"
+
+        Label {
+            id: info
+            x: 10
+            y: 0
+            height: 15
+            color: "#dddddd"
+            text: backend.performanceInformation
+            horizontalAlignment: Text.AlignRight
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottomMargin: 10
+            anchors.rightMargin: 10
+            anchors.leftMargin: 10
+            font.family: "Tahoma"
+            font.pointSize: 8
+        }
     }
+
 
     Menu {
         id: shaderContextmenu
@@ -448,4 +555,5 @@ ApplicationWindow {
         }
 
     }
+
 }
