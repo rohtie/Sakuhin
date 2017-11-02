@@ -31,38 +31,45 @@
         * Transition custom
             * Shows popup where one can choose custom transition time
 
-* Session manager with visuals history so that the whole concert can be replayed
-    * Everytime a shader is saved, it is committed to the git repo
-        * git timestamp precision is 1 second, which is precise enough
-          for live replayability
-        * libgit2 provides an easy code-oriented way to interact with git
+* Session manager - For replaying the session
+    * Local git repo tracking code changes (using libgit2)
+    * Sqlite tracking system changes
 
-    * Replay of session can be exported as a executable demo
+    * Tracking details
+        * Currently active main shader
+        * Slider changes for each shader
+        * Channel changes for each shader
+        * Transitions between shaders
+        * Hardware input (audio, webcam, etc)
 
-    * Every sound from the configured microphones are recorded and added to the git repo
+    * `sessions/` - Directory of sessions
+        * `unixtime_sec`_`day`-`month`-`year`/
 
-    * Folder structure
-        * sessions
-            * `unixtime_sec`_`day`-`month`-`year`
-                * .git (git repo)
-                * session.json (metadata about the session)
-                * controller.json (log of controller input changes)
-                * session.glsl (The file edited by user)
-                * shaders (directory of shaders created this session)
-                    * `unixtime_sec`.glsl
-                    * `unixtime_sec`.glsl
-                    * [...]
-                    * `unixtime_sec`.glsl
-                * audio (directory of audio clips recorded this session)
-                    * `unixtime_sec`.wav
-                    * `unixtime_sec`.wav
-                    * [...]
-                    * `unixtime_sec`.wav
+            * `.git` - Git repo
 
-    * Everything is saved and committed each time shader is recompiled
-        * Audio clips saved to the audio directory
+            * `session.json` - Metadata about the session
 
-    * session.json
+            * `session.glsl` - Shader code edited by user
+
+            * `shaders/` - directory of shaders created this session
+                * `unixtime_sec`.glsl
+                * `unixtime_sec`.glsl
+                * [...]
+                * `unixtime_sec`.glsl
+
+            * `audio/` - directory of audio clips recorded this session
+                * `unixtime_sec`.wav
+                * `unixtime_sec`.wav
+                * [...]
+                * `unixtime_sec`.wav
+
+            * `video/` - video clips recorded this session
+                * `unixtime_sec`.mp4
+                * `unixtime_sec`.mp4
+                * [...]
+                * `unixtime_sec`.mp4
+
+    * `session.json` - Metadata about the current session
         ~~~~
         {
             "group": "Mary & the merry ferry men",
@@ -99,19 +106,6 @@
             }
         }
         ~~~~
-
-    * controller.json (saved on every change)
-        ~~~~
-        {
-            "unixtime_msec": [
-                {
-                    "id": id,
-                    "value": value
-                }
-            ]
-        }
-        ~~~~
-
 
 * Inline error display through sublime text using its phantom API
     * https://www.sublimetext.com/docs/3/api_reference.html#sublime.Phantom
