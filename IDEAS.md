@@ -5,7 +5,26 @@
 * Choose source for spectrum analyser visualization
     * Right click on it and choose source from context menu
 
+* Shader manager
+    * Selecting a shader
+        * Trivial: Main shader is switched
+
+        * Advanced: Shader is switched for preview only
+            * To switch main shader, one must transition to the shader
+
+    * Creating a new shader
+        * Save current shader to the shader directory
+
+        * Trivial: Switch shader immediately
+            * Load selected shader template into session.glsl
+
+        * Advanced
+            * Open new shader in preview only
+
 * Transitions between shaders
+    * Transition types
+        * Select from a selection of pre-written transitions
+        * Write a custom transition live
 
     * Trivial implementation
         * Render both shaders and input them to a third shader
