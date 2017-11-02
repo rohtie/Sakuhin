@@ -1,36 +1,35 @@
-
-* Animation curves can be applied to MIDI controller sliders
-    * Right click on slider -> context menu with different animation curves
-
-* Choose source for spectrum analyser visualization
-    * Right click on it and choose source from context menu
-
 * Shader manager
-    * Selecting a shader
-        * Trivial: Main shader is switched
+    * Create shader (left click shaders menu)
+        * New file is created in the shader directory named `unixtime_sec`.glsl
+        * File is populated with chosen template: minimal/feedback/raymarch
+        * The new shader is rendered to the preview window
 
-        * Advanced: Shader is switched for preview only
-            * To switch main shader, one must transition to the shader
+    * Select shader (left click on shader)
+        * Currently selected shader is saved to shader directory
+        * Selected shader is loaded into session.glsl
+        * Channels and sliders are updated to their last known state
+        * The selected shader is rendered to the preview window
 
-    * Creating a new shader
-        * Save current shader to the shader directory
+    * Shader context menu (right click on shader)
+        * Make current
 
-        * Trivial: Switch shader immediately
-            * Load selected shader template into session.glsl
+    * Create transition (left click transition menu)
+        * Create shader with transition template
+        * The two first channels are populated with placeholder images
+        * Placeholder images are white and black
+        * Current transition is selected and rendered to preview window
 
-        * Advanced
-            * Open new shader in preview only
+    * Select transition (left click on transition)
+        * Render transition with placeholder images to preview window
 
-* Transitions between shaders
-    * Transition types
-        * Select from a selection of pre-written transitions
-        * Write a custom transition live
-
-    * Trivial implementation
-        * Render both shaders and input them to a third shader
-
-    * Efficient implementation
-        * Combine the code of both shaders into one shader and use their main functions to only render parts of each shader as needed
+    * Transition context menu
+        * Transition  1 Sec
+        * Transition  5 Sec
+        * Transition 10 Sec
+        * Transition 20 Sec
+        * Transition 30 Sec
+        * Transition custom
+            * Shows popup where one can choose custom transition time
 
 * Session manager with visuals history so that the whole concert can be replayed
     * Everytime a shader is saved, it is committed to the git repo
@@ -116,3 +115,9 @@
 
 * Inline error display through sublime text using its phantom API
     * https://www.sublimetext.com/docs/3/api_reference.html#sublime.Phantom
+
+* Animation curves can be applied to MIDI controller sliders
+    * Right click on slider -> context menu with different animation curves
+
+* Choose source for spectrum analyser visualization
+    * Right click on it and choose source from context menu
