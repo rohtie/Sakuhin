@@ -1,3 +1,8 @@
+* Window layout
+    * UI dashboard
+    * Main window
+    * Preview window (same as main window)
+
 * Shader manager
     * Create shader (left click shaders menu)
         * New file is created in the shader directory named `unixtime_sec`.glsl
