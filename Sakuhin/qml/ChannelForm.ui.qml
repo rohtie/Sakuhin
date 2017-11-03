@@ -5,8 +5,8 @@ import QtGraphicalEffects 1.0
 Button {
     id: channel
 
-    width: 52
-    height: 52
+    width: 43
+    height: 43
 
     property alias channel: channel
     property alias channelImage: channelImage

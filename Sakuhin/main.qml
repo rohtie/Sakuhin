@@ -12,8 +12,8 @@ ApplicationWindow {
     id: root
     flags: Qt.FramelessWindowHint
     visible: true
-    width: 382
-    height: 748
+    width: 256
+    height: 494
     color: "#111117"
     title: "Sakuhin"
 
@@ -31,30 +31,6 @@ ApplicationWindow {
         anchors.bottomMargin: 30
         spacing: 10
         anchors.fill: parent
-
-        Image {
-            id: preview
-            height: 200
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            fillMode: Image.PreserveAspectCrop
-            source: "tmp/XlscD4.jpg"
-
-            layer.enabled: true
-            layer.effect: OpacityMask {
-                maskSource: Item {
-                    width: preview.width
-                    height: preview.height
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: 2
-                    }
-                }
-            }
-        }
 
         Label {
             id: shaders_label
@@ -95,20 +71,20 @@ ApplicationWindow {
 
         GridView {
             id: shaders
-            height: 70
+            height: 60
             clip: true
             maximumFlickVelocity: 3000
             flickDeceleration: 1500
             boundsBehavior: Flickable.StopAtBounds
             snapMode: GridView.NoSnap
-            cellHeight: 52
-            cellWidth: 52
+            cellHeight: 48
+            cellWidth: 48
 
             anchors.left: parent.left
-            anchors.leftMargin: 5
+            anchors.leftMargin: 10
 
             anchors.right: parent.right
-            anchors.rightMargin: 5
+            anchors.rightMargin: 2.5
 
             model: FolderListModel {
                 folder: "tmp/"
@@ -123,8 +99,8 @@ ApplicationWindow {
                     anchors.fill: parent
                     anchors.topMargin: 0
                     anchors.rightMargin: 5
-                    anchors.leftMargin: 5
-                    anchors.bottomMargin: 10
+                    anchors.leftMargin: 0
+                    anchors.bottomMargin: 5
 
                     fillMode: Image.PreserveAspectCrop
                     source: fileURL
@@ -191,20 +167,20 @@ ApplicationWindow {
 
         GridView {
             id: trans
-            height: 70
+            height: 60
             clip: true
             maximumFlickVelocity: 3000
             flickDeceleration: 1500
             boundsBehavior: Flickable.StopAtBounds
             snapMode: GridView.NoSnap
-            cellHeight: 52
-            cellWidth: 52
+            cellHeight: 48
+            cellWidth: 48
 
             anchors.left: parent.left
-            anchors.leftMargin: 5
+            anchors.leftMargin: 10
 
             anchors.right: parent.right
-            anchors.rightMargin: 5
+            anchors.rightMargin: 2.5
 
             model: FolderListModel {
                 folder: "tmp/"
@@ -219,8 +195,8 @@ ApplicationWindow {
                     anchors.fill: parent
                     anchors.topMargin: 0
                     anchors.rightMargin: 5
-                    anchors.leftMargin: 5
-                    anchors.bottomMargin: 10
+                    anchors.leftMargin: 0
+                    anchors.bottomMargin: 5
 
                     fillMode: Image.PreserveAspectCrop
                     source: fileURL
@@ -280,14 +256,13 @@ ApplicationWindow {
 
         Flow {
             id: channels
-            width: 300
-            height: 52
+            height: 48
             clip: true
             anchors.left: parent.left
             anchors.leftMargin: 10
             anchors.right: parent.right
             anchors.rightMargin: 10
-            spacing: 10
+            spacing: 5
 
             Repeater {
                 id: channelRepeater
