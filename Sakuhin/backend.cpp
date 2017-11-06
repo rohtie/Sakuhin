@@ -104,7 +104,7 @@ QString BackEnd::getSessionID() {
     return sessionID;
 }
 
-
 void BackEnd::setChannel(const int &channelID, ChannelType channelType, const QString &fileUrl) {
     emit channelChanged(channelID, channelType, fileUrl);
 }
+

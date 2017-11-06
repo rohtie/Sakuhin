@@ -18,8 +18,10 @@ static GLfloat const rectangle[] = {
      1.0f, -1.0f, 0.0f
 };
 
-Window::Window(BackEnd *_backend) {
+Window::Window(BackEnd *_backend, ShaderManager *shadermanager) {
     backend = _backend;
+
+    this->shadermanager = shadermanager;
 
     sessionPath = "sessions/" + backend->getSessionID() + "/session.glsl";
     fileWatcher.addPath(sessionPath);

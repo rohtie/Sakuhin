@@ -47,8 +47,8 @@ ApplicationWindow {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    shaders.visible = !shaders.visible
-                    shaders_icon.text = shaders.visible ? '-' : '+'
+                    shader_view.visible = !shader_view.visible
+                    shaders_icon.text = shader_view.visible ? '-' : '+'
                 }
             }
 
@@ -70,7 +70,7 @@ ApplicationWindow {
         }
 
         GridView {
-            id: shaders
+            id: shader_view
             height: 60
             clip: true
             maximumFlickVelocity: 3000
@@ -86,13 +86,11 @@ ApplicationWindow {
             anchors.right: parent.right
             anchors.rightMargin: 2.5
 
-            model: FolderListModel {
-                folder: "tmp/"
-            }
+            model: shaders
 
             delegate: Item {
-                width: shaders.cellWidth
-                height: shaders.cellHeight
+                width: shader_view.cellWidth
+                height: shader_view.cellHeight
 
                 Image {
                     id: shaderImage
@@ -103,7 +101,7 @@ ApplicationWindow {
                     anchors.bottomMargin: 5
 
                     fillMode: Image.PreserveAspectCrop
-                    source: fileURL
+                    source: thumbnail
 
                     layer.enabled: true
                     layer.effect: OpacityMask {
@@ -166,7 +164,7 @@ ApplicationWindow {
         }
 
         GridView {
-            id: trans
+            id: transition_view
             height: 60
             clip: true
             maximumFlickVelocity: 3000
@@ -182,13 +180,11 @@ ApplicationWindow {
             anchors.right: parent.right
             anchors.rightMargin: 2.5
 
-            model: FolderListModel {
-                folder: "tmp/"
-            }
+            model: transitionShaders
 
             delegate: Item {
-                width: trans.cellWidth
-                height: trans.cellHeight
+                width: transition_view.cellWidth
+                height: transition_view.cellHeight
 
                 Image {
                     id: transitionImage
@@ -199,7 +195,7 @@ ApplicationWindow {
                     anchors.bottomMargin: 5
 
                     fillMode: Image.PreserveAspectCrop
-                    source: fileURL
+                    source: thumbnail
 
                     layer.enabled: true
                     layer.effect: OpacityMask {

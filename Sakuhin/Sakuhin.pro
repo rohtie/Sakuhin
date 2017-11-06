@@ -15,7 +15,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     backend.cpp \
     main.cpp \
-    window.cpp
+    window.cpp \
+    shadermanager.cpp \
+    shader.cpp
 
 RESOURCES += qml.qrc
 
@@ -32,7 +34,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     backend.h \
-    window.h
+    window.h \
+    shadermanager.h \
+    shader.h
 
 copydata.commands = $(COPY_DIR) $$PWD/data $$OUT_PWD
 first.depends = $(first) copydata

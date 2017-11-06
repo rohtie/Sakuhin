@@ -7,6 +7,8 @@
 #include <QFile>
 #include <QString>
 
+#include "shadermanager.h"
+
 class BackEnd : public QObject {
     Q_OBJECT
     Q_PROPERTY(
@@ -37,6 +39,8 @@ class BackEnd : public QObject {
 
         Q_INVOKABLE void createSession();
         Q_INVOKABLE void setChannel(const int &channelID, ChannelType channelType, const QString &fileUrl);
+
+        ShaderManager *shadermanager;
 
     public slots:
         void onShaderRecompile();

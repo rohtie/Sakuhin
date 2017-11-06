@@ -1,8 +1,11 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 #include "backend.h"
 #include "window.h"
+
+#include "shadermanager.h"
 
 int main(int argc, char *argv[]) {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -11,10 +14,12 @@ int main(int argc, char *argv[]) {
 
     qmlRegisterType<BackEnd>("sakuhin.backend", 1, 0, "BackEnd");
 
-    QQmlApplicationEngine engine;
-    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
-
+    QQmlApplicationEngine engine("qrc:/main.qml");
     BackEnd* backend = engine.rootObjects()[0]->findChild<BackEnd *>();
+
+    QQmlContext *qmlContext = engine.rootContext();
+    ShaderManager shadermanager(qmlContext);
+    backend->shadermanager = &shadermanager;
 
     QSurfaceFormat format;
     format.setRenderableType(QSurfaceFormat::OpenGL);
@@ -25,13 +30,13 @@ int main(int argc, char *argv[]) {
     // and getting rid of screen tearing
     format.setSwapInterval(0);
 
-    Window previewWindow(backend);
+    Window previewWindow(backend, &shadermanager);
     previewWindow.setFormat(format);
     previewWindow.resize(QSize(256, 256));
     previewWindow.setFlag(Qt::FramelessWindowHint);
     previewWindow.show();
 
-    Window mainWindow(backend);
+    Window mainWindow(backend, &shadermanager);
     mainWindow.setFormat(format);
     mainWindow.resize(QSize(800, 600));
     mainWindow.show();
