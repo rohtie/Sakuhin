@@ -3,6 +3,7 @@ import QtQuick.Extras 1.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import sakuhin.backend 1.0
+import sakuhin.shadermanager 1.0
 import Qt.labs.folderlistmodel 2.2
 import QtGraphicalEffects 1.0
 
@@ -19,6 +20,10 @@ ApplicationWindow {
 
     BackEnd {
         id: backend
+    }
+
+    ShaderManager {
+        id: shadermanager
     }
 
     Component.onCompleted: backend.createSession();
@@ -86,7 +91,7 @@ ApplicationWindow {
             anchors.right: parent.right
             anchors.rightMargin: 2.5
 
-            model: shaders
+            model: shadermanager.shaders
 
             delegate: Item {
                 width: shader_view.cellWidth
@@ -101,7 +106,7 @@ ApplicationWindow {
                     anchors.bottomMargin: 5
 
                     fillMode: Image.PreserveAspectCrop
-                    source: thumbnail
+                    source: model.modelData.thumbnail
 
                     layer.enabled: true
                     layer.effect: OpacityMask {
@@ -180,7 +185,7 @@ ApplicationWindow {
             anchors.right: parent.right
             anchors.rightMargin: 2.5
 
-            model: transitionShaders
+            model: shadermanager.transitionShaders
 
             delegate: Item {
                 width: transition_view.cellWidth
@@ -195,7 +200,7 @@ ApplicationWindow {
                     anchors.bottomMargin: 5
 
                     fillMode: Image.PreserveAspectCrop
-                    source: thumbnail
+                    source: model.modelData.thumbnail
 
                     layer.enabled: true
                     layer.effect: OpacityMask {

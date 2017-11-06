@@ -4,17 +4,33 @@
 #include <QQmlContext>
 #include <QObject>
 
+#include "shader.h"
+
+
 class ShaderManager : public QObject {
     Q_OBJECT
 
-    public:
-        ShaderManager(QQmlContext *qmlContext);
+    Q_PROPERTY(QList<QObject*> shaders MEMBER shaders NOTIFY shadersChanged)
+    Q_PROPERTY(QList<QObject*> transitionShaders MEMBER transitionShaders NOTIFY transitionShadersChanged)
 
-        void createShader();
-        void updateContext();
+    public:
+        ShaderManager();
+
+        Q_INVOKABLE void createShader(QString templateUrl);
+        void selectShader();
+        void makeCurrent();
+
+        void createTransition();
+        void selectTransition();
+        void startTransition();
+
+    signals:
+        void shadersChanged();
+        void transitionShadersChanged();
 
     private:
-        QQmlContext *qmlContext;
+        Shader *mainShader;
+        Shader *previewShader;
 
         QList<QObject*> shaders;
         QList<QObject*> transitionShaders;

@@ -13,16 +13,16 @@ int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
 
     qmlRegisterType<BackEnd>("sakuhin.backend", 1, 0, "BackEnd");
+    qmlRegisterType<ShaderManager>("sakuhin.shadermanager", 1, 0, "ShaderManager");
 
-    QQmlApplicationEngine engine;
+    QQmlApplicationEngine engine("qrc:/main.qml");
 
-    QQmlContext *qmlContext = engine.rootContext();
-    ShaderManager shadermanager(qmlContext);
+    QObject *qmlRoot = engine.rootObjects()[0];
 
-    engine.load("qrc:/main.qml");
+    BackEnd *backend = qmlRoot->findChild<BackEnd*>();
+    ShaderManager* shadermanager = qmlRoot->findChild<ShaderManager*>();
 
-    BackEnd* backend = engine.rootObjects()[0]->findChild<BackEnd *>();
-    backend->shadermanager = &shadermanager;
+    backend->shadermanager = shadermanager;
 
     QSurfaceFormat format;
     format.setRenderableType(QSurfaceFormat::OpenGL);
@@ -33,13 +33,13 @@ int main(int argc, char *argv[]) {
     // and getting rid of screen tearing
     format.setSwapInterval(0);
 
-    Window previewWindow(backend, &shadermanager);
+    Window previewWindow(backend, shadermanager);
     previewWindow.setFormat(format);
     previewWindow.resize(QSize(256, 256));
     previewWindow.setFlag(Qt::FramelessWindowHint);
     previewWindow.show();
 
-    Window mainWindow(backend, &shadermanager);
+    Window mainWindow(backend, shadermanager);
     mainWindow.setFormat(format);
     mainWindow.resize(QSize(800, 600));
     mainWindow.show();
