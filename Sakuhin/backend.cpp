@@ -33,12 +33,8 @@ float* BackEnd::getSliders() {
     return slider;
 }
 
-QString BackEnd::performanceInformation() {
-    return m_performanceInformation;
-}
-
 void BackEnd::setPerformanceInformation(const QString &performanceInformation) {
-    m_performanceInformation = performanceInformation;
+    this->performanceInformation = performanceInformation;
 
     emit performanceInformationChanged();
 }
