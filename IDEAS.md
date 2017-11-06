@@ -15,7 +15,7 @@
         * Channels and sliders are updated to their last known state
         * The selected shader is rendered to the preview window
 
-    * Shader context menu (right click on shader)
+    * Shader context menu (right click on shader area)
         * Make current
 
     * Create transition (left click transition menu)
@@ -27,7 +27,7 @@
     * Select transition (left click on transition)
         * Render transition with placeholder images to preview window
 
-    * Transition context menu
+    * Transition context menu (right click on transition area)
         * Transition  1 Sec
         * Transition  5 Sec
         * Transition 10 Sec
