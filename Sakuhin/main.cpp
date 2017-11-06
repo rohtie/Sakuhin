@@ -14,11 +14,14 @@ int main(int argc, char *argv[]) {
 
     qmlRegisterType<BackEnd>("sakuhin.backend", 1, 0, "BackEnd");
 
-    QQmlApplicationEngine engine("qrc:/main.qml");
-    BackEnd* backend = engine.rootObjects()[0]->findChild<BackEnd *>();
+    QQmlApplicationEngine engine;
 
     QQmlContext *qmlContext = engine.rootContext();
     ShaderManager shadermanager(qmlContext);
+
+    engine.load("qrc:/main.qml");
+
+    BackEnd* backend = engine.rootObjects()[0]->findChild<BackEnd *>();
     backend->shadermanager = &shadermanager;
 
     QSurfaceFormat format;
