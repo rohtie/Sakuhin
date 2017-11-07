@@ -36,43 +36,14 @@ ApplicationWindow {
         spacing: 10
         anchors.fill: parent
 
-        Label {
-            id: shaders_label
-            height: 15
-            color: "#dddddd"
+        SectionLabel {
             text: "Shaders"
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            anchors.rightMargin: 10
-            font.pointSize: 8
-            font.family: "Tahoma"
-            anchors.right: parent.right
+            interactive: true
 
-            MouseArea {
-                anchors.fill: parent
-
-                onClicked: {
-                    shaderCreationMenu.x = parent.x + mouse.x
-                    shaderCreationMenu.y = parent.y + mouse.y
-
-                    shaderCreationMenu.open()
-                }
-            }
-
-            Label {
-                id: shaders_icon
-                x: 0
-                y: 0
-                height: 15
-                color: "#dddddd"
-                text: '+'
-                horizontalAlignment: Text.AlignRight
-                anchors.rightMargin: 0
-                font.pointSize: 8
-                anchors.left: parent.left
-                anchors.right: parent.right
-                font.family: "Tahoma"
-                anchors.leftMargin: 0
+            area.onClicked: {
+                shaderCreationMenu.x = x + mouse.x
+                shaderCreationMenu.y = y + mouse.y
+                shaderCreationMenu.open()
             }
         }
 
@@ -80,48 +51,23 @@ ApplicationWindow {
             model: shadermanager.shaders
         }
 
-        Label {
-            id: transitions_label
-            height: 15
-            color: "#dddddd"
+        SectionLabel {
             text: "Transitions"
-            font.family: "Tahoma"
-            anchors.rightMargin: 10
-            font.pointSize: 8
-            anchors.leftMargin: 10
+            interactive: true
 
-            MouseArea {
-                anchors.fill: parent
-
-                onClicked: {
-                    transitionCreationMenu.x = parent.x + mouse.x
-                    transitionCreationMenu.y = parent.y + mouse.y
-
-                    transitionCreationMenu.open()
-                }
+            area.onClicked: {
+                transitionCreationMenu.x = x + mouse.x
+                transitionCreationMenu.y = y + mouse.y
+                transitionCreationMenu.open()
             }
-
-            Label {
-                id: shaders_icon1
-                x: 0
-                y: 0
-                height: 15
-                color: "#dddddd"
-                text: "+"
-                font.family: "Tahoma"
-                anchors.rightMargin: 0
-                font.pointSize: 8
-                anchors.leftMargin: 0
-                horizontalAlignment: Text.AlignRight
-                anchors.left: parent.left
-                anchors.right: parent.right
-            }
-            anchors.left: parent.left
-            anchors.right: parent.right
         }
 
         ShaderView {
             model: shadermanager.transitionShaders
+        }
+
+        SectionLabel {
+            text: "Channels"
         }
 
         Flow {
@@ -144,33 +90,8 @@ ApplicationWindow {
             }
         }
 
-        Label {
-            id: controller_label
-            height: 15
-            color: "#dddddd"
+        SectionLabel {
             text: "Controllers"
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            anchors.rightMargin: 10
-            font.pointSize: 8
-            font.family: "Tahoma"
-            anchors.right: parent.right
-
-            Label {
-                id: controller_icon
-                x: 0
-                y: 0
-                height: 15
-                color: "#dddddd"
-                text: '-'
-                horizontalAlignment: Text.AlignRight
-                anchors.rightMargin: 0
-                font.pointSize: 8
-                anchors.left: parent.left
-                anchors.right: parent.right
-                font.family: "Tahoma"
-                anchors.leftMargin: 0
-            }
         }
 
         RowLayout {
