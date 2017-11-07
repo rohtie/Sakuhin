@@ -220,14 +220,6 @@ ApplicationWindow {
             font.family: "Tahoma"
             anchors.right: parent.right
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    channels.visible = !channels.visible
-                    channels_icon.text = channels.visible ? '-' : '+'
-                }
-            }
-
             Label {
                 id: channels_icon
                 x: 0
@@ -257,7 +249,7 @@ ApplicationWindow {
 
             Repeater {
                 id: channelRepeater
-                model: 6
+                model: 5
 
                 ChannelForm {
                     channel.onClicked: channelPopup.activate(index)
@@ -276,14 +268,6 @@ ApplicationWindow {
             font.pointSize: 8
             font.family: "Tahoma"
             anchors.right: parent.right
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    controller.visible = !controller.visible
-                    controller_icon.text = controller.visible ? '-' : '+'
-                }
-            }
 
             Label {
                 id: controller_icon
@@ -356,8 +340,6 @@ ApplicationWindow {
 
     Menu {
         id: shaderCreationMenu
-        title: "New shader"
-
         height: shaderMenuList.contentHeight
 
         ListView {
