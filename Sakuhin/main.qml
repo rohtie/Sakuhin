@@ -28,7 +28,6 @@ ApplicationWindow {
 
     Component.onCompleted: backend.createSession();
 
-
     Column {
         id: column
         anchors.topMargin: 10
@@ -328,8 +327,6 @@ ApplicationWindow {
                 }
             }
         }
-
-
     }
 
     Image {
@@ -370,21 +367,28 @@ ApplicationWindow {
         id: shaderContextmenu
         title: "New shader"
 
-        background: Rectangle {
-            implicitWidth: 133
-            implicitHeight: 10
-            color: "#111117"
+        height: menuList.contentHeight
+
+        ListView {
+            id: menuList
+
+            anchors.fill: parent
+
+            interactive: false
+
+            model: FolderListModel {
+                folder: "file:data/shader_templates/"
+                nameFilters: ["*.glsl"]
+            }
+
+            delegate: StyledMenuItem {
+                text: fileBaseName
+            }
         }
 
-        StyledMenuItem {
-            text: "Minimal"
-            onTriggered: console.log("Add minimal shader")
-        }
-        StyledMenuItem {
-            text: "Feedback"
-        }
-        StyledMenuItem {
-            text: "Raymarch"
+        Rectangle {
+            anchors.fill: parent
+            color: "#111117"
         }
     }
 
@@ -441,6 +445,7 @@ ApplicationWindow {
                         color: "#ff0000"
                     }
                 }
+
                 Item {
                     id: textureTab
 
@@ -492,6 +497,7 @@ ApplicationWindow {
                         }
                     }
                 }
+
                 Item {
                     id: shaderTab
 
@@ -527,9 +533,6 @@ ApplicationWindow {
                     text: qsTr("Shaders")
                 }
             }
-
         }
-
     }
-
 }
