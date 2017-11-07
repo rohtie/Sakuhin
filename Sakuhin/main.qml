@@ -76,64 +76,8 @@ ApplicationWindow {
             }
         }
 
-        GridView {
-            id: shader_view
-            height: 60
-            clip: true
-            maximumFlickVelocity: 3000
-            flickDeceleration: 1500
-            boundsBehavior: Flickable.StopAtBounds
-            snapMode: GridView.NoSnap
-            cellHeight: 48
-            cellWidth: 48
-
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-
-            anchors.right: parent.right
-            anchors.rightMargin: 2.5
-
+        ShaderView {
             model: shadermanager.shaders
-
-            onCountChanged: currentIndex = count - 1
-
-            delegate: Item {
-                width: shader_view.cellWidth
-                height: shader_view.cellHeight
-
-                opacity: GridView.isCurrentItem ? 1.0 : 0.5
-
-                Image {
-                    id: shaderImage
-                    anchors.fill: parent
-                    anchors.topMargin: 0
-                    anchors.rightMargin: 5
-                    anchors.leftMargin: 0
-                    anchors.bottomMargin: 5
-
-                    asynchronous: true
-                    fillMode: Image.PreserveAspectCrop
-                    source: model.modelData.thumbnail
-
-                    layer.enabled: true
-                    layer.effect: OpacityMask {
-                        maskSource: Item {
-                            width: shaderImage.width
-                            height: shaderImage.height
-
-                            Rectangle {
-                                anchors.fill: parent
-                                radius: 2
-                            }
-                        }
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: parent.GridView.view.currentIndex = index
-                }
-            }
         }
 
         Label {
@@ -176,83 +120,8 @@ ApplicationWindow {
             anchors.right: parent.right
         }
 
-        GridView {
-            id: transition_view
-            height: 60
-            clip: true
-            maximumFlickVelocity: 3000
-            flickDeceleration: 1500
-            boundsBehavior: Flickable.StopAtBounds
-            snapMode: GridView.NoSnap
-            cellHeight: 48
-            cellWidth: 48
-
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-
-            anchors.right: parent.right
-            anchors.rightMargin: 2.5
-
+        ShaderView {
             model: shadermanager.transitionShaders
-
-            delegate: Item {
-                width: transition_view.cellWidth
-                height: transition_view.cellHeight
-
-                Image {
-                    id: transitionImage
-                    anchors.fill: parent
-                    anchors.topMargin: 0
-                    anchors.rightMargin: 5
-                    anchors.leftMargin: 0
-                    anchors.bottomMargin: 5
-
-                    fillMode: Image.PreserveAspectCrop
-                    source: model.modelData.thumbnail
-
-                    layer.enabled: true
-                    layer.effect: OpacityMask {
-                        maskSource: Item {
-                            width: transitionImage.width
-                            height: transitionImage.height
-
-                            Rectangle {
-                                anchors.fill: parent
-                                radius: 2
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        Label {
-            id: channels_label
-            height: 15
-            color: "#dddddd"
-            text: 'Channels'
-            font.pointSize: 8
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            anchors.rightMargin: 10
-            font.family: "Tahoma"
-            anchors.right: parent.right
-
-            Label {
-                id: channels_icon
-                x: 0
-                y: 0
-                height: 15
-                color: "#dddddd"
-                text: '-'
-                horizontalAlignment: Text.AlignRight
-                anchors.rightMargin: 0
-                font.pointSize: 8
-                anchors.left: parent.left
-                anchors.right: parent.right
-                font.family: "Tahoma"
-                anchors.leftMargin: 0
-            }
         }
 
         Flow {

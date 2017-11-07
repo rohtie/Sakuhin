@@ -20,5 +20,6 @@
         <file>qml/Tab.qml</file>
         <file>qml/TabForm.ui.qml</file>
         <file>qml/StyledMenuItem.qml</file>
+        <file>qml/ShaderView.qml</file>
     </qresource>
 </RCC>
