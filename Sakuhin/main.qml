@@ -64,6 +64,7 @@ ApplicationWindow {
 
         ShaderView {
             model: shadermanager.transitionShaders
+            contextArea.onClicked: transitionContextMenu.openAt(x + mouse.x, y + mouse.y)
         }
 
         SectionLabel {
@@ -180,10 +181,10 @@ ApplicationWindow {
 
     Menu {
         id: transitionCreationMenu
-        height: transitionMenuList.contentHeight
+        height: transitionCreationList.contentHeight
 
         ListView {
-            id: transitionMenuList
+            id: transitionCreationList
 
             anchors.fill: parent
 
@@ -200,6 +201,55 @@ ApplicationWindow {
                 onClicked: {
                     shadermanager.createTransition(fileURL)
                     transitionCreationMenu.close()
+                }
+            }
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            color: "#111117"
+        }
+    }
+
+    Menu {
+        id: transitionContextMenu
+        height: transitionContextList.contentHeight
+
+        function openAt(x, y) {
+            this.x = x
+            this.y = y
+            open()
+        }
+
+        ListView {
+            id: transitionContextList
+
+            anchors.fill: parent
+            interactive: false
+
+            model: ListModel {
+                ListElement {
+                    transitionTime: 1
+                }
+                ListElement {
+                    transitionTime: 5
+                }
+                ListElement {
+                    transitionTime: 10
+                }
+                ListElement {
+                    transitionTime: 20
+                }
+                ListElement {
+                    transitionTime: 30
+                }
+            }
+
+            delegate: StyledMenuItem {
+                text: transitionTime + " sec"
+
+                onClicked: {
+                    transitionContextMenu.close()
                 }
             }
         }

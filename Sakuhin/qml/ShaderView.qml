@@ -13,6 +13,8 @@ GridView {
     cellHeight: 48
     cellWidth: 48
 
+    property alias contextArea: contextArea
+
     anchors.left: parent.left
     anchors.leftMargin: 10
 
@@ -66,5 +68,11 @@ GridView {
             // TODO: Replace mousearea logic with button logic
             onExited: isPressed = false
         }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        id: contextArea
+        acceptedButtons: Qt.RightButton
     }
 }
