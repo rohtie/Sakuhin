@@ -135,8 +135,16 @@ ApplicationWindow {
             anchors.rightMargin: 10
             font.pointSize: 8
             anchors.leftMargin: 10
+
             MouseArea {
                 anchors.fill: parent
+
+                onClicked: {
+                    transitionCreationMenu.x = parent.x + mouse.x
+                    transitionCreationMenu.y = parent.y + mouse.y
+
+                    transitionCreationMenu.open()
+                }
             }
 
             Label {
@@ -145,7 +153,7 @@ ApplicationWindow {
                 y: 0
                 height: 15
                 color: "#dddddd"
-                text: "-"
+                text: "+"
                 font.family: "Tahoma"
                 anchors.rightMargin: 0
                 font.pointSize: 8
@@ -351,6 +359,33 @@ ApplicationWindow {
 
             model: FolderListModel {
                 folder: "file:data/shader_templates/"
+                nameFilters: ["*.glsl"]
+            }
+
+            delegate: StyledMenuItem {
+                text: fileBaseName
+            }
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            color: "#111117"
+        }
+    }
+
+    Menu {
+        id: transitionCreationMenu
+        height: transitionMenuList.contentHeight
+
+        ListView {
+            id: transitionMenuList
+
+            anchors.fill: parent
+
+            interactive: false
+
+            model: FolderListModel {
+                folder: "file:data/transition_templates/"
                 nameFilters: ["*.glsl"]
             }
 
