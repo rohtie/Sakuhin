@@ -50,9 +50,12 @@ ApplicationWindow {
 
             MouseArea {
                 anchors.fill: parent
+
                 onClicked: {
-                    shader_view.visible = !shader_view.visible
-                    shaders_icon.text = shader_view.visible ? '-' : '+'
+                    shaderCreationMenu.x = parent.x + mouse.x
+                    shaderCreationMenu.y = parent.y + mouse.y
+
+                    shaderCreationMenu.open()
                 }
             }
 
@@ -62,7 +65,7 @@ ApplicationWindow {
                 y: 0
                 height: 15
                 color: "#dddddd"
-                text: '-'
+                text: '+'
                 horizontalAlignment: Text.AlignRight
                 anchors.rightMargin: 0
                 font.pointSize: 8
@@ -119,18 +122,6 @@ ApplicationWindow {
                             }
                         }
                     }
-                }
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                acceptedButtons: Qt.RightButton
-
-                onClicked: {
-                    shaderContextmenu.x = parent.x + mouse.x
-                    shaderContextmenu.y = parent.y + mouse.y
-
-                    shaderContextmenu.open()
                 }
             }
         }
@@ -364,13 +355,13 @@ ApplicationWindow {
 
 
     Menu {
-        id: shaderContextmenu
+        id: shaderCreationMenu
         title: "New shader"
 
-        height: menuList.contentHeight
+        height: shaderMenuList.contentHeight
 
         ListView {
-            id: menuList
+            id: shaderMenuList
 
             anchors.fill: parent
 
