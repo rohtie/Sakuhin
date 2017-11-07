@@ -22,10 +22,12 @@ GridView {
     onCountChanged: currentIndex = count - 1
 
     delegate: Item {
+        property bool isPressed: false
+
         width: shader_view.cellWidth
         height: shader_view.cellHeight
 
-        opacity: GridView.isCurrentItem ? 1.0 : 0.5
+        opacity: (GridView.isCurrentItem || isPressed) ? 1.0 : 0.5
 
         Image {
             id: shaderImage
@@ -56,6 +58,13 @@ GridView {
         MouseArea {
             anchors.fill: parent
             onClicked: parent.GridView.view.currentIndex = index
+            onPressed: isPressed = true
+            onReleased: isPressed = false
+
+            // XXX: onExited is not emitted when the view is dragged
+            // which results in the shader thinking it is still pressed
+            // TODO: Replace mousearea logic with button logic
+            onExited: isPressed = false
         }
     }
 }
