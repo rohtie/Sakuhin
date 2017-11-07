@@ -4,7 +4,7 @@ import QtGraphicalEffects 1.0
 
 GridView {
     id: shader_view
-    height: 60
+    height: 70
     clip: true
     maximumFlickVelocity: 3000
     flickDeceleration: 1500
