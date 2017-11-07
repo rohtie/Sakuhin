@@ -95,9 +95,12 @@ ApplicationWindow {
 
             model: shadermanager.shaders
 
+            onCountChanged: positionViewAtEnd()
+
             delegate: Item {
                 width: shader_view.cellWidth
                 height: shader_view.cellHeight
+
 
                 Image {
                     id: shaderImage
@@ -364,6 +367,11 @@ ApplicationWindow {
 
             delegate: StyledMenuItem {
                 text: fileBaseName
+
+                onClicked: {
+                    shadermanager.createShader(fileURL)
+                    shaderCreationMenu.close()
+                }
             }
         }
 
