@@ -93,14 +93,15 @@ ApplicationWindow {
             anchors.right: parent.right
             anchors.rightMargin: 2.5
 
-            onCountChanged: positionViewAtEnd()
-
             model: shadermanager.shaders
+
+            onCountChanged: currentIndex = count - 1
 
             delegate: Item {
                 width: shader_view.cellWidth
                 height: shader_view.cellHeight
 
+                opacity: GridView.isCurrentItem ? 1.0 : 0.5
 
                 Image {
                     id: shaderImage
@@ -110,6 +111,7 @@ ApplicationWindow {
                     anchors.leftMargin: 0
                     anchors.bottomMargin: 5
 
+                    asynchronous: true
                     fillMode: Image.PreserveAspectCrop
                     source: model.modelData.thumbnail
 
@@ -125,6 +127,11 @@ ApplicationWindow {
                             }
                         }
                     }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: parent.GridView.view.currentIndex = index
                 }
             }
         }
@@ -185,8 +192,6 @@ ApplicationWindow {
 
             anchors.right: parent.right
             anchors.rightMargin: 2.5
-
-            onCountChanged: positionViewAtEnd()
 
             model: shadermanager.transitionShaders
 
@@ -502,6 +507,8 @@ ApplicationWindow {
                                 anchors.rightMargin: 5
                                 anchors.leftMargin: 5
                                 anchors.bottomMargin: 10
+
+                                asynchronous: true
 
                                 fillMode: Image.PreserveAspectFit
                                 source: fileURL
