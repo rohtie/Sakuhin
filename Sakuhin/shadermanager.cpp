@@ -26,3 +26,8 @@ void ShaderManager::createShader(QString templateUrl) {
     shaders.append(new Shader(12442224, "qrc:tmp/llsczl.jpg"));
     emit shadersChanged();
 }
+
+void ShaderManager::createTransition(QString templateUrl) {
+    transitionShaders.append(new Shader(12442224, "qrc:tmp/llsczl.jpg"));
+    emit transitionShadersChanged();
+}

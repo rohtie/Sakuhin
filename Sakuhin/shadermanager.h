@@ -20,7 +20,7 @@ class ShaderManager : public QObject {
         void selectShader();
         void makeCurrent();
 
-        void createTransition();
+        Q_INVOKABLE void createTransition(QString templateUrl);
         void selectTransition();
         void startTransition();
 

@@ -93,9 +93,9 @@ ApplicationWindow {
             anchors.right: parent.right
             anchors.rightMargin: 2.5
 
-            model: shadermanager.shaders
-
             onCountChanged: positionViewAtEnd()
+
+            model: shadermanager.shaders
 
             delegate: Item {
                 width: shader_view.cellWidth
@@ -185,6 +185,8 @@ ApplicationWindow {
 
             anchors.right: parent.right
             anchors.rightMargin: 2.5
+
+            onCountChanged: positionViewAtEnd()
 
             model: shadermanager.transitionShaders
 
@@ -399,6 +401,11 @@ ApplicationWindow {
 
             delegate: StyledMenuItem {
                 text: fileBaseName
+
+                onClicked: {
+                    shadermanager.createTransition(fileURL)
+                    transitionCreationMenu.close()
+                }
             }
         }
 
