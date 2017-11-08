@@ -21,6 +21,8 @@ int main(int argc, char* argv[]) {
 
     BackEnd* backend = qmlRoot->findChild<BackEnd*>();
     ShaderManager* shadermanager = qmlRoot->findChild<ShaderManager*>();
+    shadermanager->sessionID = backend->getSessionID();
+
 
     backend->shadermanager = shadermanager;
 
@@ -33,13 +35,13 @@ int main(int argc, char* argv[]) {
     // and getting rid of screen tearing
     format.setSwapInterval(0);
 
-    Window previewWindow(backend, shadermanager);
+    Window previewWindow(backend, shadermanager, true);
     previewWindow.setFormat(format);
     previewWindow.resize(QSize(256, 256));
     previewWindow.setFlag(Qt::FramelessWindowHint);
     previewWindow.show();
 
-    Window mainWindow(backend, shadermanager);
+    Window mainWindow(backend, shadermanager, false);
     mainWindow.setFormat(format);
     mainWindow.resize(QSize(800, 600));
     mainWindow.show();

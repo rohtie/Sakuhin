@@ -6,7 +6,6 @@
 
 #include "shader.h"
 
-
 class ShaderManager : public QObject {
     Q_OBJECT
 
@@ -16,6 +15,8 @@ class ShaderManager : public QObject {
     public:
         ShaderManager();
 
+        void initializeGL();
+
         Q_INVOKABLE void createShader(QString templateUrl);
         void selectShader();
         void makeCurrent();
@@ -24,14 +25,16 @@ class ShaderManager : public QObject {
         void selectTransition();
         void startTransition();
 
+        QString sessionID;
+
+        Shader* mainShader;
+        Shader* previewShader;
+
     signals:
         void shadersChanged();
         void transitionShadersChanged();
 
     private:
-        Shader* mainShader;
-        Shader* previewShader;
-
         QList<QObject*> shaders;
         QList<QObject*> transitionShaders;
 

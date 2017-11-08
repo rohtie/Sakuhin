@@ -21,35 +21,36 @@ class Window : public QOpenGLWindow,
     Q_OBJECT
 
     public:
-        explicit Window(BackEnd* backend, ShaderManager* shadermanager);
-
-        QString buildShader();
-        void recompileShader();
+        explicit Window(BackEnd* backend, ShaderManager* shadermanager, bool isPreview);
 
         void initializeGL();
+        void bindVAO();
+
+        void drawRectangle();
+        void render();
+        void updatePerformanceInformation();
         void paintGL();
 
     public slots:
         void onSessionFileChange(const QString &path);
-        void onChannelChange(const int &channelID, BackEnd::ChannelType &channelType, const QString &fileUrl);
 
     signals:
         void shaderRecompiled();
 
     private:
+        bool isPreview = false;
+
     	BackEnd* backend;
         ShaderManager* shadermanager;
 
-        QString sessionPath;
+        Shader* shader;
+
         QFileSystemWatcher fileWatcher;
-        QDateTime lastSessionModification;
         QByteArray sessionContents;
+        QDateTime lastSessionModification;
 
         QOpenGLBuffer vbo;
         QOpenGLVertexArrayObject vao;
-        QOpenGLShaderProgram shader;
-
-        QVector<QOpenGLTexture*> textures;
 
         QElapsedTimer time;
         int frameCounter;

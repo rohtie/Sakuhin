@@ -3,6 +3,9 @@
     * Main window
     * Preview window (same as main window)
 
+* When not using projection mapping with splash
+    * Display shader fbo result with another shader
+
 * Shader manager
     * Create shader (left click shaders menu)
         * New file is created in the shader directory named `unixtime_sec`.glsl

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QOpenGLFramebufferObject>
+#include <QOpenGLShaderProgram>
 
 class Shader : public QObject {
     Q_OBJECT
@@ -11,9 +12,24 @@ class Shader : public QObject {
     Q_PROPERTY(QString thumbnail MEMBER thumbnail NOTIFY thumbnailChanged)
 
     public:
-        Shader(int id, QString thumbnail);
+        Shader(int id, QString thumbnail, QString sessionpath);
 
-        int lastFrame();
+        void bindVAO();
+        void setPreview(bool isPreview);
+
+        QString build(QByteArray shaderCode);
+        bool recompile(QByteArray shaderCode);
+
+        void bind();
+        void release();
+
+        void setResolution(int width, int height);
+        void setTime(double time);
+        void setUniformValues();
+
+        int getLastFrame();
+
+        QOpenGLShaderProgram program;
 
     signals:
         void idChanged();
@@ -22,7 +38,14 @@ class Shader : public QObject {
     private:
         int id;
         QString thumbnail;
-        QOpenGLFramebufferObject* fbo;
+
+        bool isPreview = false;
+        double time = 0.0;
+
+        QOpenGLFramebufferObject* fbo = nullptr;
+        QOpenGLFramebufferObject* previewFbo = nullptr;
+        QOpenGLFramebufferObject* mainFbo = nullptr;
+
 };
 
 #endif // SHADER_H

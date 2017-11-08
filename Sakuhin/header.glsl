@@ -8,6 +8,5 @@ uniform sampler2D channel1;
 uniform sampler2D channel2;
 uniform sampler2D channel3;
 uniform sampler2D channel4;
-uniform sampler2D channel5;
 
 out vec4 outputColor;
