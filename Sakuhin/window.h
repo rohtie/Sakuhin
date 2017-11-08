@@ -21,7 +21,7 @@ class Window : public QOpenGLWindow,
     Q_OBJECT
 
     public:
-        explicit Window(BackEnd *backend, ShaderManager *shadermanager);
+        explicit Window(BackEnd* backend, ShaderManager* shadermanager);
 
         QString buildShader();
         void recompileShader();
@@ -37,8 +37,8 @@ class Window : public QOpenGLWindow,
         void shaderRecompiled();
 
     private:
-    	BackEnd *backend;
-        ShaderManager *shadermanager;
+    	BackEnd* backend;
+        ShaderManager* shadermanager;
 
         QString sessionPath;
         QFileSystemWatcher fileWatcher;

@@ -29,8 +29,8 @@ class ShaderManager : public QObject {
         void transitionShadersChanged();
 
     private:
-        Shader *mainShader;
-        Shader *previewShader;
+        Shader* mainShader;
+        Shader* previewShader;
 
         QList<QObject*> shaders;
         QList<QObject*> transitionShaders;

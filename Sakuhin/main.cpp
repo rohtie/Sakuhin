@@ -7,7 +7,7 @@
 
 #include "shadermanager.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QGuiApplication app(argc, argv);
@@ -17,9 +17,9 @@ int main(int argc, char *argv[]) {
 
     QQmlApplicationEngine engine("qrc:/main.qml");
 
-    QObject *qmlRoot = engine.rootObjects()[0];
+    QObject* qmlRoot = engine.rootObjects()[0];
 
-    BackEnd *backend = qmlRoot->findChild<BackEnd*>();
+    BackEnd* backend = qmlRoot->findChild<BackEnd*>();
     ShaderManager* shadermanager = qmlRoot->findChild<ShaderManager*>();
 
     backend->shadermanager = shadermanager;

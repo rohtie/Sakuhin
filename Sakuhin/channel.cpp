@@ -2,7 +2,7 @@
 
 #include "channel.h"
 
-Channel::Channel(QObject *parent) : QObject(parent) {
+Channel::Channel(QObject* parent) : QObject(parent) {
 
 }
 

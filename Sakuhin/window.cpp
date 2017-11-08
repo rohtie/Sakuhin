@@ -18,9 +18,8 @@ static GLfloat const rectangle[] = {
      1.0f, -1.0f, 0.0f
 };
 
-Window::Window(BackEnd *_backend, ShaderManager *shadermanager) {
-    backend = _backend;
-
+Window::Window(BackEnd* backend, ShaderManager* shadermanager) {
+    this->backend = backend;
     this->shadermanager = shadermanager;
 
     sessionPath = "sessions/" + backend->getSessionID() + "/session.glsl";
@@ -56,7 +55,7 @@ QString Window::buildShader() {
 }
 
 void Window::recompileShader() {
-    QOpenGLShader *oldShader = shader.shaders()[1];
+    QOpenGLShader* oldShader = shader.shaders()[1];
 
     shader.removeShader(oldShader);
 

@@ -17,7 +17,7 @@ class Channel : public QObject {
         };
         Q_ENUM(ChannelType)
 
-        explicit Channel(QObject *parent = nullptr);
+        explicit Channel(QObject* parent = nullptr);
 
         void bind();
         void setTexture(QString &fileUrl);
@@ -27,7 +27,7 @@ class Channel : public QObject {
         int channelLocation;
         ChannelType channelType;
 
-        QOpenGLTexture *texture;
+        QOpenGLTexture* texture;
         Shader* shader;
 };
 

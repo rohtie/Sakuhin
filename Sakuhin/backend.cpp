@@ -9,7 +9,7 @@
 #include <QtDebug>
 #include <QString>
 
-BackEnd::BackEnd(QObject *parent) : QObject(parent) {
+BackEnd::BackEnd(QObject* parent) : QObject(parent) {
 
 }
 

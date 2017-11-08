@@ -15,7 +15,7 @@ class BackEnd : public QObject {
     Q_PROPERTY(QString performanceInformation MEMBER performanceInformation NOTIFY performanceInformationChanged)
 
     public:
-        explicit BackEnd(QObject *parent = nullptr);
+        explicit BackEnd(QObject* parent = nullptr);
 
         enum ChannelType {
             Texture,
@@ -34,7 +34,7 @@ class BackEnd : public QObject {
         Q_INVOKABLE void createSession();
         Q_INVOKABLE void setChannel(const int &channelID, ChannelType channelType, const QString &fileUrl);
 
-        ShaderManager *shadermanager;
+        ShaderManager* shadermanager;
 
     public slots:
         void onShaderRecompile();
