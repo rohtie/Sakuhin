@@ -2,6 +2,7 @@
 #define SHADER_H
 
 #include <QObject>
+#include <QOpenGLFramebufferObject>
 
 class Shader : public QObject {
     Q_OBJECT
@@ -12,7 +13,7 @@ class Shader : public QObject {
     public:
         Shader(int id, QString thumbnail);
 
-        QString thumbnail;
+        int lastFrame();
 
     signals:
         void idChanged();
@@ -20,6 +21,8 @@ class Shader : public QObject {
 
     private:
         int id;
+        QString thumbnail;
+        QOpenGLFramebufferObject* fbo;
 };
 
 #endif // SHADER_H

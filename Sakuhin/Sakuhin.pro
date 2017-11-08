@@ -17,7 +17,8 @@ SOURCES += \
     main.cpp \
     window.cpp \
     shadermanager.cpp \
-    shader.cpp
+    shader.cpp \
+    channel.cpp
 
 RESOURCES += qml.qrc
 
@@ -36,7 +37,8 @@ HEADERS += \
     backend.h \
     window.h \
     shadermanager.h \
-    shader.h
+    shader.h \
+    channel.h
 
 copydata.commands = $(COPY_DIR) $$PWD/data $$OUT_PWD
 first.depends = $(first) copydata
