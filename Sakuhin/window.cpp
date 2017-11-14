@@ -5,6 +5,7 @@
 #include <QFileSystemWatcher>
 #include <QFileInfo>
 #include <QDateTime>
+#include <QOpenGLDebugLogger>
 
 #include "backend.h"
 
@@ -40,6 +41,13 @@ void Window::initializeGL() {
     initializeOpenGLFunctions();
 
     qDebug() << reinterpret_cast<const char*>(glGetString(GL_VERSION));
+
+    #ifdef QT_DEBUG
+    QOpenGLDebugLogger* logger = new QOpenGLDebugLogger(this);
+    logger->initialize();
+    connect(logger, &QOpenGLDebugLogger::messageLogged, this, &Window::handleLoggedMessage);
+    logger->startLogging();
+    #endif
 
     if (isPreview) {
         shadermanager->initializeGL();
@@ -139,4 +147,8 @@ void Window::onSessionFileChange(const QString &path) {
     if(!fileWatcher.files().contains(path) && fileInfo.exists()) {
         fileWatcher.addPath(path);
     }
+}
+
+void Window::handleLoggedMessage(const QOpenGLDebugMessage &debugMessage){
+    qDebug() << (isPreview ? "Preview: " : "Main: ") << debugMessage.message();
 }

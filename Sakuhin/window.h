@@ -11,6 +11,7 @@
 #include <QElapsedTimer>
 #include <QOpenGLTexture>
 #include <QVector>
+#include <QOpenGLDebugMessage>
 
 #include "backend.h"
 #include "shadermanager.h"
@@ -30,6 +31,8 @@ class Window : public QOpenGLWindow,
         void render();
         void updatePerformanceInformation();
         void paintGL();
+
+        void handleLoggedMessage(const QOpenGLDebugMessage &debugMessage);
 
     public slots:
         void onSessionFileChange(const QString &path);

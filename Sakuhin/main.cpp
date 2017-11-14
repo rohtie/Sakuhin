@@ -31,6 +31,10 @@ int main(int argc, char* argv[]) {
     format.setProfile(QSurfaceFormat::CoreProfile);
     format.setVersion(4, 5);
 
+    #ifdef QT_DEBUG
+    format.setOption(QSurfaceFormat::DebugContext);
+    #endif
+
     // Disable vsync for more accurate performance measures
     // and getting rid of screen tearing
     format.setSwapInterval(0);
