@@ -39,6 +39,8 @@ int main(int argc, char* argv[]) {
     // and getting rid of screen tearing
     format.setSwapInterval(0);
 
+    shadermanager->createContext(format);
+
     Window previewWindow(backend, shadermanager, true);
     previewWindow.setFormat(format);
     previewWindow.resize(QSize(256, 256));

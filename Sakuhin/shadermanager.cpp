@@ -1,11 +1,21 @@
 #include "shadermanager.h"
 #include "shader.h"
 
-ShaderManager::ShaderManager() {
+#include <QOffscreenSurface>
 
+ShaderManager::ShaderManager() {
 }
 
-void ShaderManager::initializeGL() {
+void ShaderManager::createContext(const QSurfaceFormat &format) {
+    QOffscreenSurface surface;
+    surface.setFormat(format);
+    surface.create();
+
+    context = QOpenGLContext::globalShareContext();
+    context->setFormat(format);
+    context->create();
+    context->makeCurrent(&surface);
+
     mainShader = new Shader(
         1242424,
         "qrc:tmp/XdjyR1.jpg",

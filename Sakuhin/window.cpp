@@ -49,13 +49,7 @@ void Window::initializeGL() {
     logger->startLogging();
     #endif
 
-    if (isPreview) {
-        shadermanager->initializeGL();
-        shader = shadermanager->previewShader;
-    }
-    else {
-        shader = shadermanager->mainShader;
-    }
+    shader = shadermanager->mainShader;
 
     vao.create();
     vao.bind();

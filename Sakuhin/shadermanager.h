@@ -3,6 +3,8 @@
 
 #include <QQmlContext>
 #include <QObject>
+#include <QOpenGLContext>
+#include <QOpenGLFunctions>
 
 #include "shader.h"
 
@@ -15,7 +17,7 @@ class ShaderManager : public QObject {
     public:
         ShaderManager();
 
-        void initializeGL();
+        void createContext(const QSurfaceFormat &format);
 
         Q_INVOKABLE void createShader(QString templateUrl);
         void selectShader();
@@ -38,6 +40,7 @@ class ShaderManager : public QObject {
         QList<QObject*> shaders;
         QList<QObject*> transitionShaders;
 
+        QOpenGLContext* context;
 };
 
 #endif // SHADERMANAGER_H
