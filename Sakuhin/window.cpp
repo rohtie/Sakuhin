@@ -34,6 +34,14 @@ void Window::initializeGL() {
     logger->startLogging();
     #endif
 
+    screenShader.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vertex.glsl");
+    screenShader.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/screenShader.glsl");
+    screenShader.link();
+
+    screenShader.bind();
+        screenShader.setUniformValue("screenTexture", GL_TEXTURE0);
+    screenShader.release();
+
     vao.create();
     vao.bind();
         vbo.create();
@@ -60,11 +68,30 @@ void Window::render(Shader* shader) {
     shader->setResolution(width(), height());
     shader->setTime(time.elapsed() / 1000.0f);
 
-    shader->bind();
-        shader->setUniformValues();
+    shader->fbo->bind();
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        shader->bind();
+            shader->setUniformValues();
+
+            drawRectangle();
+        shader->release();
+    shader->fbo->release();
+}
+
+void Window::renderScreen(Shader* shader) {
+    render(shader);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    screenShader.bind();
+        screenShader.setUniformValue("resolution", width(), height());
+        screenShader.setUniformValue("screenTextureResolution", shader->width(), shader->height());
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, shader->getLastFrame());
 
         drawRectangle();
-    shader->release();
+    screenShader.release();
 }
 
 void Window::updatePerformanceInformation() {
@@ -92,8 +119,7 @@ void Window::paintGL() {
         updatePerformanceInformation();
     }
 
-    glClear(GL_COLOR_BUFFER_BIT);
-    render(shadermanager->getShader(isPreview));
+    renderScreen(shadermanager->getShader(isPreview));
     update();
 }
 

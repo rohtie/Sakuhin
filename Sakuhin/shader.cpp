@@ -95,11 +95,19 @@ void Shader::setTime(double time) {
 }
 
 void Shader::setUniformValues() {
-    program.setUniformValue("resolution", fbo->width(), fbo->height());
+    program.setUniformValue("resolution", width(), height());
     program.setUniformValue("time", (GLfloat) time);
 
     // TODO: Fix sliders
     // shader.setUniformValueArray("slider", (GLfloat*) backend->getSliders(), 4, 1);
+}
+
+int Shader::width() {
+    return fbo->width();
+}
+
+int Shader::height() {
+    return fbo->height();
 }
 
 int Shader::getLastFrame() {

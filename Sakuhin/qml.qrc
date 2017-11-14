@@ -14,6 +14,7 @@
         <file>footer.glsl</file>
         <file>header.glsl</file>
         <file>vertex.glsl</file>
+        <file>screenShader.glsl</file>
         <file>qml/SliderController.qml</file>
         <file>qml/SliderControllerForm.ui.qml</file>
         <file>qml/Channel.qml</file>

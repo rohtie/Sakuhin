@@ -26,25 +26,27 @@ class Shader : public QObject {
         void setTime(double time);
         void setUniformValues();
 
+        int width();
+        int height();
+
         int getLastFrame();
 
-        QOpenGLShaderProgram program;
+        QOpenGLFramebufferObject* fbo = nullptr;
+        QOpenGLFramebufferObject* previewFbo = nullptr;
+        QOpenGLFramebufferObject* mainFbo = nullptr;
 
     signals:
         void idChanged();
         void thumbnailChanged();
 
     private:
+        QOpenGLShaderProgram program;
+
         int id;
         QString thumbnail;
 
         bool isPreview = false;
         double time = 0.0;
-
-        QOpenGLFramebufferObject* fbo = nullptr;
-        QOpenGLFramebufferObject* previewFbo = nullptr;
-        QOpenGLFramebufferObject* mainFbo = nullptr;
-
 };
 
 #endif // SHADER_H

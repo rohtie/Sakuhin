@@ -28,6 +28,7 @@ class Window : public QOpenGLWindow,
 
         void drawRectangle();
         void render(Shader* shader);
+        void renderScreen(Shader* shader);
         void updatePerformanceInformation();
         void paintGL();
 
@@ -42,8 +43,9 @@ class Window : public QOpenGLWindow,
     	BackEnd* backend;
         ShaderManager* shadermanager;
 
-        QOpenGLBuffer vbo;
+        QOpenGLShaderProgram screenShader;
         QOpenGLVertexArrayObject vao;
+        QOpenGLBuffer vbo;
 
         QElapsedTimer time;
         int frameCounter;
