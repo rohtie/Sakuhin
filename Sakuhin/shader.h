@@ -14,7 +14,6 @@ class Shader : public QObject {
     public:
         Shader(int id, QString thumbnail, QString sessionpath);
 
-        void bindVAO();
         void setPreview(bool isPreview);
 
         QString build(QByteArray shaderCode);

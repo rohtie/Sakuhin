@@ -57,24 +57,19 @@ void Window::initializeGL() {
         shader = shadermanager->mainShader;
     }
 
-    vbo.create();
-    vbo.bind();
-        vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
-        vbo.allocate(rectangle, sizeof(rectangle));
-        vao.create();
-    vbo.release();
+    vao.create();
+    vao.bind();
+        vbo.create();
+        vbo.bind();
+            vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
+            vbo.allocate(rectangle, sizeof(rectangle));
 
-    bindVAO();
+            glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_TRUE, 0, 0);
+            glEnableVertexAttribArray(0);
+        vbo.release();
+    vao.release();
 
     time.start();
-}
-
-void Window::bindVAO() {
-    vbo.bind();
-        vao.bind();
-            shader->bindVAO();
-        vao.release();
-    vbo.release();
 }
 
 void Window::drawRectangle() {

@@ -25,7 +25,6 @@ class Window : public QOpenGLWindow,
         explicit Window(BackEnd* backend, ShaderManager* shadermanager, bool isPreview);
 
         void initializeGL();
-        void bindVAO();
 
         void drawRectangle();
         void render();

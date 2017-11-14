@@ -25,11 +25,6 @@ Shader::Shader(int id, QString thumbnail, QString sessionpath) {
     program.release();
 }
 
-void Shader::bindVAO() {
-    program.enableAttributeArray(0);
-    program.setAttributeBuffer(0, GL_FLOAT, 0, 3);
-}
-
 void Shader::setPreview(bool isPreview) {
     if (isPreview == this->isPreview) {
         return;
