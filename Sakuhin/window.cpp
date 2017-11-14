@@ -24,17 +24,15 @@ Window::Window(BackEnd* backend, ShaderManager* shadermanager, bool isPreview) {
 void Window::initializeGL() {
     initializeOpenGLFunctions();
 
+    #ifdef QT_DEBUG
     qDebug() << reinterpret_cast<const char*>(glGetString(GL_VERSION));
 
-    #ifdef QT_DEBUG
     QOpenGLDebugLogger* logger = new QOpenGLDebugLogger(this);
     logger->initialize();
     connect(logger, &QOpenGLDebugLogger::messageLogged,
             this, &Window::handleLoggedMessage);
     logger->startLogging();
     #endif
-
-    shader = shadermanager->mainShader;
 
     vao.create();
     vao.bind();
@@ -57,7 +55,7 @@ void Window::drawRectangle() {
     vao.release();
 }
 
-void Window::render() {
+void Window::render(Shader* shader) {
     shader->setPreview(isPreview);
     shader->setResolution(width(), height());
     shader->setTime(time.elapsed() / 1000.0f);
@@ -95,7 +93,7 @@ void Window::paintGL() {
     }
 
     glClear(GL_COLOR_BUFFER_BIT);
-    render();
+    render(shadermanager->getShader(isPreview));
     update();
 }
 

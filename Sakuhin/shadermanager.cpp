@@ -28,6 +28,18 @@ void ShaderManager::initialize(const QSurfaceFormat &format) {
         "sessions/" + sessionID + "/session.glsl"
     );
     previewShader = mainShader;
+
+    shaders.append(mainShader);
+    emit shadersChanged();
+}
+
+Shader* ShaderManager::getShader(bool isPreview) {
+    if (isPreview) {
+        return previewShader;
+    }
+    else {
+        return mainShader;
+    }
 }
 
 void ShaderManager::createShader(QString templateUrl) {

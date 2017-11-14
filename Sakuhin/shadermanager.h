@@ -23,6 +23,8 @@ class ShaderManager : public QObject {
 
         void initialize(const QSurfaceFormat &format);
 
+        Shader* getShader(bool isPreview);
+
         Q_INVOKABLE void createShader(QString templateUrl);
         void selectShader();
         void makeCurrent();
@@ -33,9 +35,6 @@ class ShaderManager : public QObject {
 
         QString sessionID;
 
-        Shader* mainShader;
-        Shader* previewShader;
-
     public slots:
         void onSessionFileChange(const QString &path);
 
@@ -44,6 +43,9 @@ class ShaderManager : public QObject {
         void transitionShadersChanged();
 
     private:
+        Shader* mainShader;
+        Shader* previewShader;
+
         QFileSystemWatcher fileWatcher;
         QByteArray sessionContents;
         QDateTime lastSessionModification;
