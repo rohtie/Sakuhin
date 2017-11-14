@@ -5,6 +5,10 @@
 #include <QObject>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
+#include <QFileSystemWatcher>
+#include <QFile>
+#include <QFileInfo>
+#include <QDateTime>
 
 #include "shader.h"
 
@@ -17,7 +21,7 @@ class ShaderManager : public QObject {
     public:
         ShaderManager();
 
-        void createContext(const QSurfaceFormat &format);
+        void initialize(const QSurfaceFormat &format);
 
         Q_INVOKABLE void createShader(QString templateUrl);
         void selectShader();
@@ -32,11 +36,18 @@ class ShaderManager : public QObject {
         Shader* mainShader;
         Shader* previewShader;
 
+    public slots:
+        void onSessionFileChange(const QString &path);
+
     signals:
         void shadersChanged();
         void transitionShadersChanged();
 
     private:
+        QFileSystemWatcher fileWatcher;
+        QByteArray sessionContents;
+        QDateTime lastSessionModification;
+
         QList<QObject*> shaders;
         QList<QObject*> transitionShaders;
 

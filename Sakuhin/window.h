@@ -33,9 +33,6 @@ class Window : public QOpenGLWindow,
 
         void handleLoggedMessage(const QOpenGLDebugMessage &debugMessage);
 
-    public slots:
-        void onSessionFileChange(const QString &path);
-
     signals:
         void shaderRecompiled();
 
@@ -46,10 +43,6 @@ class Window : public QOpenGLWindow,
         ShaderManager* shadermanager;
 
         Shader* shader;
-
-        QFileSystemWatcher fileWatcher;
-        QByteArray sessionContents;
-        QDateTime lastSessionModification;
 
         QOpenGLBuffer vbo;
         QOpenGLVertexArrayObject vao;

@@ -1,10 +1,6 @@
 #include "window.h"
 #include <QDebug>
 #include <QString>
-#include <QFile>
-#include <QFileSystemWatcher>
-#include <QFileInfo>
-#include <QDateTime>
 #include <QOpenGLDebugLogger>
 
 #include "backend.h"
@@ -19,22 +15,10 @@ static GLfloat const rectangle[] = {
      1.0f, -1.0f, 0.0f
 };
 
-Window::Window(BackEnd* backend,
-               ShaderManager* shadermanager,
-               bool isPreview) {
-
+Window::Window(BackEnd* backend, ShaderManager* shadermanager, bool isPreview) {
     this->backend = backend;
     this->shadermanager = shadermanager;
     this->isPreview = isPreview;
-
-    if (isPreview) {
-        fileWatcher.addPath(
-            "sessions/" + backend->getSessionID() + "/session.glsl"
-        );
-
-        QObject::connect(&fileWatcher, &QFileSystemWatcher::fileChanged,
-                         this, &Window::onSessionFileChange);
-    }
 }
 
 void Window::initializeGL() {
@@ -45,7 +29,8 @@ void Window::initializeGL() {
     #ifdef QT_DEBUG
     QOpenGLDebugLogger* logger = new QOpenGLDebugLogger(this);
     logger->initialize();
-    connect(logger, &QOpenGLDebugLogger::messageLogged, this, &Window::handleLoggedMessage);
+    connect(logger, &QOpenGLDebugLogger::messageLogged,
+            this, &Window::handleLoggedMessage);
     logger->startLogging();
     #endif
 
@@ -58,7 +43,7 @@ void Window::initializeGL() {
             vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
             vbo.allocate(rectangle, sizeof(rectangle));
 
-            glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_TRUE, 0, 0);
+            glVertexAttribPointer((GLuint) 0, 3, GL_FLOAT, GL_TRUE, 0, 0);
             glEnableVertexAttribArray(0);
         vbo.release();
     vao.release();
@@ -112,30 +97,6 @@ void Window::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT);
     render();
     update();
-}
-
-void Window::onSessionFileChange(const QString &path) {
-    QFileInfo fileInfo(path);
-
-    if (fileInfo.lastModified() > lastSessionModification) {
-        lastSessionModification = fileInfo.lastModified();
-
-        QFile session(path);
-        session.open(QIODevice::ReadOnly);
-        QByteArray newSessionContents = session.readAll();
-
-        if (newSessionContents != sessionContents) {
-            sessionContents = newSessionContents;
-
-            shader->recompile(sessionContents);
-        }
-    }
-
-    // On some systems, files are replaced by an entirely new file when
-    // modified. thus we need to add it to the file watcher again.
-    if(!fileWatcher.files().contains(path) && fileInfo.exists()) {
-        fileWatcher.addPath(path);
-    }
 }
 
 void Window::handleLoggedMessage(const QOpenGLDebugMessage &debugMessage){
