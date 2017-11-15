@@ -29,9 +29,10 @@ class Window : public QOpenGLWindow,
         void drawRectangle();
         void render(Shader* shader);
         void renderScreen(Shader* shader);
-        void updatePerformanceInformation();
         void paintGL();
 
+        void keyPressEvent(QKeyEvent* event);
+        void updatePerformanceInformation();
         void handleLoggedMessage(const QOpenGLDebugMessage &debugMessage);
 
     signals:
@@ -50,6 +51,9 @@ class Window : public QOpenGLWindow,
         QElapsedTimer time;
         int frameCounter;
         qint64 lastTime = 0;
+        QMargins oldMargins;
+
+        QRect oldGeometry;
 };
 
 #endif // WINDOW_H

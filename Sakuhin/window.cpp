@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QString>
 #include <QOpenGLDebugLogger>
+#include <QKeyEvent>
 
 #include "backend.h"
 
@@ -107,6 +108,43 @@ void Window::paintGL() {
 
     renderScreen(shadermanager->currentShader(isPreview));
     update();
+}
+
+void Window::keyPressEvent(QKeyEvent* event) {
+    if (event->key() == Qt::Key_F11) {
+        if ((flags() & Qt::FramelessWindowHint) == 0) {
+            oldGeometry = frameGeometry();
+            oldMargins = frameMargins();
+
+            int frameWidth = oldGeometry.width();
+            int frameHeight = oldGeometry.height();
+
+            QPoint oldPosition = framePosition();
+
+            setFlags(Qt::Window | Qt::FramelessWindowHint);
+
+            setWidth(frameWidth);
+            setHeight(frameHeight);
+            setPosition(oldPosition);
+        }
+        else {
+            setFlags(Qt::Window);
+
+            // TODO: Get the default frame margins when window is already frameless
+            if (oldMargins.top() == 0) {
+                oldGeometry = frameGeometry();
+            }
+
+            oldGeometry.adjust(
+                oldMargins.left(),
+                oldMargins.top(),
+                -oldMargins.right(),
+                -oldMargins.bottom()
+            );
+
+            setGeometry(oldGeometry);
+        }
+    }
 }
 
 void Window::updatePerformanceInformation() {
