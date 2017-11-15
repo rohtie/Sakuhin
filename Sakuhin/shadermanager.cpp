@@ -27,19 +27,24 @@ void ShaderManager::initialize(const QSurfaceFormat &format) {
         "qrc:tmp/XdjyR1.jpg",
         "sessions/" + sessionID + "/session.glsl"
     );
+
     previewShader = mainShader;
 
     shaders.append(mainShader);
     emit shadersChanged();
 }
 
-Shader* ShaderManager::getShader(bool isPreview) {
+Shader* ShaderManager::currentShader(bool isPreview) {
     if (isPreview) {
         return previewShader;
     }
     else {
         return mainShader;
     }
+}
+
+bool ShaderManager::previewIsMain() {
+    return previewShader == mainShader;
 }
 
 void ShaderManager::createShader(QString templateUrl) {

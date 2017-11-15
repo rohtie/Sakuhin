@@ -23,6 +23,8 @@ Shader::Shader(int id, QString thumbnail, QString sessionpath) {
         program.setUniformValue("channel3", 3);
         program.setUniformValue("channel4", 4);
     program.release();
+
+    fbo = mainFbo;
 }
 
 void Shader::setPreview(bool isPreview) {
@@ -33,11 +35,9 @@ void Shader::setPreview(bool isPreview) {
     this->isPreview = isPreview;
 
     if (isPreview) {
-        mainFbo = fbo;
         fbo = previewFbo;
     }
     else {
-        previewFbo = fbo;
         fbo = mainFbo;
     }
 }
@@ -85,8 +85,8 @@ void Shader::release() {
 }
 
 void Shader::setResolution(int width, int height) {
-    if (fbo == nullptr || (width != fbo->width() || height != fbo->height())) {
-        fbo = new QOpenGLFramebufferObject(width, height);
+    if (fbo[pingPongIndex] == nullptr || (width != this->width() || height != this->height())) {
+        fbo[pingPongIndex] = new QOpenGLFramebufferObject(width, height);
     }
 }
 
@@ -103,13 +103,36 @@ void Shader::setUniformValues() {
 }
 
 int Shader::width() {
-    return fbo->width();
+    return fbo[pingPongIndex]->width();
 }
 
 int Shader::height() {
-    return fbo->height();
+    return fbo[pingPongIndex]->height();
 }
 
-int Shader::getLastFrame() {
-    return fbo->texture();
+QOpenGLFramebufferObject* Shader::currentFbo() {
+    return fbo[pingPongIndex];
+}
+
+void Shader::updatePingPong() {
+    previousPingPongIndex = pingPongIndex;
+    pingPongIndex = (pingPongIndex + 1) % 2;
+}
+
+int Shader::currentFrame() {
+    if (fbo[pingPongIndex] == nullptr) {
+        return 0;
+    }
+    else {
+        return fbo[pingPongIndex]->texture();
+    }
+}
+
+int Shader::lastFrame() {
+    if (fbo[previousPingPongIndex] == nullptr) {
+        return 0;
+    }
+    else {
+        return fbo[previousPingPongIndex]->texture();
+    }
 }

@@ -14,7 +14,7 @@ void Channel::bind() {
 
     if (channelType == ShaderType) {
         glActiveTexture(channelLocation);
-        glBindTexture(GL_TEXTURE_2D, shader->getLastFrame());
+        glBindTexture(GL_TEXTURE_2D, shader->lastFrame());
         return;
     }
 }

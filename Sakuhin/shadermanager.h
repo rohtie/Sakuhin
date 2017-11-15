@@ -23,7 +23,8 @@ class ShaderManager : public QObject {
 
         void initialize(const QSurfaceFormat &format);
 
-        Shader* getShader(bool isPreview);
+        Shader* currentShader(bool isPreview);
+        bool previewIsMain();
 
         Q_INVOKABLE void createShader(QString templateUrl);
         void selectShader();

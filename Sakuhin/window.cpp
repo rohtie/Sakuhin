@@ -64,34 +64,49 @@ void Window::drawRectangle() {
 }
 
 void Window::render(Shader* shader) {
+    shader->updatePingPong();
+
     shader->setPreview(isPreview);
     shader->setResolution(width(), height());
     shader->setTime(time.elapsed() / 1000.0f);
 
-    shader->fbo->bind();
+    QOpenGLFramebufferObject* fbo = shader->currentFbo();
+    fbo->bind();
         glClear(GL_COLOR_BUFFER_BIT);
 
         shader->bind();
             shader->setUniformValues();
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, shader->lastFrame());
 
             drawRectangle();
         shader->release();
-    shader->fbo->release();
+    fbo->release();
 }
 
 void Window::renderScreen(Shader* shader) {
-    render(shader);
-
-    glClear(GL_COLOR_BUFFER_BIT);
+    if (!isPreview || !shadermanager->previewIsMain()) {
+        render(shader);
+    }
 
     screenShader.bind();
+        glClear(GL_COLOR_BUFFER_BIT);
         screenShader.setUniformValue("resolution", width(), height());
         screenShader.setUniformValue("screenTextureResolution", shader->width(), shader->height());
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, shader->getLastFrame());
+        glBindTexture(GL_TEXTURE_2D, shader->currentFrame());
 
         drawRectangle();
     screenShader.release();
+}
+
+void Window::paintGL() {
+    if (!isPreview) {
+        updatePerformanceInformation();
+    }
+
+    renderScreen(shadermanager->currentShader(isPreview));
+    update();
 }
 
 void Window::updatePerformanceInformation() {
@@ -114,14 +129,6 @@ void Window::updatePerformanceInformation() {
     }
 }
 
-void Window::paintGL() {
-    if (!isPreview) {
-        updatePerformanceInformation();
-    }
-
-    renderScreen(shadermanager->getShader(isPreview));
-    update();
-}
 
 void Window::handleLoggedMessage(const QOpenGLDebugMessage &debugMessage){
     qDebug() << (isPreview ? "Preview: " : "Main: ") << debugMessage.message();

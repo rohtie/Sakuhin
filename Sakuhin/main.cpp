@@ -39,16 +39,16 @@ int main(int argc, char* argv[]) {
 
     shadermanager->initialize(format);
 
+    Window mainWindow(backend, shadermanager, false);
+    mainWindow.setFormat(format);
+    mainWindow.resize(QSize(800, 600));
+    mainWindow.show();
+
     Window previewWindow(backend, shadermanager, true);
     previewWindow.setFormat(format);
     previewWindow.resize(QSize(256, 256));
     previewWindow.setFlag(Qt::FramelessWindowHint);
     previewWindow.show();
-
-    Window mainWindow(backend, shadermanager, false);
-    mainWindow.setFormat(format);
-    mainWindow.resize(QSize(800, 600));
-    mainWindow.show();
 
     return app.exec();
 }

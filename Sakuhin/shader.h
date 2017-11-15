@@ -29,11 +29,11 @@ class Shader : public QObject {
         int width();
         int height();
 
-        int getLastFrame();
+        QOpenGLFramebufferObject* currentFbo();
+        void updatePingPong();
 
-        QOpenGLFramebufferObject* fbo = nullptr;
-        QOpenGLFramebufferObject* previewFbo = nullptr;
-        QOpenGLFramebufferObject* mainFbo = nullptr;
+        int currentFrame();
+        int lastFrame();
 
     signals:
         void idChanged();
@@ -47,6 +47,13 @@ class Shader : public QObject {
 
         bool isPreview = false;
         double time = 0.0;
+
+        int pingPongIndex = 0;
+        int previousPingPongIndex = 1;
+
+        QOpenGLFramebufferObject** fbo;
+        QOpenGLFramebufferObject* previewFbo[2] = {nullptr};
+        QOpenGLFramebufferObject* mainFbo[2] = {nullptr};
 };
 
 #endif // SHADER_H

@@ -18,9 +18,5 @@ vec4 pixel(vec2 p) {
         1.
     );
 
-    if (q.x <= 0.5) {
-        return col - texture(channel0, q);
-    }
-
-    return col - texture(channel1, q);
+    return texture(channel0, q) * 0.99 + col * 0.01;
 }
