@@ -10,6 +10,7 @@ class Shader : public QObject {
 
     Q_PROPERTY(int id MEMBER id NOTIFY idChanged)
     Q_PROPERTY(QString thumbnail MEMBER thumbnail NOTIFY thumbnailChanged)
+    Q_PROPERTY(QList<QObject*> channels MEMBER channels NOTIFY channelsChanged)
 
     public:
         Shader(int id, QString thumbnail, QString sessionpath);
@@ -38,9 +39,12 @@ class Shader : public QObject {
     signals:
         void idChanged();
         void thumbnailChanged();
+        void channelsChanged();
 
     private:
         QOpenGLShaderProgram program;
+
+        QList<QObject*> channels;
 
         int id;
         QString thumbnail;

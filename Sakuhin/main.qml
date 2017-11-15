@@ -48,6 +48,7 @@ ApplicationWindow {
         }
 
         ShaderView {
+            id: shader_grid_view
             model: shadermanager.shaders
         }
 
@@ -71,22 +72,77 @@ ApplicationWindow {
             text: "Channels"
         }
 
-        Flow {
-            id: channels
-            height: 48
+        GridView {
+            id: channel_view
+
+            height: 45
             clip: true
+            maximumFlickVelocity: 3000
+            flickDeceleration: 1500
+            boundsBehavior: Flickable.StopAtBounds
+            snapMode: GridView.NoSnap
+            cellHeight: 48
+            cellWidth: 48
+
             anchors.left: parent.left
             anchors.leftMargin: 10
+
             anchors.right: parent.right
-            anchors.rightMargin: 10
-            spacing: 5
+            anchors.rightMargin: 2.5
 
-            Repeater {
-                id: channelRepeater
-                model: 5
+            onCountChanged: currentIndex = count - 1
 
-                ChannelForm {
-                    channel.onClicked: channelPopup.activate(index)
+            Connections {
+                target: shader_grid_view
+                onCurrentIndexChanged: {
+                    console.log("fuck yeah:", shader_grid_view.currentIndex)
+                    channel_view.model = shadermanager.shaders[shader_grid_view.currentIndex].channels
+                }
+            }
+
+            delegate: Button {
+                id: channel
+
+                width: channel_view.cellWidth
+                height: channel_view.cellHeight
+
+                onClicked: {
+                    channel_view.currentIndex = index
+                    channelPopup.activate(channel_view.currentIndex)
+                }
+
+                property alias channelImage: channelImage
+
+                background: Rectangle {
+                    anchors.fill: parent
+
+                    anchors.topMargin: 0
+                    anchors.rightMargin: 5
+                    anchors.leftMargin: 0
+                    anchors.bottomMargin: 5
+
+                    color: "#69697b"
+                    radius: 2
+
+                    Image {
+                        id: channelImage
+
+                        anchors.fill: parent
+                        fillMode: Image.PreserveAspectCrop
+
+                        layer.enabled: true
+                        layer.effect: OpacityMask {
+                            maskSource: Item {
+                                width: channelImage.width
+                                height: channelImage.height
+
+                                Rectangle {
+                                    anchors.fill: parent
+                                    radius: 2
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -359,7 +415,7 @@ ApplicationWindow {
                                         var channelID = channelPopup.currentChannelID
 
                                         backend.setChannel(channelID, BackEnd.Texture, filePath)
-                                        channelRepeater.itemAt(channelID).channelImage.source = fileURL
+                                        channel_view.currentItem.channelImage.source = fileURL
                                         channelPopup.close()
                                     }
                                 }

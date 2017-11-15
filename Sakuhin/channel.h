@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QOpenGLTexture>
+#include <QImage>
 
 #include "shader.h"
 
@@ -17,17 +18,19 @@ class Channel : public QObject {
         };
         Q_ENUM(ChannelType)
 
-        explicit Channel(QObject* parent = nullptr);
+        explicit Channel(const int &channelLocation);
 
         void bind();
         void setTexture(QString &fileUrl);
         void setShader(Shader* shader);
 
     private:
-        int channelLocation;
         ChannelType channelType;
 
+        int channelLocation;
+        QImage image;
         QOpenGLTexture* texture;
+
         Shader* shader;
 };
 

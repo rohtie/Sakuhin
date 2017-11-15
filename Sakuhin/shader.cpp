@@ -2,6 +2,7 @@
 #include <QFile>
 
 #include "shader.h"
+#include "channel.h"
 
 Shader::Shader(int id, QString thumbnail, QString sessionpath) {
     this->id = id;
@@ -23,6 +24,11 @@ Shader::Shader(int id, QString thumbnail, QString sessionpath) {
         program.setUniformValue("channel3", 3);
         program.setUniformValue("channel4", 4);
     program.release();
+
+    for (int i = 0; i < 5; ++i) {
+        channels.append(new Channel(i));
+    }
+    emit channelsChanged();
 
     fbo = mainFbo;
 }

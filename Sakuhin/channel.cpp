@@ -2,8 +2,8 @@
 
 #include "channel.h"
 
-Channel::Channel(QObject* parent) : QObject(parent) {
-
+Channel::Channel(const int &channelLocation) {
+    this->channelLocation = channelLocation;
 }
 
 void Channel::bind() {
@@ -13,7 +13,7 @@ void Channel::bind() {
     }
 
     if (channelType == ShaderType) {
-        glActiveTexture(channelLocation);
+        glActiveTexture(GL_TEXTURE0 + channelLocation);
         glBindTexture(GL_TEXTURE_2D, shader->lastFrame());
         return;
     }

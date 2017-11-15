@@ -31,6 +31,8 @@ void ShaderManager::initialize(const QSurfaceFormat &format) {
     previewShader = mainShader;
 
     shaders.append(mainShader);
+    shaders.append(mainShader);
+    shaders.append(mainShader);
     emit shadersChanged();
 }
 
