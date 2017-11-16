@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import sakuhin.backend 1.0
 import sakuhin.shadermanager 1.0
+import sakuhin.audiomanager 1.0
 import Qt.labs.folderlistmodel 2.2
 import QtGraphicalEffects 1.0
 
@@ -24,6 +25,10 @@ ApplicationWindow {
 
     ShaderManager {
         id: shadermanager
+    }
+
+    AudioManager {
+        id: audiomanager
     }
 
     Component.onCompleted: backend.createSession();
@@ -362,10 +367,80 @@ ApplicationWindow {
                 Item {
                     id: hardwareTab
 
-                    Rectangle {
-                        width: parent.width
-                        height: parent.height
-                        color: "#ff0000"
+                    GridView {
+                        clip: true
+                        maximumFlickVelocity: 3000
+                        flickDeceleration: 1500
+                        boundsBehavior: Flickable.StopAtBounds
+                        snapMode: GridView.NoSnap
+                        cellHeight: 123
+                        cellWidth: 123
+
+                        anchors.fill: parent
+                        anchors.topMargin: 5
+                        anchors.leftMargin: 5
+
+                        id: hardware_grid
+
+                        Item {
+                            width: hardware_grid.cellWidth
+                            height: hardware_grid.cellHeight
+
+                            Button {
+                                text: "Audio"
+
+                                anchors.fill: parent
+                                anchors.topMargin: 0
+                                anchors.rightMargin: 5
+                                anchors.leftMargin: 5
+                                anchors.bottomMargin: 10
+
+                                onClicked: audio_menu.open()
+
+                                background: Rectangle {
+                                    implicitWidth: 100
+                                    implicitHeight: 40
+                                    color: "#69697b"
+                                    border.width: 0
+                                    radius: 4
+                                }
+
+                                Menu {
+                                    id: audio_menu
+                                    height: audio_list.contentHeight
+
+                                    onHeightChanged: {
+                                        if (height > root.height) {
+                                            height = root.height
+                                        }
+                                    }
+
+                                    background: Rectangle {
+                                        implicitWidth: 256
+                                        implicitHeight: 256
+                                        anchors.fill: parent
+                                        color: "#111117"
+                                    }
+
+                                    ListView {
+                                        height: audio_menu.height
+                                        boundsBehavior: Flickable.StopAtBounds
+
+                                        id: audio_list
+
+                                        model: audiomanager.audioDevices
+
+                                        delegate: StyledMenuItem {
+                                            text: model.modelData.name
+
+                                            onClicked: {
+                                                audio_menu.close()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -379,14 +454,12 @@ ApplicationWindow {
                         flickDeceleration: 1500
                         boundsBehavior: Flickable.StopAtBounds
                         snapMode: GridView.NoSnap
-                        cellHeight: 124
-                        cellWidth: 124
+                        cellHeight: 123
+                        cellWidth: 123
 
-                        anchors.rightMargin: 5
-                        anchors.leftMargin: 5
-                        anchors.bottomMargin: 10
-                        anchors.topMargin: 10
                         anchors.fill: parent
+                        anchors.topMargin: 5
+                        anchors.leftMargin: 5
 
                         model: FolderListModel {
                             folder: "file:data/textures/"

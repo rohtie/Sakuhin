@@ -1,4 +1,4 @@
-QT += quick
+QT += quick multimedia
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -18,7 +18,9 @@ SOURCES += \
     window.cpp \
     shadermanager.cpp \
     shader.cpp \
-    channel.cpp
+    channel.cpp \
+    audiomanager.cpp \
+    audiodevice.cpp
 
 RESOURCES += qml.qrc
 
@@ -38,7 +40,9 @@ HEADERS += \
     window.h \
     shadermanager.h \
     shader.h \
-    channel.h
+    channel.h \
+    audiomanager.h \
+    audiodevice.h
 
 copydata.commands = $(COPY_DIR) $$PWD/data $$OUT_PWD
 first.depends = $(first) copydata

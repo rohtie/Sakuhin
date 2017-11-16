@@ -6,6 +6,7 @@
 #include <QImage>
 
 #include "shader.h"
+#include "audiodevice.h"
 
 class Channel : public QObject {
     Q_OBJECT
@@ -15,6 +16,7 @@ class Channel : public QObject {
             NoType,
             TextureType,
             ShaderType,
+            AudioType,
             HardwareType
         };
         Q_ENUM(ChannelType)
@@ -24,6 +26,7 @@ class Channel : public QObject {
         void bind();
         Q_INVOKABLE void setTexture(const QString &fileUrl);
         void setShader(Shader* shader);
+        void setAudioDevice(QObject* audioDevice);
 
         ChannelType channelType = NoType;
         Shader* shader;
@@ -32,6 +35,7 @@ class Channel : public QObject {
         int channelLocation = 0;
         QOpenGLTexture* texture;
 
+        AudioDevice* audioDevice;
 };
 
 #endif // CHANNEL_H

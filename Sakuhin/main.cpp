@@ -6,6 +6,7 @@
 #include "window.h"
 
 #include "shadermanager.h"
+#include "audiomanager.h"
 
 int main(int argc, char* argv[]) {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -14,6 +15,7 @@ int main(int argc, char* argv[]) {
 
     qmlRegisterType<BackEnd>("sakuhin.backend", 1, 0, "BackEnd");
     qmlRegisterType<ShaderManager>("sakuhin.shadermanager", 1, 0, "ShaderManager");
+    qmlRegisterType<AudioManager>("sakuhin.audiomanager", 1, 0, "AudioManager");
 
     QQmlApplicationEngine engine("qrc:/main.qml");
 
@@ -23,6 +25,9 @@ int main(int argc, char* argv[]) {
     ShaderManager* shadermanager = qmlRoot->findChild<ShaderManager*>();
     shadermanager->sessionID = backend->getSessionID();
     backend->shadermanager = shadermanager;
+
+    AudioManager* audiomanager = qmlRoot->findChild<AudioManager*>();
+    audiomanager->initialize();
 
     QSurfaceFormat format;
     format.setRenderableType(QSurfaceFormat::OpenGL);
