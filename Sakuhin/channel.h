@@ -26,7 +26,7 @@ class Channel : public QObject {
         void bind();
         Q_INVOKABLE void setTexture(const QString &fileUrl);
         void setShader(Shader* shader);
-        void setAudioDevice(QObject* audioDevice);
+        Q_INVOKABLE void setAudioDevice(QObject* audioDevice);
 
         ChannelType channelType = NoType;
         Shader* shader;

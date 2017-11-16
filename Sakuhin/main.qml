@@ -434,6 +434,8 @@ ApplicationWindow {
                                             text: model.modelData.name
 
                                             onClicked: {
+                                                // TODO: Find a cleaner way to write this...
+                                                shadermanager.shaders[shader_grid_view.currentIndex].channels[channel_view.currentIndex].setAudioDevice(audiomanager.audioDevices[index])
                                                 audio_menu.close()
                                             }
                                         }

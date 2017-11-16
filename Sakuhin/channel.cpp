@@ -11,6 +11,11 @@ void Channel::setTexture(const QString &fileUrl) {
     texture = new QOpenGLTexture(QImage(fileUrl).mirrored());
 }
 
+void Channel::setAudioDevice(QObject* audioDevice) {
+    channelType = AudioType;
+    this->audioDevice = (AudioDevice*) audioDevice;
+}
+
 void Channel::bind() {
     if (channelType == TextureType) {
         texture->bind(channelLocation);
