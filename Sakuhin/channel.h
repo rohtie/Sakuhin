@@ -12,26 +12,26 @@ class Channel : public QObject {
 
     public:
         enum ChannelType {
+            NoType,
             TextureType,
             ShaderType,
             HardwareType
         };
         Q_ENUM(ChannelType)
 
-        explicit Channel(const int &channelLocation);
+        explicit Channel(int channelLocation);
 
         void bind();
-        void setTexture(QString &fileUrl);
+        Q_INVOKABLE void setTexture(const QString &fileUrl);
         void setShader(Shader* shader);
 
-    private:
-        ChannelType channelType;
+        ChannelType channelType = NoType;
+        Shader* shader;
 
-        int channelLocation;
-        QImage image;
+    private:
+        int channelLocation = 0;
         QOpenGLTexture* texture;
 
-        Shader* shader;
 };
 
 #endif // CHANNEL_H

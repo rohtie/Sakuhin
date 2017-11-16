@@ -2,8 +2,13 @@
 
 #include "channel.h"
 
-Channel::Channel(const int &channelLocation) {
+Channel::Channel(int channelLocation) {
     this->channelLocation = channelLocation;
+}
+
+void Channel::setTexture(const QString &fileUrl) {
+    channelType = TextureType;
+    texture = new QOpenGLTexture(QImage(fileUrl).mirrored());
 }
 
 void Channel::bind() {

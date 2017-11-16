@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 
 #include "backend.h"
+#include "channel.h"
 
 static GLfloat const rectangle[] = {
     -1.0f,  1.0f, 0.0f,
@@ -77,8 +78,6 @@ void Window::render(Shader* shader) {
 
         shader->bind();
             shader->setUniformValues();
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, shader->lastFrame());
 
             drawRectangle();
         shader->release();

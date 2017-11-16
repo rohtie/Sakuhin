@@ -95,7 +95,6 @@ ApplicationWindow {
             Connections {
                 target: shader_grid_view
                 onCurrentIndexChanged: {
-                    console.log("fuck yeah:", shader_grid_view.currentIndex)
                     channel_view.model = shadermanager.shaders[shader_grid_view.currentIndex].channels
                 }
             }
@@ -414,7 +413,7 @@ ApplicationWindow {
                                     onClicked: {
                                         var channelID = channelPopup.currentChannelID
 
-                                        backend.setChannel(channelID, BackEnd.Texture, filePath)
+                                        shadermanager.shaders[shader_grid_view.currentIndex].channels[channel_view.currentIndex].setTexture(filePath)
                                         channel_view.currentItem.channelImage.source = fileURL
                                         channelPopup.close()
                                     }

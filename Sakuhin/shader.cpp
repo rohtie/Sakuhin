@@ -25,7 +25,7 @@ Shader::Shader(int id, QString thumbnail, QString sessionpath) {
         program.setUniformValue("channel4", 4);
     program.release();
 
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 5; i++) {
         channels.append(new Channel(i));
     }
     emit channelsChanged();
@@ -84,6 +84,11 @@ bool Shader::recompile(QByteArray shaderCode) {
 
 void Shader::bind() {
     program.bind();
+
+    for (int i = 0; i < 5; i++) {
+        Channel* channel = (Channel*) channels[i];
+        channel->bind();
+    }
 }
 
 void Shader::release() {

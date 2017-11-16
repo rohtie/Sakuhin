@@ -36,6 +36,8 @@ class Shader : public QObject {
         int currentFrame();
         int lastFrame();
 
+        QList<QObject*> channels;
+
     signals:
         void idChanged();
         void thumbnailChanged();
@@ -44,7 +46,6 @@ class Shader : public QObject {
     private:
         QOpenGLShaderProgram program;
 
-        QList<QObject*> channels;
 
         int id;
         QString thumbnail;
