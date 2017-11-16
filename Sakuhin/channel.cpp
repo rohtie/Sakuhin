@@ -14,6 +14,7 @@ void Channel::setTexture(const QString &fileUrl) {
 void Channel::setAudioDevice(QObject* audioDevice) {
     channelType = AudioType;
     this->audioDevice = (AudioDevice*) audioDevice;
+    this->audioDevice->start();
 }
 
 void Channel::bind() {

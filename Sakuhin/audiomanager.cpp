@@ -10,8 +10,7 @@ void AudioManager::initialize() {
     QList<QAudioDeviceInfo> devices = QAudioDeviceInfo::availableDevices(QAudio::AudioInput);
 
     for (int i = 0; i < devices.size(); i++) {
-        QAudioDeviceInfo* deviceInfo = &devices[i];
-        audioDevices.append(new AudioDevice(deviceInfo));
+        audioDevices.append(new AudioDevice(devices[i]));
     }
 
     emit audioDevicesChanged();
