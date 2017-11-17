@@ -110,7 +110,7 @@ void Window::paintGL() {
 }
 
 void Window::keyPressEvent(QKeyEvent* event) {
-    if (event->key() == Qt::Key_F11) {
+    if (event->key() == Qt::Key_F2) {
         if ((flags() & Qt::FramelessWindowHint) == 0) {
             oldGeometry = frameGeometry();
             oldMargins = frameMargins();
