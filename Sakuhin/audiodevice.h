@@ -4,6 +4,10 @@
 #include <QObject>
 #include <QAudioDeviceInfo>
 #include <QAudioInput>
+#include <QOpenGLTexture>
+
+#include <fftw3.h>
+
 
 class AudioDevice : public QIODevice {
     Q_OBJECT
@@ -16,8 +20,10 @@ class AudioDevice : public QIODevice {
         void start();
         void stop();
 
-        qint64 readData(char *data, qint64 maxlen) override;
-        qint64 writeData(const char *data, qint64 len) override;
+        qint64 readData(char* data, qint64 maxlen) override;
+        qint64 writeData(const char* data, qint64 len) override;
+
+        QOpenGLTexture* spectrumTexture();
 
     signals:
         void nameChanged();
@@ -26,6 +32,9 @@ class AudioDevice : public QIODevice {
         QString name;
         QAudioDeviceInfo deviceInfo;
         QAudioInput* audioInput;
+        QOpenGLTexture* texture;
+
+        const int spectrumWidth = 2048;
 };
 
 #endif // AUDIODEVICE_H

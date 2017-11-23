@@ -1,5 +1,6 @@
 #include "audiodevice.h"
 #include <QDebug>
+#include <QtMath>
 #include "qendian.h"
 
 AudioDevice::AudioDevice(const QAudioDeviceInfo &deviceInfo) {
@@ -12,6 +13,19 @@ AudioDevice::AudioDevice(const QAudioDeviceInfo &deviceInfo) {
 void AudioDevice::start() {
     audioInput = new QAudioInput(deviceInfo, deviceInfo.preferredFormat());
     open(QIODevice::WriteOnly);
+
+    QAudioFormat format = audioInput->format();
+
+    #ifdef QT_DEBUG
+    qDebug() << "Audio input samplesize:" << format.sampleSize() << "bit";
+    #endif
+
+    texture = new QOpenGLTexture(QOpenGLTexture::Target2D);
+    texture->setSize(spectrumWidth, 1);
+    texture->setFormat(QOpenGLTexture::R32F);
+    texture->allocateStorage(QOpenGLTexture::Red, QOpenGLTexture::Float32);
+    texture->create();
+
     audioInput->start(this);
 }
 
@@ -26,56 +40,66 @@ qint64 AudioDevice::readData(char *data, qint64 maxlen) {
     return 0;
 }
 
-qint64 AudioDevice::writeData(const char *data, qint64 len) {
+qint64 AudioDevice::writeData(const char* data, qint64 len) {
+    // TODO: Smooth the fft spectrum
+    // TODO: Apply blackman window for better distribution of frequencies
+
     QAudioFormat format = audioInput->format();
 
-    Q_ASSERT(format.sampleSize() % 8 == 0);
     const int channelBytes = format.sampleSize() / 8;
-    const int sampleBytes = format.channelCount() * channelBytes;
-    Q_ASSERT(len % sampleBytes == 0);
+    const int channelCount = format.channelCount();
+    const int sampleBytes = channelCount * channelBytes;
     const int numSamples = len / sampleBytes;
 
-    quint32 maxValue = 0;
-    const unsigned char *ptr = reinterpret_cast<const unsigned char *>(data);
+    const int targetSamples = spectrumWidth * 2;
+    const int fftwSamples = targetSamples / 2 + 1;
+    const double fftwScale = 0.0125 * fftwSamples;
 
-    for (int i = 0; i < numSamples; ++i) {
-        for (int j = 0; j < format.channelCount(); ++j) {
-            quint32 value = 0;
+    // Because the data read from the audio input
+    // can vary a lot in size we must zero pad the
+    // sample passed to fft to ensure correct output
+    // size for the spectrum texture.
+    double in[targetSamples] = {0.0};
 
-            if (format.sampleSize() == 8 && format.sampleType() == QAudioFormat::UnSignedInt) {
-                value = *reinterpret_cast<const quint8*>(ptr);
-            } else if (format.sampleSize() == 8 && format.sampleType() == QAudioFormat::SignedInt) {
-                value = qAbs(*reinterpret_cast<const qint8*>(ptr));
-            } else if (format.sampleSize() == 16 && format.sampleType() == QAudioFormat::UnSignedInt) {
-                if (format.byteOrder() == QAudioFormat::LittleEndian)
-                    value = qFromLittleEndian<quint16>(ptr);
-                else
-                    value = qFromBigEndian<quint16>(ptr);
-            } else if (format.sampleSize() == 16 && format.sampleType() == QAudioFormat::SignedInt) {
-                if (format.byteOrder() == QAudioFormat::LittleEndian)
-                    value = qAbs(qFromLittleEndian<qint16>(ptr));
-                else
-                    value = qAbs(qFromBigEndian<qint16>(ptr));
-            } else if (format.sampleSize() == 32 && format.sampleType() == QAudioFormat::UnSignedInt) {
-                if (format.byteOrder() == QAudioFormat::LittleEndian)
-                    value = qFromLittleEndian<quint32>(ptr);
-                else
-                    value = qFromBigEndian<quint32>(ptr);
-            } else if (format.sampleSize() == 32 && format.sampleType() == QAudioFormat::SignedInt) {
-                if (format.byteOrder() == QAudioFormat::LittleEndian)
-                    value = qAbs(qFromLittleEndian<qint32>(ptr));
-                else
-                    value = qAbs(qFromBigEndian<qint32>(ptr));
-            } else if (format.sampleSize() == 32 && format.sampleType() == QAudioFormat::Float) {
-                value = qAbs(*reinterpret_cast<const float*>(ptr) * 0x7fffffff); // assumes 0-1.0
+    const unsigned char *currentSample = reinterpret_cast<const unsigned char*>(data);
+
+    for (int i = 0; i < numSamples; i++) {
+        for (int j = 0; j < channelCount; j++) {
+            // Assume that we only need to sample one channel
+            // to get a good fft representation
+            if (j > 0) {
+                currentSample += channelBytes;
+                continue;
             }
 
-            maxValue = qMax(value, maxValue);
-            ptr += channelBytes;
+            // For simplicity we assume that the sample is 16 bit signed pcm input
+            const qint16 pcmSample = *reinterpret_cast<const qint16*>(currentSample);
+
+            // Normalize the sample with the max negative value for signed 16 bit: -32768
+            in[i] = double(pcmSample) / 32768.0;
+
+            currentSample += channelBytes;
         }
     }
 
-    qDebug() << maxValue;
+    fftw_complex out[fftwSamples];
+    fftw_plan plan = fftw_plan_dft_r2c_1d(targetSamples, in, out, FFTW_ESTIMATE);
+    fftw_execute(plan);
+
+    float spectrum[fftwSamples];
+
+    for (int i = 0; i < fftwSamples; i++) {
+        double val = qSqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]) / fftwScale;
+        val = val > 1.0 ? 1.0 : val;
+
+        spectrum[i] = val;
+    }
+
+    texture->setData(QOpenGLTexture::Red, QOpenGLTexture::Float32, (const void*) &spectrum);
 
     return len;
+}
+
+QOpenGLTexture* AudioDevice::spectrumTexture() {
+    return texture;
 }
