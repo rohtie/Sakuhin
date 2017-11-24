@@ -43,7 +43,8 @@ HEADERS += \
     shader.h \
     channel.h \
     audiomanager.h \
-    audiodevice.h
+    audiodevice.h \
+    objloader.h
 
 copydata.commands = $(COPY_DIR) $$PWD/data $$OUT_PWD
 first.depends = $(first) copydata
