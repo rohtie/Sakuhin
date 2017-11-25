@@ -33,6 +33,7 @@ int main(int argc, char* argv[]) {
     format.setRenderableType(QSurfaceFormat::OpenGL);
     format.setProfile(QSurfaceFormat::CoreProfile);
     format.setVersion(4, 5);
+    format.setDepthBufferSize(24);
 
     #ifdef QT_DEBUG
     format.setOption(QSurfaceFormat::DebugContext);
@@ -44,12 +45,12 @@ int main(int argc, char* argv[]) {
 
     shadermanager->initialize(format);
 
-    Window mainWindow(backend, shadermanager, false);
+    Window mainWindow(backend, shadermanager, false, false);
     mainWindow.setFormat(format);
-    mainWindow.resize(QSize(800, 600));
+    mainWindow.resize(QSize(720 * 0.5, 1280 * 0.5));
     mainWindow.show();
 
-    Window previewWindow(backend, shadermanager, true);
+    Window previewWindow(backend, shadermanager, true, false);
     previewWindow.setFormat(format);
     previewWindow.resize(QSize(256, 256));
     previewWindow.setFlag(Qt::FramelessWindowHint);

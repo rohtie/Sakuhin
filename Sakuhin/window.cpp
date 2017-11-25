@@ -4,6 +4,8 @@
 #include <QOpenGLDebugLogger>
 #include <QKeyEvent>
 
+#include "objloader.h"
+
 #include "backend.h"
 #include "channel.h"
 
@@ -17,10 +19,11 @@ static GLfloat const rectangle[] = {
      1.0f, -1.0f, 0.0f
 };
 
-Window::Window(BackEnd* backend, ShaderManager* shadermanager, bool isPreview) {
+Window::Window(BackEnd* backend, ShaderManager* shadermanager, bool isPreview, bool isProjectionMapping) {
     this->backend = backend;
     this->shadermanager = shadermanager;
     this->isPreview = isPreview;
+    this->isProjectionMapping = isProjectionMapping;
 }
 
 void Window::initializeGL() {
@@ -41,28 +44,70 @@ void Window::initializeGL() {
     screenShader.link();
 
     screenShader.bind();
-        screenShader.setUniformValue("screenTexture", GL_TEXTURE0);
+        screenShader.setUniformValue("screenTexture", 0);
     screenShader.release();
 
-    vao.create();
-    vao.bind();
-        vbo.create();
-        vbo.bind();
-            vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
-            vbo.allocate(rectangle, sizeof(rectangle));
+    rectangleVao.create();
+    rectangleVao.bind();
+        rectangleVertexBuffer.create();
+        rectangleVertexBuffer.bind();
+            rectangleVertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+            rectangleVertexBuffer.allocate(rectangle, sizeof(rectangle));
 
-            glVertexAttribPointer((GLuint) 0, 3, GL_FLOAT, GL_TRUE, 0, 0);
             glEnableVertexAttribArray(0);
-        vbo.release();
-    vao.release();
+            glVertexAttribPointer((GLuint) 0, 3, GL_FLOAT, GL_TRUE, 0, 0);
+        rectangleVertexBuffer.release();
+    rectangleVao.release();
+
+    if (isProjectionMapping) {
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+
+        meshShader.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/meshVertex.glsl");
+        meshShader.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/meshShader.glsl");
+        meshShader.link();
+
+        meshShader.bind();
+            meshShader.setUniformValue("mainTexture", 0);
+        meshShader.release();
+
+
+        viewMatrix.lookAt(QVector3D(0, 125., -400.), QVector3D(0, 125., 0), QVector3D(0, 1, 0));
+        projectionMatrix.perspective(45.2397, (float) width() / (float) height(), 0.1f, 1000.0f);
+        mvpMatrix = projectionMatrix * viewMatrix * modelMatrix;
+
+
+        loadMesh("data/models/dinzoil.obj", meshVertices, meshUVs);
+
+        meshVao.create();
+        meshVao.bind();
+            meshVertexBuffer.create();
+            meshVertexBuffer.bind();
+                meshVertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+                meshVertexBuffer.allocate(meshVertices.constData(), meshVertices.size() * sizeof(GLfloat));
+
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer((GLuint) 0, 3, GL_FLOAT, GL_TRUE, 0, 0);
+            meshVertexBuffer.release();
+
+            meshUVbuffer.create();
+            meshUVbuffer.bind();
+                meshUVbuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+                meshUVbuffer.allocate(meshUVs.constData(), meshUVs.size() * sizeof(GLfloat));
+
+                glEnableVertexAttribArray(1);
+                glVertexAttribPointer((GLuint) 1, 2, GL_FLOAT, GL_TRUE, 0, 0);
+            meshUVbuffer.release();
+        meshVao.release();
+    }
 
     time.start();
 }
 
 void Window::drawRectangle() {
-    vao.bind();
+    rectangleVao.bind();
         glDrawArrays(GL_TRIANGLES, 0, 6);
-    vao.release();
+    rectangleVao.release();
 }
 
 void Window::render(Shader* shader) {
@@ -89,15 +134,37 @@ void Window::renderScreen(Shader* shader) {
         render(shader);
     }
 
-    screenShader.bind();
-        glClear(GL_COLOR_BUFFER_BIT);
-        screenShader.setUniformValue("resolution", width(), height());
-        screenShader.setUniformValue("screenTextureResolution", shader->width(), shader->height());
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, shader->currentFrame());
+    if (isProjectionMapping) {
+        meshShader.bind();
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        drawRectangle();
-    screenShader.release();
+            meshShader.setUniformValue("mvpMatrix", mvpMatrix);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, shader->currentFrame());
+
+            // The fbo doesn't care about filtering the texture, so we have to do it manually
+            // TODO: Find out if it is possible to do this in a
+            //       different way as it takes about 0.25 ms to compute
+            // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            // glGenerateMipmap(GL_TEXTURE_2D);
+
+            meshVao.bind();
+                glDrawArrays(GL_TRIANGLES, 0, meshVertices.size());
+            meshVao.release();
+        meshShader.release();
+    }
+    else {
+        screenShader.bind();
+            glClear(GL_COLOR_BUFFER_BIT);
+            screenShader.setUniformValue("resolution", width(), height());
+            screenShader.setUniformValue("screenTextureResolution", shader->width(), shader->height());
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, shader->currentFrame());
+
+            drawRectangle();
+        screenShader.release();
+    }
 }
 
 void Window::paintGL() {

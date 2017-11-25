@@ -13,7 +13,7 @@ Software for live coding visuals with OpenGL shaders
     * Webcam
 
 * Integrated MIDI controller passing its values to the shader
-* Integration with [Splash](https://github.com/paperManu/splash) for advanced projection mapping
+* Integrated projection mapping using a supplied 3D model
 
 #### Technology
 

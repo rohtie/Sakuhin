@@ -12,6 +12,7 @@
 #include <QOpenGLTexture>
 #include <QVector>
 #include <QOpenGLDebugMessage>
+#include <QMatrix4x4>
 
 #include "backend.h"
 #include "shadermanager.h"
@@ -22,7 +23,7 @@ class Window : public QOpenGLWindow,
     Q_OBJECT
 
     public:
-        explicit Window(BackEnd* backend, ShaderManager* shadermanager, bool isPreview);
+        explicit Window(BackEnd* backend, ShaderManager* shadermanager, bool isPreview, bool isProjectionMapping);
 
         void initializeGL();
 
@@ -40,13 +41,25 @@ class Window : public QOpenGLWindow,
 
     private:
         bool isPreview = false;
+        bool isProjectionMapping = false;
 
     	BackEnd* backend;
         ShaderManager* shadermanager;
 
         QOpenGLShaderProgram screenShader;
-        QOpenGLVertexArrayObject vao;
-        QOpenGLBuffer vbo;
+        QOpenGLVertexArrayObject rectangleVao;
+        QOpenGLBuffer rectangleVertexBuffer;
+
+        QOpenGLShaderProgram meshShader;
+        QOpenGLVertexArrayObject meshVao;
+        QOpenGLBuffer meshVertexBuffer;
+        QOpenGLBuffer meshUVbuffer;
+        QVector<GLfloat> meshVertices;
+        QVector<GLfloat> meshUVs;
+        QMatrix4x4 modelMatrix;
+        QMatrix4x4 viewMatrix;
+        QMatrix4x4 projectionMatrix;
+        QMatrix4x4 mvpMatrix;
 
         QElapsedTimer time;
         int frameCounter;
