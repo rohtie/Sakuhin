@@ -72,6 +72,10 @@ qint64 AudioDevice::writeData(const char* data, qint64 len) {
                 continue;
             }
 
+            if (i > targetSamples) {
+                break;
+            }
+
             // For simplicity we assume that the sample is 16 bit signed pcm input
             const qint16 pcmSample = *reinterpret_cast<const qint16*>(currentSample);
 
