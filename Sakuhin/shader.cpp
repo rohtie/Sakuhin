@@ -79,6 +79,14 @@ bool Shader::recompile(QByteArray shaderCode) {
     }
 
     program.link();
+
+    program.bind();
+        program.setUniformValue("channel0", 0);
+        program.setUniformValue("channel1", 1);
+        program.setUniformValue("channel2", 2);
+        program.setUniformValue("channel3", 3);
+        program.setUniformValue("channel4", 4);
+    program.release();
     return true;
 }
 
