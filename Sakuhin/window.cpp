@@ -65,49 +65,84 @@ void Window::initializeGL() {
         rectangleVertexBuffer.release();
     rectangleVao.release();
 
+    connect(this, SIGNAL(isProjectionMappingChanged()), this, SLOT(updateProjectionMapping()));
+    connect(this, SIGNAL(isVerticalChanged()), this, SLOT(updateMVPmatrix()));
+    connect(this, SIGNAL(distanceFromObjectChanged()), this, SLOT(updateMVPmatrix()));
+    connect(this, SIGNAL(projectorHeightChanged()), this, SLOT(updateMVPmatrix()));
+    connect(this, SIGNAL(fieldOfViewChanged()), this, SLOT(updateMVPmatrix()));
+
     if (isProjectionMapping) {
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
-
-        meshShader.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/meshVertex.glsl");
-        meshShader.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/meshShader.glsl");
-        meshShader.link();
-
-        meshShader.bind();
-            meshShader.setUniformValue("mainTexture", 0);
-        meshShader.release();
-
-
-        viewMatrix.lookAt(QVector3D(0, 125., -400.), QVector3D(0, 125., 0), QVector3D(0, 1, 0));
-        projectionMatrix.perspective(45.2397, (float) width() / (float) height(), 0.1f, 1000.0f);
-        mvpMatrix = projectionMatrix * viewMatrix * modelMatrix;
-
-
-        loadMesh("data/models/dinzoil.obj", meshVertices, meshUVs);
-
-        meshVao.create();
-        meshVao.bind();
-            meshVertexBuffer.create();
-            meshVertexBuffer.bind();
-                meshVertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-                meshVertexBuffer.allocate(meshVertices.constData(), meshVertices.size() * sizeof(GLfloat));
-
-                glEnableVertexAttribArray(0);
-                glVertexAttribPointer((GLuint) 0, 3, GL_FLOAT, GL_TRUE, 0, 0);
-            meshVertexBuffer.release();
-
-            meshUVbuffer.create();
-            meshUVbuffer.bind();
-                meshUVbuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-                meshUVbuffer.allocate(meshUVs.constData(), meshUVs.size() * sizeof(GLfloat));
-
-                glEnableVertexAttribArray(1);
-                glVertexAttribPointer((GLuint) 1, 2, GL_FLOAT, GL_TRUE, 0, 0);
-            meshUVbuffer.release();
-        meshVao.release();
+        updateProjectionMapping();
     }
 
     time.start();
+}
+
+void Window::updateProjectionMapping() {
+    // TODO: Figure out how to seamlessly switch between projection view and shader view
+    //       without getting black windows
+
+    if (hasLoadedProjectionObject) {
+        return;
+    }
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    meshShader.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/meshVertex.glsl");
+    meshShader.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/meshShader.glsl");
+    meshShader.link();
+
+    meshShader.bind();
+        meshShader.setUniformValue("mainTexture", 0);
+    meshShader.release();
+
+    updateMVPmatrix();
+
+    loadMesh("data/models/dinzoil.obj", meshVertices, meshUVs);
+
+    meshVao.create();
+    meshVao.bind();
+        meshVertexBuffer.create();
+        meshVertexBuffer.bind();
+            meshVertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+            meshVertexBuffer.allocate(meshVertices.constData(), meshVertices.size() * sizeof(GLfloat));
+
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer((GLuint) 0, 3, GL_FLOAT, GL_TRUE, 0, 0);
+        meshVertexBuffer.release();
+
+        meshUVbuffer.create();
+        meshUVbuffer.bind();
+            meshUVbuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+            meshUVbuffer.allocate(meshUVs.constData(), meshUVs.size() * sizeof(GLfloat));
+
+            glEnableVertexAttribArray(1);
+            glVertexAttribPointer((GLuint) 1, 2, GL_FLOAT, GL_TRUE, 0, 0);
+        meshUVbuffer.release();
+    meshVao.release();
+
+    hasLoadedProjectionObject = true;
+}
+
+void Window::updateMVPmatrix() {
+    QVector3D upVector(0, 1, 0);
+    if (isVertical) {
+        upVector = QVector3D(1, 0, 0);
+    }
+
+    viewMatrix.setToIdentity();
+    projectionMatrix.setToIdentity();
+    modelMatrix.setToIdentity();
+    mvpMatrix.setToIdentity();
+
+    viewMatrix.lookAt(QVector3D(0, projectorHeight, distanceFromObject), QVector3D(0, projectorHeight, 0), upVector);
+    projectionMatrix.perspective(fieldOfView, (float) width() / (float) height(), 0.1f, 1000.0f);
+    mvpMatrix = projectionMatrix * viewMatrix * modelMatrix;
+}
+
+void Window::resizeGL(int width, int height) {
+    updateMVPmatrix();
 }
 
 void Window::drawRectangle() {
@@ -143,7 +178,7 @@ void Window::renderScreen(Shader* shader) {
         render(shader);
     }
 
-    if (isProjectionMapping) {
+    if (isProjectionMapping && hasLoadedProjectionObject) {
         meshShader.bind();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

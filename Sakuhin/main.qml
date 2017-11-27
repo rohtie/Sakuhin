@@ -607,10 +607,223 @@ ApplicationWindow {
                 Item {
                     id: windows
 
-                    Rectangle {
-                        width: parent.width
-                        height: parent.height
-                        color: "#00ffff"
+                    ListView {
+                        id: windowList
+
+                        anchors.fill: parent
+                        boundsBehavior: Flickable.StopAtBounds
+                        model: windowmanager.windows
+
+                        delegate: Column {
+                            id: windowSettingsColumn
+                            topPadding: 40
+
+                            Label {
+                                height: 20
+                                color: "#bbb"
+                                text: model.modelData.isMaster ? "Master window" : model.modelData.isPreview ? "Preview window" : "Slave window"
+                                anchors.left: parent.left
+                                anchors.leftMargin: 10
+                                anchors.rightMargin: 10
+                                anchors.right: parent.right
+                                font.pointSize: 10
+                                font.family: "Tahoma"
+                                verticalAlignment: Text.AlignVCenter
+                            }
+
+                            Switch {
+                                id: projectionSwitch
+                                text: qsTr("Projection mapping")
+                                checked: model.modelData.isProjectionMapping
+                                onClicked: model.modelData.isProjectionMapping = checked
+                                font.pointSize: 7
+
+                                indicator: Rectangle {
+                                    implicitWidth: 20
+                                    implicitHeight: 10
+                                    x: parent.leftPadding
+                                    y: parent.height / 2 - height / 2
+                                    radius: 13
+                                    color: "#666"
+                                    border.width: 0
+
+                                    Rectangle {
+                                        width: 10
+                                        height: 10
+                                        x: projectionSwitch.checked ? parent.width - width : 0
+
+                                        radius: 13
+                                        color: "#bbb"
+                                        border.width: 0
+                                    }
+                                }
+
+                                contentItem: Text {
+                                    text: parent.text
+                                    font: parent.font
+                                    opacity: 1.0
+                                    color: "#bbb"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    leftPadding: parent.indicator.width + parent.spacing
+                                }
+                            }
+
+                            Column {
+                                spacing: 10
+
+                                visible: projectionSwitch.checked
+
+                                Switch {
+                                    id: verticalSwitch
+                                    text: qsTr("Vertical")
+                                    checked: model.modelData.isVertical
+                                    onClicked: model.modelData.isVertical = checked
+                                    font.pointSize: 7
+
+                                    indicator: Rectangle {
+                                        implicitWidth: 20
+                                        implicitHeight: 10
+                                        x: parent.leftPadding
+                                        y: parent.height / 2 - height / 2
+                                        radius: 13
+                                        color: "#666"
+                                        border.width: 0
+
+                                        Rectangle {
+                                            width: 10
+                                            height: 10
+                                            x: verticalSwitch.checked ? parent.width - width : 0
+
+                                            radius: 13
+                                            color: "#bbb"
+                                            border.width: 0
+                                        }
+                                    }
+
+                                    contentItem: Text {
+                                        text: parent.text
+                                        font: parent.font
+                                        opacity: 1.0
+                                        color: "#bbb"
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        leftPadding: parent.indicator.width + parent.spacing
+                                    }
+                                }
+
+                                Label {
+                                    height: 10
+                                    color: "#bbb"
+                                    text: "Distance to object (cm)"
+                                    anchors.left: parent.left
+                                    anchors.leftMargin: 10
+                                    anchors.rightMargin: 10
+                                    font.pointSize: 7
+                                    font.family: "Tahoma"
+                                    anchors.right: parent.right
+                                }
+
+                                TextField {
+                                    text: model.modelData.distanceFromObject
+                                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+                                    color: "#bbb"
+                                    font.pointSize: 7
+
+                                    background: Rectangle {
+                                        implicitWidth: windowList.width
+                                        implicitHeight: 10
+                                        color: "#333"
+                                        border.width: 0
+                                    }
+
+                                    onTextChanged: {
+                                        var value = parseFloat(text)
+
+                                        if (isNaN(value)) {
+                                            value = 0
+                                        }
+
+                                        model.modelData.distanceFromObject = value
+                                    }
+                                }
+
+                                Label {
+                                    height: 10
+                                    color: "#bbb"
+                                    text: "Projector height (cm)"
+                                    anchors.left: parent.left
+                                    anchors.leftMargin: 10
+                                    anchors.rightMargin: 10
+                                    font.pointSize: 7
+                                    font.family: "Tahoma"
+                                    anchors.right: parent.right
+                                }
+
+                                TextField {
+                                    text: model.modelData.projectorHeight
+                                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+                                    color: "#bbb"
+                                    font.pointSize: 7
+
+                                    background: Rectangle {
+                                        implicitWidth: windowList.width
+                                        implicitHeight: 10
+                                        color: "#333"
+                                        border.width: 0
+                                    }
+
+                                    onTextChanged: {
+                                        var value = parseFloat(text)
+
+                                        if (isNaN(value)) {
+                                            value = 0
+                                        }
+
+                                        model.modelData.projectorHeight = value
+                                    }
+                                }
+
+                                Label {
+                                    height: 10
+                                    color: "#bbb"
+                                    text: "Projector field of view (degrees)"
+                                    anchors.left: parent.left
+                                    anchors.leftMargin: 10
+                                    anchors.rightMargin: 10
+                                    font.pointSize: 7
+                                    font.family: "Tahoma"
+                                    anchors.right: parent.right
+                                }
+
+                                TextField {
+                                    text: model.modelData.fieldOfView
+                                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+                                    color: "#bbb"
+                                    font.pointSize: 7
+
+                                    background: Rectangle {
+                                        implicitWidth: windowList.width
+                                        implicitHeight: 10
+                                        color: "#333"
+                                        border.width: 0
+                                    }
+
+                                    onTextChanged: {
+                                        var value = parseFloat(text)
+
+                                        if (isNaN(value)) {
+                                            value = 0
+                                        }
+
+                                        model.modelData.fieldOfView = value
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

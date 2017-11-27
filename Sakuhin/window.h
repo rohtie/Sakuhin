@@ -22,6 +22,14 @@ class Window : public QOpenGLWindow,
                protected QOpenGLFunctions {
     Q_OBJECT
 
+    Q_PROPERTY(bool isMaster MEMBER isMaster NOTIFY isMasterChanged)
+    Q_PROPERTY(bool isPreview MEMBER isPreview NOTIFY isPreviewChanged)
+    Q_PROPERTY(bool isProjectionMapping MEMBER isProjectionMapping NOTIFY isProjectionMappingChanged)
+    Q_PROPERTY(bool isVertical MEMBER isVertical NOTIFY isVerticalChanged)
+    Q_PROPERTY(float distanceFromObject MEMBER distanceFromObject NOTIFY distanceFromObjectChanged)
+    Q_PROPERTY(float projectorHeight MEMBER projectorHeight NOTIFY projectorHeightChanged)
+    Q_PROPERTY(float fieldOfView MEMBER fieldOfView NOTIFY fieldOfViewChanged)
+
     public:
         explicit Window();
 
@@ -37,13 +45,33 @@ class Window : public QOpenGLWindow,
         void updatePerformanceInformation();
         void handleLoggedMessage(const QOpenGLDebugMessage &debugMessage);
 
+        void resizeGL(int width, int height);
+
+    public slots:
+        void updateProjectionMapping();
+        void updateMVPmatrix();
+
     signals:
         void shaderRecompiled();
+
+        void isMasterChanged();
+        void isPreviewChanged();
+        void isProjectionMappingChanged();
+        void isVerticalChanged();
+        void distanceFromObjectChanged();
+        void projectorHeightChanged();
+        void fieldOfViewChanged();
 
     private:
         bool isMaster = false;
         bool isPreview = false;
         bool isProjectionMapping = false;
+        bool hasLoadedProjectionObject = false;
+
+        float distanceFromObject = -400.0;
+        float projectorHeight = 125.;
+        float fieldOfView = 45.2397;
+        bool isVertical = false;
 
     	BackEnd* backend;
         ShaderManager* shadermanager;

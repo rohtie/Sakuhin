@@ -68,6 +68,8 @@ bool loadMesh(const QString &filePath, QVector<GLfloat> &openglVertices, QVector
             openglUVs.append(currentUV->y());
         }
     }
+
+    meshFile.close();
 }
 
 #endif // OBJLOADER_H
