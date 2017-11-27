@@ -35,6 +35,7 @@ class AudioDevice : public QIODevice {
         QOpenGLTexture* texture;
 
         const int spectrumWidth = 512;
+        QVector<double> blackman;
 };
 
 #endif // AUDIODEVICE_H

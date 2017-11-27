@@ -20,6 +20,19 @@ void AudioDevice::start() {
     qDebug() << "Audio input samplesize:" << format.sampleSize() << "bit";
     #endif
 
+    const double pi = qAcos(-1.0);
+
+    // We need the blackman window to be twice the size of the spectrum width
+    // because fft results are half the size of the input size
+    // TODO: Find out if blackman window is ideal for improvised noise music
+    for (int i = 0; i < spectrumWidth * 2 + 1; i++) {
+        blackman.append(
+            0.42 -
+            0.5 * qCos(2.0 * pi * (double) i / (double) (spectrumWidth - 1)) +
+            0.08 * qCos(4.0 * pi * (double) i / (double) (spectrumWidth - 1))
+        );
+    }
+
     texture = new QOpenGLTexture(QOpenGLTexture::Target2D);
     texture->setSize(spectrumWidth, 1);
     texture->setFormat(QOpenGLTexture::R32F);
@@ -42,8 +55,6 @@ qint64 AudioDevice::readData(char *data, qint64 maxlen) {
 
 qint64 AudioDevice::writeData(const char* data, qint64 len) {
     // TODO: Smooth the fft spectrum
-    // TODO: Apply blackman window for better distribution of frequencies
-
     QAudioFormat format = audioInput->format();
 
     const int channelBytes = format.sampleSize() / 8;
@@ -81,6 +92,7 @@ qint64 AudioDevice::writeData(const char* data, qint64 len) {
 
             // Normalize the sample with the max negative value for signed 16 bit: -32768
             in[i] = double(pcmSample) / 32768.0;
+            in[i] *= blackman[i];
 
             currentSample += channelBytes;
         }
