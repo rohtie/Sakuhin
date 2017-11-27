@@ -34,7 +34,7 @@ class AudioDevice : public QIODevice {
         QAudioInput* audioInput;
         QOpenGLTexture* texture;
 
-        const int spectrumWidth = 2048;
+        const int spectrumWidth = 512;
 };
 
 #endif // AUDIODEVICE_H
