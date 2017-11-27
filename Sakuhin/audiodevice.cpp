@@ -104,6 +104,8 @@ qint64 AudioDevice::writeData(const char* data, qint64 len) {
 
     float spectrum[fftwSamples];
 
+    // TODO: Figure out if it is better to only use the amplitude (imaginary numbers)
+    //       rather than combining the phase and amplitude
     for (int i = 0; i < fftwSamples; i++) {
         double val = qSqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]) / fftwScale;
         val = val > 1.0 ? 1.0 : val;
