@@ -23,8 +23,9 @@ class Window : public QOpenGLWindow,
     Q_OBJECT
 
     public:
-        explicit Window(BackEnd* backend, ShaderManager* shadermanager, bool isPreview, bool isProjectionMapping);
+        explicit Window();
 
+        void initialize(BackEnd* backend, ShaderManager* shadermanager, bool isMaster, bool isPreview, bool isProjectionMapping);
         void initializeGL();
 
         void drawRectangle();
@@ -40,6 +41,7 @@ class Window : public QOpenGLWindow,
         void shaderRecompiled();
 
     private:
+        bool isMaster = false;
         bool isPreview = false;
         bool isProjectionMapping = false;
 

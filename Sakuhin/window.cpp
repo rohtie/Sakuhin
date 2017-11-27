@@ -19,9 +19,15 @@ static GLfloat const rectangle[] = {
      1.0f, -1.0f, 0.0f
 };
 
-Window::Window(BackEnd* backend, ShaderManager* shadermanager, bool isPreview, bool isProjectionMapping) {
+
+Window::Window() {
+
+}
+
+void Window::initialize(BackEnd* backend, ShaderManager* shadermanager, bool isMaster, bool isPreview, bool isProjectionMapping) {
     this->backend = backend;
     this->shadermanager = shadermanager;
+    this->isMaster = isMaster;
     this->isPreview = isPreview;
     this->isProjectionMapping = isProjectionMapping;
 }
@@ -130,7 +136,10 @@ void Window::render(Shader* shader) {
 }
 
 void Window::renderScreen(Shader* shader) {
-    if (!isPreview || !shadermanager->previewIsMain()) {
+    if (isMaster) {
+        render(shader);
+    }
+    else if (isPreview && !shadermanager->previewIsMain()) {
         render(shader);
     }
 
@@ -155,6 +164,10 @@ void Window::renderScreen(Shader* shader) {
         meshShader.release();
     }
     else {
+        if (shader->currentFbo() == nullptr) {
+            return;
+        }
+
         screenShader.bind();
             glClear(GL_COLOR_BUFFER_BIT);
             screenShader.setUniformValue("resolution", width(), height());
@@ -226,6 +239,7 @@ void Window::updatePerformanceInformation() {
         double ms = timeSinceLastTime / frameCounter;
         double fps = frameCounter * 1000 / timeSinceLastTime;
 
+        // TODO: Send performance information through the window manager instead
         backend->setPerformanceInformation(QString::number(ms) + " ms " + QString::number(fps) + " fps");
 
         frameCounter = 0;

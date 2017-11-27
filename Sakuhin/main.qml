@@ -5,6 +5,7 @@ import QtQuick.Controls 2.2
 import sakuhin.backend 1.0
 import sakuhin.shadermanager 1.0
 import sakuhin.audiomanager 1.0
+import sakuhin.windowmanager 1.0
 import Qt.labs.folderlistmodel 2.2
 import QtGraphicalEffects 1.0
 
@@ -31,15 +32,36 @@ ApplicationWindow {
         id: audiomanager
     }
 
+    WindowManager {
+        id: windowmanager
+    }
+
     Component.onCompleted: backend.createSession();
 
     Column {
         id: column
-        anchors.topMargin: 10
+        anchors.topMargin: 5
         clip: false
         anchors.bottomMargin: 30
         spacing: 10
         anchors.fill: parent
+
+        Label {
+            height: 25
+            color: "#bbb"
+            text: "⚙ Sakuhin 作品"
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+            font.pointSize: 11
+            font.family: "Tahoma"
+            anchors.right: parent.right
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: settingsPopup.open()
+            }
+        }
 
         SectionLabel {
             text: "Shaders"
@@ -531,6 +553,87 @@ ApplicationWindow {
                 }
                 TabForm {
                     text: qsTr("Shaders")
+                }
+            }
+        }
+    }
+
+    Popup {
+        id: settingsPopup
+        x: 0
+        y: 0
+        width: parent.width
+        height: parent.height
+        visible: false
+        rightPadding: 0
+        leftPadding: 0
+        bottomPadding: 0
+        topPadding: 0
+        spacing: 0
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape
+
+        background: Rectangle {
+            color: "#111117"
+        }
+
+        Rectangle {
+            width: parent.width
+            height: parent.height
+            color: "#111117"
+        }
+
+        Column {
+            spacing: 0
+            anchors.fill: parent
+
+            StackLayout {
+                width: parent.width
+                height: parent.height - settingsBar.height
+                visible: true
+                currentIndex: settingsBar.currentIndex
+
+                Item {
+                    id: session
+
+                    Rectangle {
+                        width: parent.width
+                        height: parent.height
+                        color: "#0000ff"
+                    }
+                }
+
+                Item {
+                    id: windows
+
+                    Rectangle {
+                        width: parent.width
+                        height: parent.height
+                        color: "#00ffff"
+                    }
+                }
+            }
+
+            TabBar {
+                id: settingsBar
+                height: 40
+                currentIndex: 1
+                spacing: 1
+                anchors.right: parent.right
+                anchors.rightMargin: 0
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+
+                background: Rectangle {
+                    color: "#111117"
+                }
+
+                TabForm {
+                    text: qsTr("Session")
+                }
+                TabForm {
+                    text: qsTr("Windows")
                 }
             }
         }

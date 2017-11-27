@@ -7,6 +7,7 @@
 
 #include "shadermanager.h"
 #include "audiomanager.h"
+#include "windowmanager.h"
 
 int main(int argc, char* argv[]) {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -16,6 +17,7 @@ int main(int argc, char* argv[]) {
     qmlRegisterType<BackEnd>("sakuhin.backend", 1, 0, "BackEnd");
     qmlRegisterType<ShaderManager>("sakuhin.shadermanager", 1, 0, "ShaderManager");
     qmlRegisterType<AudioManager>("sakuhin.audiomanager", 1, 0, "AudioManager");
+    qmlRegisterType<WindowManager>("sakuhin.windowmanager", 1, 0, "WindowManager");
 
     QQmlApplicationEngine engine("qrc:/main.qml");
 
@@ -43,18 +45,9 @@ int main(int argc, char* argv[]) {
     // and getting rid of screen tearing
     format.setSwapInterval(0);
 
+    WindowManager* windowmanager = qmlRoot->findChild<WindowManager*>();
     shadermanager->initialize(format);
-
-    Window mainWindow(backend, shadermanager, false, false);
-    mainWindow.setFormat(format);
-    mainWindow.resize(QSize(720 * 0.5, 1280 * 0.5));
-    mainWindow.show();
-
-    Window previewWindow(backend, shadermanager, true, false);
-    previewWindow.setFormat(format);
-    previewWindow.resize(QSize(256, 256));
-    previewWindow.setFlag(Qt::FramelessWindowHint);
-    previewWindow.show();
+    windowmanager->initialize(format, backend, shadermanager);
 
     return app.exec();
 }
