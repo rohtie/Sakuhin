@@ -3,8 +3,10 @@
     * Main window
     * Preview window (same as main window)
 
-* When not using projection mapping with splash
-    * Display shader fbo result with another shader
+* When projection mapping we should render the shader once to an offscreen fbo
+  where the size is a power of 2 to get better performance
+
+* Display shader fbo result with another shader
 
 * Shader manager
     * Create shader (left click shaders menu)
