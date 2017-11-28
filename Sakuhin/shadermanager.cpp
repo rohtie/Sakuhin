@@ -22,17 +22,9 @@ void ShaderManager::initialize(const QSurfaceFormat &format) {
     context->create();
     context->makeCurrent(&surface);
 
-    mainShader = new Shader(
-        1242424,
-        "qrc:tmp/XdjyR1.jpg",
-        "sessions/" + sessionID + "/session.glsl"
-    );
+    createShader("data/shader_templates/minimal.glsl");
+    mainShader = previewShader;
 
-    previewShader = mainShader;
-
-    shaders.append(mainShader);
-    shaders.append(mainShader);
-    shaders.append(mainShader);
     emit shadersChanged();
 }
 
@@ -49,8 +41,35 @@ bool ShaderManager::previewIsMain() {
     return previewShader == mainShader;
 }
 
-void ShaderManager::createShader(QString templateUrl) {
+void ShaderManager::createShader(QString templatePath) {
+    QString creationTime = QString::number(QDateTime::currentSecsSinceEpoch());
+    QString shaderPath = "sessions/" + sessionID + "/shaders/" + creationTime + ".glsl";
+
+    QFile::copy(templatePath, shaderPath);
+    shaders.append(new Shader("qrc:tmp/llsczl.jpg", shaderPath));
+    selectShader(shaders.length() - 1);
+
     emit shadersChanged();
+}
+
+void ShaderManager::selectShader(int index) {
+    Shader* selectedShader = (Shader*) shaders.at(index);
+
+    QString sessionFilepath = "sessions/" + sessionID + "/session.glsl";
+
+    if (previewShader != nullptr) {
+        if (QFile::exists(previewShader->filepath)) {
+            QFile::remove(previewShader->filepath);
+        }
+        QFile::copy(sessionFilepath, previewShader->filepath);
+    }
+
+    if (QFile::exists(sessionFilepath)) {
+        QFile::remove(sessionFilepath);
+    }
+    QFile::copy(selectedShader->filepath, sessionFilepath);
+
+    previewShader = selectedShader;
 }
 
 void ShaderManager::createTransition(QString templateUrl) {
@@ -66,8 +85,9 @@ void ShaderManager::onSessionFileChange(const QString &path) {
         QFile session(path);
         session.open(QIODevice::ReadOnly);
         QByteArray newSessionContents = session.readAll();
+        session.close();
 
-        if (newSessionContents != sessionContents) {
+        if (newSessionContents != sessionContents && newSessionContents.size() > 0) {
             sessionContents = newSessionContents;
 
             previewShader->recompile(sessionContents);

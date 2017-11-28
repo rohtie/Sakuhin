@@ -4,16 +4,17 @@
 #include "shader.h"
 #include "channel.h"
 
-Shader::Shader(int id, QString thumbnail, QString sessionpath) {
-    this->id = id;
+Shader::Shader(QString thumbnail, QString filepath) {
+    this->filepath = filepath;
     this->thumbnail = thumbnail;
 
     program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vertex.glsl");
 
+    QFile session(filepath);
+    session.open(QIODevice::ReadOnly);
+
     // TODO: Find out if it is better to only compile the session glsl and link
     // it together with header and footer files, instead of concatenating them
-    QFile session(sessionpath);
-    session.open(QIODevice::ReadOnly);
     program.addShaderFromSourceCode(QOpenGLShader::Fragment, build(session.readAll()));
     program.link();
 
@@ -70,10 +71,10 @@ bool Shader::recompile(QByteArray shaderCode) {
     QString code = build(shaderCode);
 
     if (!program.addShaderFromSourceCode(QOpenGLShader::Fragment, code)) {
+        qDebug() << "Shader error:" << program.log();
+
         program.addShader(oldShader);
         program.link();
-
-        qDebug() << program.log();
 
         return false;
     }

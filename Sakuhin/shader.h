@@ -8,12 +8,11 @@
 class Shader : public QObject {
     Q_OBJECT
 
-    Q_PROPERTY(int id MEMBER id NOTIFY idChanged)
     Q_PROPERTY(QString thumbnail MEMBER thumbnail NOTIFY thumbnailChanged)
     Q_PROPERTY(QList<QObject*> channels MEMBER channels NOTIFY channelsChanged)
 
     public:
-        Shader(int id, QString thumbnail, QString sessionpath);
+        Shader(QString thumbnail, QString filepath);
 
         void setPreview(bool isPreview);
 
@@ -37,17 +36,15 @@ class Shader : public QObject {
         int lastFrame();
 
         QList<QObject*> channels;
+        QString filepath;
 
     signals:
-        void idChanged();
         void thumbnailChanged();
         void channelsChanged();
 
     private:
         QOpenGLShaderProgram program;
 
-
-        int id;
         QString thumbnail;
 
         bool isPreview = false;
@@ -55,6 +52,7 @@ class Shader : public QObject {
 
         int pingPongIndex = 0;
         int previousPingPongIndex = 1;
+
 
         QOpenGLFramebufferObject** fbo;
         QOpenGLFramebufferObject* previewFbo[2] = {nullptr};

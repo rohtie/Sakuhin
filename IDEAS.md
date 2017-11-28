@@ -67,6 +67,24 @@
                 * [...]
                 * `unixtime_sec`.glsl
 
+                * `thumbnails/` - directory of thumbnails for the shaders
+                    * `unixtime_sec`.png
+                    * `unixtime_sec`.png
+                    * [...]
+                    * `unixtime_sec`.png
+
+            * `transitions/` - directory of transitions created this session
+                * `unixtime_sec`.glsl
+                * `unixtime_sec`.glsl
+                * [...]
+                * `unixtime_sec`.glsl
+
+                * `thumbnails/` - directory of thumbnails for the shaders
+                    * `unixtime_sec`.png
+                    * `unixtime_sec`.png
+                    * [...]
+                    * `unixtime_sec`.png
+
             * `audio/` - directory of audio clips recorded this session
                 * `unixtime_sec`.wav
                 * `unixtime_sec`.wav

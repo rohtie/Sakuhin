@@ -77,6 +77,7 @@ ApplicationWindow {
         ShaderView {
             id: shader_grid_view
             model: shadermanager.shaders
+            onCurrentIndexChanged: shadermanager.selectShader(currentIndex)
         }
 
         SectionLabel {
@@ -249,7 +250,7 @@ ApplicationWindow {
                 text: fileBaseName
 
                 onClicked: {
-                    shadermanager.createShader(fileURL)
+                    shadermanager.createShader(filePath)
                     shaderCreationMenu.close()
                 }
             }

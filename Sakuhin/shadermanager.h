@@ -26,8 +26,8 @@ class ShaderManager : public QObject {
         Shader* currentShader(bool isPreview);
         bool previewIsMain();
 
-        Q_INVOKABLE void createShader(QString templateUrl);
-        void selectShader();
+        Q_INVOKABLE void createShader(QString templatePath);
+        Q_INVOKABLE void selectShader(int index);
         void makeCurrent();
 
         Q_INVOKABLE void createTransition(QString templateUrl);
@@ -44,8 +44,8 @@ class ShaderManager : public QObject {
         void transitionShadersChanged();
 
     private:
-        Shader* mainShader;
-        Shader* previewShader;
+        Shader* mainShader = nullptr;
+        Shader* previewShader = nullptr;
 
         QFileSystemWatcher fileWatcher;
         QByteArray sessionContents;
