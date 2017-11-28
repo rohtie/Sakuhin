@@ -52,8 +52,6 @@ class Window : public QOpenGLWindow,
         void updateMVPmatrix();
 
     signals:
-        void shaderRecompiled();
-
         void isMasterChanged();
         void isPreviewChanged();
         void isProjectionMappingChanged();

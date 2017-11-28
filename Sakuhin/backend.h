@@ -36,9 +36,6 @@ class BackEnd : public QObject {
 
         ShaderManager* shadermanager;
 
-    public slots:
-        void onShaderRecompile();
-
     signals:
         void performanceInformationChanged();
         void channelChanged(const int &channelID, ChannelType &channelType, const QString &fileUrl);
@@ -49,9 +46,6 @@ class BackEnd : public QObject {
         QString sessionPath;
 
         QString performanceInformation = "16.66667 ms 60 fps";
-
-        QJsonObject controllerLog;
-        QFile controllerLogFile;
 };
 
 #endif // BACKEND_H
