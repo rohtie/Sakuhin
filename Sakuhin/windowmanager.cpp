@@ -8,29 +8,31 @@ void WindowManager::initialize(const QSurfaceFormat &format, BackEnd* backend, S
     this->backend = backend;
     this->shadermanager = shadermanager;
 
-    masterWindow = new Window();
-    masterWindow->initialize(backend, shadermanager, true, false, true);
-    masterWindow->setFormat(format);
-    masterWindow->resize(QSize(256, 256));
-    masterWindow->show();
-
     Window* previewWindow = new Window();
     previewWindow->initialize(backend, shadermanager, false, true, false);
     previewWindow->setFormat(format);
     previewWindow->resize(QSize(256, 256));
+    previewWindow->setPosition(0, 513);
     previewWindow->setFlag(Qt::FramelessWindowHint);
     previewWindow->show();
+
+    masterWindow = new Window();
+    masterWindow->initialize(backend, shadermanager, true, false, true);
+    masterWindow->setFormat(format);
+    masterWindow->resize(QSize(256, 256));
+    masterWindow->setPosition(257, 0);
+    masterWindow->show();
 
     Window* slaveWindow = new Window();
     slaveWindow->initialize(backend, shadermanager, false, false, true);
     slaveWindow->setFormat(format);
     slaveWindow->resize(QSize(256, 256));
-    slaveWindow->setFlag(Qt::FramelessWindowHint);
+    slaveWindow->setPosition(513, 0);
     slaveWindow->show();
 
     windows.append(masterWindow);
-    windows.append(previewWindow);
     windows.append(slaveWindow);
+    windows.append(previewWindow);
 
     emit windowsChanged();
 }
