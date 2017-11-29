@@ -57,21 +57,23 @@ void ShaderManager::selectShader(int index) {
     // TODO: DRY this up together with selectTransition
     Shader* selectedShader = (Shader*) shaders.at(index);
 
-    QString sessionFilepath = "sessions/" + sessionID + "/session.glsl";
+    if (previewShader != selectedShader) {
+        QString sessionFilepath = "sessions/" + sessionID + "/session.glsl";
 
-    if (previewShader != nullptr) {
-        if (QFile::exists(previewShader->filepath)) {
-            QFile::remove(previewShader->filepath);
+        if (previewShader != nullptr) {
+            if (QFile::exists(previewShader->filepath)) {
+                QFile::remove(previewShader->filepath);
+            }
+            QFile::copy(sessionFilepath, previewShader->filepath);
         }
-        QFile::copy(sessionFilepath, previewShader->filepath);
-    }
 
-    if (QFile::exists(sessionFilepath)) {
-        QFile::remove(sessionFilepath);
-    }
-    QFile::copy(selectedShader->filepath, sessionFilepath);
+        if (QFile::exists(sessionFilepath)) {
+            QFile::remove(sessionFilepath);
+        }
+        QFile::copy(selectedShader->filepath, sessionFilepath);
 
-    previewShader = selectedShader;
+        previewShader = selectedShader;
+    }
 
     isPreviewingShader = true;
     emit isPreviewingShaderChanged();
@@ -93,21 +95,23 @@ void ShaderManager::selectTransition(int index) {
     // TODO: DRY this up together with selectShader
     Shader* selectedShader = (Shader*) transitionShaders.at(index);
 
-    QString sessionFilepath = "sessions/" + sessionID + "/session.glsl";
+    if (previewShader != selectedShader) {
+        QString sessionFilepath = "sessions/" + sessionID + "/session.glsl";
 
-    if (previewShader != nullptr) {
-        if (QFile::exists(previewShader->filepath)) {
-            QFile::remove(previewShader->filepath);
+        if (previewShader != nullptr) {
+            if (QFile::exists(previewShader->filepath)) {
+                QFile::remove(previewShader->filepath);
+            }
+            QFile::copy(sessionFilepath, previewShader->filepath);
         }
-        QFile::copy(sessionFilepath, previewShader->filepath);
-    }
 
-    if (QFile::exists(sessionFilepath)) {
-        QFile::remove(sessionFilepath);
-    }
-    QFile::copy(selectedShader->filepath, sessionFilepath);
+        if (QFile::exists(sessionFilepath)) {
+            QFile::remove(sessionFilepath);
+        }
+        QFile::copy(selectedShader->filepath, sessionFilepath);
 
-    previewShader = selectedShader;
+        previewShader = selectedShader;
+    }
 
     isPreviewingShader = false;
     emit isPreviewingShaderChanged();
