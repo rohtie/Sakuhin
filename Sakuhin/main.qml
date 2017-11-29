@@ -38,11 +38,11 @@ ApplicationWindow {
 
     Component.onCompleted: backend.createSession();
 
-    Column {
+    ColumnLayout {
         id: column
         anchors.topMargin: 5
         clip: false
-        anchors.bottomMargin: 30
+        anchors.bottomMargin: 40
         spacing: 10
         anchors.fill: parent
 
@@ -94,6 +94,7 @@ ApplicationWindow {
         }
 
         ShaderView {
+            id: transitionGridView
             model: shadermanager.transitionShaders
             contextArea.onClicked: transitionContextMenu.openAt(x + mouse.x, y + mouse.y)
             onShaderActivated: shadermanager.selectTransition(currentIndex)
@@ -127,8 +128,15 @@ ApplicationWindow {
 
             Connections {
                 target: shader_grid_view
-                onCurrentIndexChanged: {
+                onShaderActivated: {
                     channel_view.model = shadermanager.shaders[shader_grid_view.currentIndex].channels
+                }
+            }
+
+            Connections {
+                target: transitionGridView
+                onShaderActivated: {
+                    channel_view.model = shadermanager.transitionShaders[transitionGridView.currentIndex].channels
                 }
             }
 
@@ -180,22 +188,39 @@ ApplicationWindow {
         }
 
         SectionLabel {
-            text: "Controllers"
+            text: "Sliders"
         }
 
-        RowLayout {
-            id: controller
-            spacing: 0
-            anchors.right: parent.right
-            anchors.rightMargin: 10
+        ListView {
+            id: shaderSliders
+
+            Layout.fillHeight: true
+
             anchors.left: parent.left
-            anchors.leftMargin: 10
+            anchors.leftMargin: 0
 
-            Repeater {
-                model: 4
+            anchors.right: parent.right
+            anchors.rightMargin: 0
 
-                SliderControllerForm {
-                    onValueChanged: backend.setSlider(index, value)
+            orientation: ListView.Horizontal
+
+            delegate: SliderControllerForm {
+                width: shaderSliders.width / shaderSliders.count
+                value: model.modelData.value
+                onValueChanged: model.modelData.value = value
+            }
+
+            Connections {
+                target: shader_grid_view
+                onShaderActivated: {
+                    shaderSliders.model = shadermanager.shaders[shader_grid_view.currentIndex].sliders
+                }
+            }
+
+            Connections {
+                target: transitionGridView
+                onShaderActivated: {
+                    shaderSliders.model = shadermanager.transitionShaders[transitionGridView.currentIndex].sliders
                 }
             }
         }

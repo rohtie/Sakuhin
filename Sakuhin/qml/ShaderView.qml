@@ -27,6 +27,7 @@ GridView {
     anchors.rightMargin: 2.5
 
     onCountChanged: currentIndex = count - 1
+    onCurrentIndexChanged: shader_view.shaderActivated()
 
     delegate: Item {
         property bool isPressed: false

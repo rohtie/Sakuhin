@@ -22,7 +22,8 @@ SOURCES += \
     channel.cpp \
     audiomanager.cpp \
     audiodevice.cpp \
-    windowmanager.cpp
+    windowmanager.cpp \
+    slider.cpp
 
 RESOURCES += qml.qrc
 
@@ -46,7 +47,8 @@ HEADERS += \
     audiomanager.h \
     audiodevice.h \
     objloader.h \
-    windowmanager.h
+    windowmanager.h \
+    slider.h
 
 copydata.commands = $(COPY_DIR) $$PWD/data $$OUT_PWD
 first.depends = $(first) copydata

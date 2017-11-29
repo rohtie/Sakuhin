@@ -3,6 +3,7 @@
 
 #include "shader.h"
 #include "channel.h"
+#include "slider.h"
 
 Shader::Shader(QString thumbnail, QString filepath) {
     this->filepath = filepath;
@@ -30,6 +31,11 @@ Shader::Shader(QString thumbnail, QString filepath) {
         channels.append(new Channel(i));
     }
     emit channelsChanged();
+
+    for (int i = 0; i < 4; i++) {
+        sliders.append(new Slider());
+    }
+    emit slidersChanged();
 
     fbo = mainFbo;
 }
@@ -118,8 +124,11 @@ void Shader::setUniformValues() {
     program.setUniformValue("resolution", width(), height());
     program.setUniformValue("time", (GLfloat) time);
 
-    // TODO: Fix sliders
-    // shader.setUniformValueArray("slider", (GLfloat*) backend->getSliders(), 4, 1);
+    for (int i = 0; i < 4; i++) {
+        Slider* slider = (Slider*) sliders.at(i);
+        QString sliderName = "slider" + QString::number(i);
+        program.setUniformValue(sliderName.toStdString().c_str(), (GLfloat) slider->value);
+    }
 }
 
 int Shader::width() {

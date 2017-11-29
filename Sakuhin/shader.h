@@ -10,6 +10,7 @@ class Shader : public QObject {
 
     Q_PROPERTY(QString thumbnail MEMBER thumbnail NOTIFY thumbnailChanged)
     Q_PROPERTY(QList<QObject*> channels MEMBER channels NOTIFY channelsChanged)
+    Q_PROPERTY(QList<QObject*> sliders MEMBER sliders NOTIFY slidersChanged)
 
     public:
         Shader(QString thumbnail, QString filepath);
@@ -41,11 +42,13 @@ class Shader : public QObject {
     signals:
         void thumbnailChanged();
         void channelsChanged();
+        void slidersChanged();
 
     private:
         QOpenGLShaderProgram program;
 
         QString thumbnail;
+        QList<QObject*> sliders;
 
         bool isPreview = false;
         double time = 0.0;

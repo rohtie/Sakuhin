@@ -4,24 +4,26 @@ import QtQuick.Templates 2.2
 
 Slider {
     id: control
-    width: 10
-    height: 150
+
+    width: 20
+    height: parent.height
+
     Layout.fillWidth: true
-    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
     Layout.fillHeight: true
+    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
     wheelEnabled: true
     orientation: Qt.Vertical
 
     background: Rectangle {
-        anchors.horizontalCenter: parent.horizontalCenter
+        width: 7
+        height: control.height
         x: control.leftPadding
-        y: control.topPadding + control.availableHeight / 2 - height / 2
-        implicitWidth: 10
-        implicitHeight: 100
-        width: implicitWidth
-        height: control.availableHeight
-        radius: 2
+        y: control.topPadding + control.height / 2 - height / 2
+        anchors.horizontalCenter: parent.horizontalCenter
+
         color: "#69697b"
+        radius: 2
 
         Rectangle {
             anchors.bottom: parent.bottom
