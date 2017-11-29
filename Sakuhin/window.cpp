@@ -216,7 +216,7 @@ void Window::renderScreen(Shader* shader) {
 }
 
 void Window::paintGL() {
-    if (!isPreview) {
+    if (isMaster) {
         updatePerformanceInformation();
     }
 
