@@ -13,14 +13,6 @@ BackEnd::BackEnd(QObject* parent) : QObject(parent) {
 
 }
 
-void BackEnd::setSlider(const int &id, const float &value) {
-    slider[id] = value;
-}
-
-float* BackEnd::getSliders() {
-    return slider;
-}
-
 void BackEnd::setPerformanceInformation(const QString &performanceInformation) {
     this->performanceInformation = performanceInformation;
 
@@ -75,8 +67,3 @@ void BackEnd::createSession() {
 QString BackEnd::getSessionID() {
     return sessionID;
 }
-
-void BackEnd::setChannel(const int &channelID, ChannelType channelType, const QString &fileUrl) {
-    emit channelChanged(channelID, channelType, fileUrl);
-}
-

@@ -17,31 +17,17 @@ class BackEnd : public QObject {
     public:
         explicit BackEnd(QObject* parent = nullptr);
 
-        enum ChannelType {
-            Texture,
-            Shader,
-            Hardware
-        };
-        Q_ENUM(ChannelType)
-
         QString getSessionID();
 
-        void setPerformanceInformation(const QString &performanceInformation);
-
-        Q_INVOKABLE void setSlider(const int &id, const float &value);
-        float* getSliders();
-
         Q_INVOKABLE void createSession();
-        Q_INVOKABLE void setChannel(const int &channelID, ChannelType channelType, const QString &fileUrl);
+        void setPerformanceInformation(const QString &performanceInformation);
 
         ShaderManager* shadermanager;
 
     signals:
         void performanceInformationChanged();
-        void channelChanged(const int &channelID, ChannelType &channelType, const QString &fileUrl);
 
     private:
-        float slider[4] = {};
         QString sessionID;
         QString sessionPath;
 
