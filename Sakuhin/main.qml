@@ -94,6 +94,7 @@ ApplicationWindow {
         ShaderView {
             model: shadermanager.transitionShaders
             contextArea.onClicked: transitionContextMenu.openAt(x + mouse.x, y + mouse.y)
+            onCurrentIndexChanged: shadermanager.selectTransition(currentIndex)
         }
 
         SectionLabel {
@@ -282,7 +283,7 @@ ApplicationWindow {
                 text: fileBaseName
 
                 onClicked: {
-                    shadermanager.createTransition(fileURL)
+                    shadermanager.createTransition(filePath)
                     transitionCreationMenu.close()
                 }
             }

@@ -42,6 +42,7 @@ bool ShaderManager::previewIsMain() {
 }
 
 void ShaderManager::createShader(QString templatePath) {
+    // TODO: DRY this up together with createTransition
     QString creationTime = QString::number(QDateTime::currentSecsSinceEpoch());
     QString shaderPath = "sessions/" + sessionID + "/shaders/" + creationTime + ".glsl";
 
@@ -53,6 +54,7 @@ void ShaderManager::createShader(QString templatePath) {
 }
 
 void ShaderManager::selectShader(int index) {
+    // TODO: DRY this up together with selectTransition
     Shader* selectedShader = (Shader*) shaders.at(index);
 
     QString sessionFilepath = "sessions/" + sessionID + "/session.glsl";
@@ -72,8 +74,37 @@ void ShaderManager::selectShader(int index) {
     previewShader = selectedShader;
 }
 
-void ShaderManager::createTransition(QString templateUrl) {
+void ShaderManager::createTransition(QString templatePath) {
+    // TODO: DRY this up together with createShader
+    QString creationTime = QString::number(QDateTime::currentSecsSinceEpoch());
+    QString shaderPath = "sessions/" + sessionID + "/transitions/" + creationTime + ".glsl";
+
+    QFile::copy(templatePath, shaderPath);
+    transitionShaders.append(new Shader("qrc:tmp/llsczl.jpg", shaderPath));
+    selectTransition(transitionShaders.length() - 1);
+
     emit transitionShadersChanged();
+}
+
+void ShaderManager::selectTransition(int index) {
+    // TODO: DRY this up together with selectShader
+    Shader* selectedShader = (Shader*) transitionShaders.at(index);
+
+    QString sessionFilepath = "sessions/" + sessionID + "/session.glsl";
+
+    if (previewShader != nullptr) {
+        if (QFile::exists(previewShader->filepath)) {
+            QFile::remove(previewShader->filepath);
+        }
+        QFile::copy(sessionFilepath, previewShader->filepath);
+    }
+
+    if (QFile::exists(sessionFilepath)) {
+        QFile::remove(sessionFilepath);
+    }
+    QFile::copy(selectedShader->filepath, sessionFilepath);
+
+    previewShader = selectedShader;
 }
 
 void ShaderManager::onSessionFileChange(const QString &path) {
