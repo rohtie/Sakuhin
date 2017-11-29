@@ -77,7 +77,9 @@ ApplicationWindow {
         ShaderView {
             id: shader_grid_view
             model: shadermanager.shaders
-            onCurrentIndexChanged: shadermanager.selectShader(currentIndex)
+            onShaderActivated: shadermanager.selectShader(currentIndex)
+            activeIndex: shadermanager.mainIndex
+            isViewPreviewed: shadermanager.isPreviewingShader
         }
 
         SectionLabel {
@@ -94,7 +96,9 @@ ApplicationWindow {
         ShaderView {
             model: shadermanager.transitionShaders
             contextArea.onClicked: transitionContextMenu.openAt(x + mouse.x, y + mouse.y)
-            onCurrentIndexChanged: shadermanager.selectTransition(currentIndex)
+            onShaderActivated: shadermanager.selectTransition(currentIndex)
+            activeIndex: -1
+            isViewPreviewed: !shadermanager.isPreviewingShader
         }
 
         SectionLabel {

@@ -72,6 +72,9 @@ void ShaderManager::selectShader(int index) {
     QFile::copy(selectedShader->filepath, sessionFilepath);
 
     previewShader = selectedShader;
+
+    isPreviewingShader = true;
+    emit isPreviewingShaderChanged();
 }
 
 void ShaderManager::createTransition(QString templatePath) {
@@ -105,6 +108,9 @@ void ShaderManager::selectTransition(int index) {
     QFile::copy(selectedShader->filepath, sessionFilepath);
 
     previewShader = selectedShader;
+
+    isPreviewingShader = false;
+    emit isPreviewingShaderChanged();
 }
 
 void ShaderManager::onSessionFileChange(const QString &path) {

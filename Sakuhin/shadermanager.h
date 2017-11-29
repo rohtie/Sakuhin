@@ -18,6 +18,9 @@ class ShaderManager : public QObject {
     Q_PROPERTY(QList<QObject*> shaders MEMBER shaders NOTIFY shadersChanged)
     Q_PROPERTY(QList<QObject*> transitionShaders MEMBER transitionShaders NOTIFY transitionShadersChanged)
 
+    Q_PROPERTY(int mainIndex MEMBER mainIndex NOTIFY mainIndexChanged)
+    Q_PROPERTY(bool isPreviewingShader MEMBER isPreviewingShader NOTIFY isPreviewingShaderChanged)
+
     public:
         ShaderManager();
 
@@ -42,8 +45,13 @@ class ShaderManager : public QObject {
     signals:
         void shadersChanged();
         void transitionShadersChanged();
+        void mainIndexChanged();
+        void isPreviewingShaderChanged();
 
     private:
+        int mainIndex = 0;
+        bool isPreviewingShader = true;
+
         Shader* mainShader = nullptr;
         Shader* previewShader = nullptr;
 

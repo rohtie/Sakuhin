@@ -13,6 +13,11 @@ GridView {
     cellHeight: 48
     cellWidth: 48
 
+    signal shaderActivated()
+
+    property int activeIndex
+    property bool isViewPreviewed
+
     property alias contextArea: contextArea
 
     anchors.left: parent.left
@@ -29,7 +34,7 @@ GridView {
         width: shader_view.cellWidth
         height: shader_view.cellHeight
 
-        opacity: (GridView.isCurrentItem || isPressed) ? 1.0 : 0.5
+        opacity: ((GridView.isCurrentItem || isPressed || index == activeIndex) && isViewPreviewed) ? 1.0 : 0.5
 
         Image {
             id: shaderImage
@@ -57,9 +62,31 @@ GridView {
             }
         }
 
+        Label {
+            visible: (index == currentIndex || index == activeIndex || isPressed)
+
+            anchors.fill: parent
+            anchors.topMargin: 0
+            anchors.rightMargin: 5
+            anchors.leftMargin: 0
+            anchors.bottomMargin: 5
+
+            color: "#fff"
+            text: index == activeIndex ? "M" : "P"
+            font.pointSize: shader_view.cellWidth * 0.45
+            font.family: "Tahoma"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            style: Text.Outline
+            styleColor: "#000"
+        }
+
         MouseArea {
             anchors.fill: parent
-            onClicked: parent.GridView.view.currentIndex = index
+            onClicked: {
+                parent.GridView.view.currentIndex = index
+                shader_view.shaderActivated()
+            }
             onPressed: isPressed = true
             onReleased: isPressed = false
 
