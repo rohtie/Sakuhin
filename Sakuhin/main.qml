@@ -16,7 +16,7 @@ ApplicationWindow {
     flags: Qt.FramelessWindowHint
     visible: true
     width: 256
-    height: 494
+    height: 512
     color: "#111117"
     title: "Sakuhin"
 
