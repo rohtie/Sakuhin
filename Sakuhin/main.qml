@@ -42,7 +42,7 @@ ApplicationWindow {
         id: column
         anchors.topMargin: 5
         clip: false
-        anchors.bottomMargin: 40
+        anchors.bottomMargin: 30
         spacing: 10
         anchors.fill: parent
 
@@ -188,7 +188,7 @@ ApplicationWindow {
         }
 
         SectionLabel {
-            text: "Sliders"
+            text: ""
         }
 
         ListView {
@@ -226,39 +226,22 @@ ApplicationWindow {
         }
     }
 
-    Image {
-        id: spectrum
-        x: 10
-        y: 225
-        height: 35
+    Label {
+        id: info
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
+        anchors.bottomMargin: 10
         anchors.right: parent.right
-        anchors.rightMargin: 0
+        anchors.rightMargin: 10
         anchors.left: parent.left
-        anchors.leftMargin: 0
-        fillMode: Image.PreserveAspectCrop
-        source: "tmp/spectrum.jpg"
+        anchors.leftMargin: 10
 
-        Label {
-            id: info
-            x: 10
-            y: 0
-            height: 15
-            color: "#dddddd"
-            text: backend.performanceInformation
-            horizontalAlignment: Text.AlignRight
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottomMargin: 10
-            anchors.rightMargin: 10
-            anchors.leftMargin: 10
-            font.family: "Tahoma"
-            font.pointSize: 8
-        }
+        height: 10
+        color: "#dddddd"
+        text: backend.performanceInformation
+        horizontalAlignment: Text.AlignRight
+        font.family: "Tahoma"
+        font.pointSize: 7
     }
-
 
     Menu {
         id: shaderCreationMenu
