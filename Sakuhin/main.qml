@@ -77,6 +77,7 @@ ApplicationWindow {
         ShaderView {
             id: shader_grid_view
             model: shadermanager.shaders
+            contextArea.onClicked: shaderContextMenu.openAt(x + mouse.x, y + mouse.y)
             onShaderActivated: shadermanager.selectShader(currentIndex)
             activeIndex: shadermanager.mainIndex
             isViewPreviewed: shadermanager.isPreviewingShader
@@ -272,6 +273,52 @@ ApplicationWindow {
         Rectangle {
             anchors.fill: parent
             color: "#111117"
+        }
+    }
+
+    Menu {
+        id: shaderContextMenu
+        height: shaderContextList.contentHeight
+
+        function openAt(x, y) {
+            this.x = x
+            this.y = y
+            open()
+        }
+
+        onHeightChanged: {
+            if (height > root.height) {
+                height = root.height
+            }
+        }
+
+        background: Rectangle {
+            implicitWidth: 256
+            implicitHeight: 256
+            anchors.fill: parent
+            color: "#111117"
+        }
+
+        ListView {
+            height: shaderContextMenu.height
+            boundsBehavior: Flickable.StopAtBounds
+
+            id: shaderContextList
+
+            model: ListModel {
+                ListElement {
+                    name: "Make current"
+                }
+            }
+
+            delegate: StyledMenuItem {
+                text: name
+
+                onClicked: {
+                    shadermanager.makeCurrent(shader_grid_view.currentIndex)
+                    shaderContextMenu.close()
+                }
+            }
         }
     }
 

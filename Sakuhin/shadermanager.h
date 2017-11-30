@@ -31,7 +31,7 @@ class ShaderManager : public QObject {
 
         Q_INVOKABLE void createShader(QString templatePath);
         Q_INVOKABLE void selectShader(int index);
-        void makeCurrent();
+        Q_INVOKABLE void makeCurrent(int index);
 
         Q_INVOKABLE void createTransition(QString templatePath);
         Q_INVOKABLE void selectTransition(int index);

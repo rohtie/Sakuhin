@@ -79,6 +79,14 @@ void ShaderManager::selectShader(int index) {
     emit isPreviewingShaderChanged();
 }
 
+void ShaderManager::makeCurrent(int index) {
+    if (isPreviewingShader) {
+        mainIndex = index;
+        mainShader = previewShader;
+        emit mainIndexChanged();
+    }
+}
+
 void ShaderManager::createTransition(QString templatePath) {
     // TODO: DRY this up together with createShader
     QString creationTime = QString::number(QDateTime::currentSecsSinceEpoch());
