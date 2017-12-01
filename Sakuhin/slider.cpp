@@ -5,8 +5,6 @@
 Slider::Slider(QObject* parent) : QObject(parent) {
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(easeSlider()));
-
-    startEase(5);
 }
 
 void Slider::startEase(int index) {
@@ -27,5 +25,4 @@ void Slider::easeSlider() {
     emit valueChanged();
 }
 
-QStringList Slider::easingNames = QStringList() << "Linear" << "QuadraticIn" << "QuadraticOut" << "QuadraticInOut" << "CubicIn" << "CubicOut" << "CubicInOut" << "QuarticIn" << "QuarticOut" << "QuarticInOut" << "QuinticIn" << "QuinticOut" << "QuinticInOut" << "SineIn" << "SineOut" << "SineInOut" << "CircularIn" << "CircularOut" << "CircularInOut" << "ExponentialIn" << "ExponentialOut" << "ExponentialInOut" << "ElasticIn" << "ElasticOut" << "ElasticInOut" << "BackIn" << "BackOut" << "BackInOut" << "BounceOut" << "BounceIn" << "BounceInOut";
 QList<easingFunctionPointer> Slider::easingfunctions = QList<easingFunctionPointer>() << &Linear << &QuadraticIn << &QuadraticOut << &QuadraticInOut << &CubicIn << &CubicOut << &CubicInOut << &QuarticIn << &QuarticOut << &QuarticInOut << &QuinticIn << &QuinticOut << &QuinticInOut << &SineIn << &SineOut << &SineInOut << &CircularIn << &CircularOut << &CircularInOut << &ExponentialIn << &ExponentialOut << &ExponentialInOut << &ElasticIn << &ElasticOut << &ElasticInOut << &BackIn << &BackOut << &BackInOut << &BounceOut << &BounceIn << &BounceInOut;

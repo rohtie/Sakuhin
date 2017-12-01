@@ -209,6 +209,16 @@ ApplicationWindow {
                 width: shaderSliders.width / shaderSliders.count
                 value: model.modelData.value
                 onValueChanged: model.modelData.value = value
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    acceptedButtons: Qt.RightButton
+                    onClicked: {
+                        shaderSliders.currentIndex = index
+                        sliderContextMenu.openAt(x + mouse.x, y + mouse.y)
+                    }
+                }
             }
 
             Connections {
@@ -909,6 +919,54 @@ ApplicationWindow {
                 }
                 TabForm {
                     text: qsTr("Windows")
+                }
+            }
+        }
+    }
+
+    Menu {
+        id: sliderContextMenu
+        height: sliderContextList.contentHeight
+
+        function openAt(x, y) {
+            this.x = x
+            this.y = y
+            open()
+        }
+
+        onHeightChanged: {
+            if (height > root.height) {
+                height = root.height
+            }
+        }
+
+        background: Rectangle {
+            implicitWidth: 256
+            implicitHeight: 256
+            anchors.fill: parent
+            color: "#111117"
+        }
+
+        ListView {
+            height: sliderContextMenu.height
+            boundsBehavior: Flickable.StopAtBounds
+
+            id: sliderContextList
+
+            model: backend.easingNames
+
+            delegate: StyledMenuItem {
+                text: model.modelData
+
+                onClicked: {
+                    if (shadermanager.isPreviewingShader) {
+                        shadermanager.shaders[shader_grid_view.currentIndex].sliders[shaderSliders.currentIndex].startEase(index)
+                    }
+                    else  {
+                        shadermanager.transitionShaders[transitionGridView.currentIndex].sliders[shaderSliders.currentIndex].startEase(index)
+                    }
+
+                    sliderContextMenu.close()
                 }
             }
         }
