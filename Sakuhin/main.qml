@@ -609,11 +609,13 @@ ApplicationWindow {
                 id: bar
                 height: 40
                 currentIndex: 1
-                spacing: 1
+                spacing: 0
                 anchors.right: parent.right
                 anchors.rightMargin: 0
                 anchors.left: parent.left
                 anchors.leftMargin: 0
+                font.family: "Tahoma"
+                font.pointSize: 11
 
                 background: Rectangle {
                     color: "#111117"
@@ -906,11 +908,13 @@ ApplicationWindow {
                 id: settingsBar
                 height: 40
                 currentIndex: 1
-                spacing: 1
+                spacing: 0
                 anchors.right: parent.right
                 anchors.rightMargin: 0
                 anchors.left: parent.left
                 anchors.leftMargin: 0
+                font.family: "Tahoma"
+                font.pointSize: 9
 
                 background: Rectangle {
                     color: "#111117"
@@ -918,6 +922,7 @@ ApplicationWindow {
 
                 TabForm {
                     text: qsTr("Session")
+                    font.family: "Tahoma"
                 }
                 TabForm {
                     text: qsTr("Windows")
@@ -964,7 +969,7 @@ ApplicationWindow {
                     if (shadermanager.isPreviewingShader) {
                         shadermanager.shaders[shader_grid_view.currentIndex].sliders[shaderSliders.currentIndex].startEase(index)
                     }
-                    else  {
+                    else  {
                         shadermanager.transitionShaders[transitionGridView.currentIndex].sliders[shaderSliders.currentIndex].startEase(index)
                     }
 
