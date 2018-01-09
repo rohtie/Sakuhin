@@ -597,10 +597,20 @@ ApplicationWindow {
                 Item {
                     id: shaderTab
 
-                    Rectangle {
-                        width: parent.width
+                    ShaderView {
+                        id: shader_as_input
+
                         height: parent.height
-                        color: "#0000ff"
+                        cellHeight: 123
+                        cellWidth: 123
+                        anchors.fill: parent
+                        anchors.topMargin: 7.5
+                        anchors.leftMargin: 7.5
+
+                        model: shadermanager.shaders
+                        // TODO: onShaderActivated: channel.setShader()
+                        activeIndex: shadermanager.mainIndex
+                        isViewPreviewed: shadermanager.isPreviewingShader
                     }
                 }
             }
