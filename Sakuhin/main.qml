@@ -17,6 +17,8 @@ ApplicationWindow {
     visible: true
     width: 256
     height: 512
+    x: 0
+    y: 0
     color: "#111117"
     title: "Sakuhin"
 

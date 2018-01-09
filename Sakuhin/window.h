@@ -33,7 +33,9 @@ class Window : public QOpenGLWindow,
     public:
         explicit Window();
 
-        void initialize(BackEnd* backend, ShaderManager* shadermanager, bool isMaster, bool isPreview, bool isProjectionMapping);
+        void setupMapping(float distanceFromObject, float projectorHeight, float fieldOfView, bool isVertical, const QString &modelPath);
+        void initialize(BackEnd* backend, ShaderManager* shadermanager, bool isMaster, bool isPreview);
+
         void initializeGL();
 
         void drawRectangle();
@@ -70,6 +72,7 @@ class Window : public QOpenGLWindow,
         float projectorHeight = 125.;
         float fieldOfView = 45.2397;
         bool isVertical = false;
+        QString modelPath;
 
     	BackEnd* backend;
         ShaderManager* shadermanager;

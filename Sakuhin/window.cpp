@@ -24,12 +24,20 @@ Window::Window() {
 
 }
 
-void Window::initialize(BackEnd* backend, ShaderManager* shadermanager, bool isMaster, bool isPreview, bool isProjectionMapping) {
+void Window::setupMapping(float distanceFromObject, float projectorHeight, float fieldOfView, bool isVertical, const QString &modelPath) {
+    this->distanceFromObject = distanceFromObject;
+    this->projectorHeight = projectorHeight;
+    this->fieldOfView = fieldOfView;
+    this->isVertical = isVertical;
+    this->modelPath = modelPath;
+    this->isProjectionMapping = true;
+}
+
+void Window::initialize(BackEnd* backend, ShaderManager* shadermanager, bool isMaster, bool isPreview) {
     this->backend = backend;
     this->shadermanager = shadermanager;
     this->isMaster = isMaster;
     this->isPreview = isPreview;
-    this->isProjectionMapping = isProjectionMapping;
 }
 
 void Window::initializeGL() {
@@ -99,7 +107,7 @@ void Window::updateProjectionMapping() {
 
     updateMVPmatrix();
 
-    loadMesh("data/models/dinzoil.obj", meshVertices, meshUVs);
+    loadMesh(modelPath, meshVertices, meshUVs);
 
     meshVao.create();
     meshVao.bind();
