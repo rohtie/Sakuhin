@@ -608,7 +608,9 @@ ApplicationWindow {
                         anchors.leftMargin: 7.5
 
                         model: shadermanager.shaders
-                        // TODO: onShaderActivated: channel.setShader()
+
+                        // TODO: Shorten the train
+                        onShaderActivated: shadermanager.shaders[shader_grid_view.currentIndex].channels[channel_view.currentIndex].setShader(shadermanager.shaders[currentIndex])
                         activeIndex: shadermanager.mainIndex
                         isViewPreviewed: shadermanager.isPreviewingShader
                     }
