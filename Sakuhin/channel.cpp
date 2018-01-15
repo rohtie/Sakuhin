@@ -27,8 +27,7 @@ void Channel::bind() {
         texture->bind(channelLocation);
         return;
     }
-
-    if (channelType == AudioType) {
+    else if (channelType == AudioType) {
         QOpenGLTexture* spectrum = audioDevice->spectrumTexture();
 
         if (spectrum->isCreated()) {
@@ -37,8 +36,7 @@ void Channel::bind() {
 
         return;
     }
-
-    if (channelType == ShaderType) {
+    else if (channelType == ShaderType) {
         glActiveTexture(GL_TEXTURE0 + channelLocation);
         glBindTexture(GL_TEXTURE_2D, shader->lastFrame());
         return;

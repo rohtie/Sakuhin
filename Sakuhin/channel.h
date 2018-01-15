@@ -29,7 +29,7 @@ class Channel : public QObject {
         Q_INVOKABLE void setAudioDevice(QObject* audioDevice);
 
         ChannelType channelType = NoType;
-        Shader* shader;
+        Shader* shader = nullptr;
 
     private:
         int channelLocation = 0;

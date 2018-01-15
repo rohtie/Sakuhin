@@ -160,9 +160,19 @@ void Window::drawRectangle() {
 }
 
 void Window::render(Shader* shader) {
-    shader->updatePingPong();
+    for (int i = 0; i < 5; i++) {
+        Channel* channel = (Channel*) shader->channels[i];
 
+        if (channel->channelType == Channel::ShaderType) {
+            if (channel->shader != nullptr && channel->shader != shadermanager->currentShader(isPreview)) {
+                render(channel->shader);
+            }
+        }
+    }
+
+    shader->updatePingPong();
     shader->setPreview(isPreview);
+
     shader->setResolution(width(), height());
     shader->setTime(time.elapsed() / 1000.0f);
 
@@ -224,6 +234,8 @@ void Window::renderScreen(Shader* shader) {
 }
 
 void Window::paintGL() {
+    currentTime = time.elapsed();
+
     if (isMaster) {
         updatePerformanceInformation();
     }
@@ -270,7 +282,6 @@ void Window::keyPressEvent(QKeyEvent* event) {
 }
 
 void Window::updatePerformanceInformation() {
-    qint64 currentTime = time.elapsed();
     double timeSinceLastTime = double(currentTime - lastTime);
     frameCounter++;
 

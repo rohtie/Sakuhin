@@ -73,8 +73,7 @@ class Window : public QOpenGLWindow,
         float fieldOfView = 45.2397;
         bool isVertical = false;
         QString modelPath;
-
-    	BackEnd* backend;
+        BackEnd* backend;
         ShaderManager* shadermanager;
 
         QOpenGLShaderProgram screenShader;
@@ -94,6 +93,7 @@ class Window : public QOpenGLWindow,
 
         QElapsedTimer time;
         int frameCounter;
+        qint64 currentTime = 0;
         qint64 lastTime = 0;
         QMargins oldMargins;
 
