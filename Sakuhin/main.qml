@@ -570,14 +570,27 @@ ApplicationWindow {
                             Image {
                                 anchors.fill: parent
                                 anchors.topMargin: 0
-                                anchors.rightMargin: 5
-                                anchors.leftMargin: 5
-                                anchors.bottomMargin: 10
+                                anchors.rightMargin: 2.5
+                                anchors.leftMargin: 2.5
+                                anchors.bottomMargin: 5
 
                                 asynchronous: true
 
                                 fillMode: Image.PreserveAspectFit
                                 source: fileURL
+
+                                layer.enabled: true
+                                layer.effect: OpacityMask {
+                                    maskSource: Item {
+                                        width: textureGrid.width
+                                        height: textureGrid.height
+
+                                        Rectangle {
+                                            anchors.fill: parent
+                                            radius: 5
+                                        }
+                                    }
+                                }
 
                                 MouseArea {
                                     anchors.fill: parent
@@ -597,22 +610,62 @@ ApplicationWindow {
                 Item {
                     id: shaderTab
 
-                    ShaderView {
-                        id: shader_as_input
-
-                        height: parent.height
+                    GridView {
+                        id: shaderGrid
+                        clip: true
+                        maximumFlickVelocity: 3000
+                        flickDeceleration: 1500
+                        boundsBehavior: Flickable.StopAtBounds
+                        snapMode: GridView.NoSnap
                         cellHeight: 123
                         cellWidth: 123
+
                         anchors.fill: parent
-                        anchors.topMargin: 7.5
-                        anchors.leftMargin: 7.5
+                        anchors.topMargin: 5
+                        anchors.leftMargin: 5
 
                         model: shadermanager.shaders
 
-                        // TODO: Shorten the train
-                        onShaderActivated: shadermanager.shaders[shader_grid_view.currentIndex].channels[channel_view.currentIndex].setShader(shadermanager.shaders[currentIndex])
-                        activeIndex: shadermanager.mainIndex
-                        isViewPreviewed: shadermanager.isPreviewingShader
+                        delegate: Item {
+                            width: shaderGrid.cellWidth
+                            height: shaderGrid.cellHeight
+
+                            Image {
+                                id: shaderImage
+                                anchors.fill: parent
+                                anchors.topMargin: 0
+                                anchors.rightMargin: 5
+                                anchors.leftMargin: 0
+                                anchors.bottomMargin: 5
+
+                                asynchronous: true
+                                fillMode: Image.PreserveAspectCrop
+                                source: model.modelData.thumbnail
+
+                                layer.enabled: true
+                                layer.effect: OpacityMask {
+                                    maskSource: Item {
+                                        width: shaderImage.width
+                                        height: shaderImage.height
+
+                                        Rectangle {
+                                            anchors.fill: parent
+                                            radius: 2
+                                        }
+                                    }
+                                }
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    var channelID = channelPopup.currentChannelID
+
+                                    shadermanager.shaders[shader_grid_view.currentIndex].channels[channel_view.currentIndex].setShader(shadermanager.shaders[index])
+                                    channelPopup.close()
+                                }
+                            }
+                        }
                     }
                 }
             }
