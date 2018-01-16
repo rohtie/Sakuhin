@@ -227,8 +227,33 @@ void Window::renderScreen(Shader* shader) {
 
         screenShader.bind();
             glClear(GL_COLOR_BUFFER_BIT);
-            screenShader.setUniformValue("resolution", width(), height());
-            screenShader.setUniformValue("screenTextureResolution", shader->width(), shader->height());
+
+            float scaledWidth = (float) width();
+            float scaledHeight = (float) height();
+            float centerX = 0.0;
+            float centerY = 0.0;
+
+            if (isPreview && shadermanager->previewIsMain()) {
+                float scaleX = 1.0;
+                float scaleY = 1.0;
+
+                if (shader->width() > shader->height()) {
+                    scaleY = (float) shader->width() / (float) shader->height();
+                }
+                else {
+                    scaleX = (float) shader->height() / (float) shader->width();
+                }
+
+                scaledWidth /= scaleX;
+                scaledHeight /= scaleY;
+
+                centerX = ((float) width() - scaledWidth) * 0.5;
+                centerY = ((float) height() - scaledHeight) * 0.5;
+            }
+
+            screenShader.setUniformValue("resolution", scaledWidth, scaledHeight);
+            screenShader.setUniformValue("centerAdjustment", centerX, centerY);
+
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, shader->currentFrame());
 
