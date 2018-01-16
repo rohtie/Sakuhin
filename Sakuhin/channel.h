@@ -21,13 +21,14 @@ class Channel : public QObject {
         };
         Q_ENUM(ChannelType)
 
-        explicit Channel(int channelLocation);
+        explicit Channel(int channelLocation, Shader* owner);
 
         void bind();
         Q_INVOKABLE void setTexture(const QString &fileUrl);
         Q_INVOKABLE void setShader(Shader* shader);
         Q_INVOKABLE void setAudioDevice(QObject* audioDevice);
 
+        Shader* owner;
         ChannelType channelType = NoType;
         Shader* shader = nullptr;
 

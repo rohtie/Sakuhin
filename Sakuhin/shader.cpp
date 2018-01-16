@@ -28,7 +28,7 @@ Shader::Shader(QString thumbnail, QString filepath) {
     program.release();
 
     for (int i = 0; i < 5; i++) {
-        channels.append(new Channel(i));
+        channels.append(new Channel(i, this));
     }
     emit channelsChanged();
 

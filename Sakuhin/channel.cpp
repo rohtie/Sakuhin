@@ -2,7 +2,8 @@
 
 #include "channel.h"
 
-Channel::Channel(int channelLocation) {
+Channel::Channel(int channelLocation, Shader* owner) {
+    this->owner = owner;
     this->channelLocation = channelLocation;
 }
 
@@ -38,7 +39,13 @@ void Channel::bind() {
     }
     else if (channelType == ShaderType) {
         glActiveTexture(GL_TEXTURE0 + channelLocation);
-        glBindTexture(GL_TEXTURE_2D, shader->lastFrame());
+
+        if (owner == shader) {
+            glBindTexture(GL_TEXTURE_2D, shader->lastFrame());
+        }
+        else {
+            glBindTexture(GL_TEXTURE_2D, shader->currentFrame());
+        }
         return;
     }
 }
