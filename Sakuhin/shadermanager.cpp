@@ -1,5 +1,6 @@
 #include "shadermanager.h"
 #include "shader.h"
+#include "channel.h"
 
 #include <QOffscreenSurface>
 
@@ -104,6 +105,9 @@ void ShaderManager::selectTransition(int index) {
     Shader* selectedShader = (Shader*) transitionShaders.at(index);
 
     if (previewShader != selectedShader) {
+        ((Channel*) selectedShader->channels[0])->setShader(mainShader);
+        ((Channel*) selectedShader->channels[1])->setShader(previewShader);
+
         QString sessionFilepath = "sessions/" + sessionID + "/session.glsl";
 
         if (previewShader != nullptr) {
