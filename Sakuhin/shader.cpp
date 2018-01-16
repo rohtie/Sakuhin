@@ -148,6 +148,25 @@ void Shader::updatePingPong() {
     pingPongIndex = (pingPongIndex + 1) % 2;
 }
 
+bool Shader::needsUpdate(qint64 currentTime, bool isPreview) {
+    if (isPreview) {
+        if (lastRenderTimePreview != currentTime) {
+            lastRenderTimePreview = currentTime;
+
+            return true;
+        }
+    }
+    else {
+        if (lastRenderTime != currentTime) {
+            lastRenderTime = currentTime;
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
 int Shader::currentFrame() {
     if (fbo[pingPongIndex] == nullptr) {
         return 0;

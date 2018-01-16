@@ -160,6 +160,10 @@ void Window::drawRectangle() {
 }
 
 void Window::render(Shader* shader) {
+    if (!shader->needsUpdate(currentTime, isPreview)) {
+        return;
+    }
+
     for (int i = 0; i < 5; i++) {
         Channel* channel = (Channel*) shader->channels[i];
 

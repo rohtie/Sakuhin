@@ -33,6 +33,8 @@ class Shader : public QObject {
         QOpenGLFramebufferObject* currentFbo();
         void updatePingPong();
 
+        bool needsUpdate(qint64 currentTime, bool isPreview);
+
         int currentFrame();
         int lastFrame();
 
@@ -56,6 +58,8 @@ class Shader : public QObject {
         int pingPongIndex = 0;
         int previousPingPongIndex = 1;
 
+        qint64 lastRenderTime = 0;
+        qint64 lastRenderTimePreview = 0;
 
         QOpenGLFramebufferObject** fbo;
         QOpenGLFramebufferObject* previewFbo[2] = {nullptr};
