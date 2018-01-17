@@ -5,7 +5,7 @@
 #include "channel.h"
 #include "slider.h"
 
-Shader::Shader(QString thumbnail, QString filepath) {
+Shader::Shader(QString filepath) {
     this->filepath = filepath;
     this->thumbnail = thumbnail;
 
@@ -129,6 +129,17 @@ void Shader::setUniformValues() {
         QString sliderName = "slider" + QString::number(i);
         program.setUniformValue(sliderName.toStdString().c_str(), (GLfloat) slider->value);
     }
+}
+
+void Shader::createThumbnail(const QString &thumbnailpath) {
+    if (fbo[pingPongIndex] == nullptr) {
+        return;
+    }
+
+    fbo[pingPongIndex]->toImage().save(thumbnailpath, "JPG");
+    thumbnail = "file:" + thumbnailpath;
+
+    emit thumbnailChanged();
 }
 
 int Shader::width() {

@@ -31,12 +31,12 @@ void BackEnd::createSession() {
         return;
     }
 
-    if (!rootDirectory.mkpath(sessionPath + "/shaders")) {
+    if (!rootDirectory.mkpath(sessionPath + "/shaders/thumbnails")) {
         qDebug() << "Couldn't make path";
         return;
     }
 
-    if (!rootDirectory.mkpath(sessionPath + "/transitions")) {
+    if (!rootDirectory.mkpath(sessionPath + "/transitions/thumbnails")) {
         qDebug() << "Couldn't make path";
         return;
     }

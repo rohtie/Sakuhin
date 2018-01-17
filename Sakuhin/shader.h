@@ -13,7 +13,7 @@ class Shader : public QObject {
     Q_PROPERTY(QList<QObject*> sliders MEMBER sliders NOTIFY slidersChanged)
 
     public:
-        Shader(QString thumbnail, QString filepath);
+        Shader(QString filepath);
 
         void setPreview(bool isPreview);
 
@@ -26,6 +26,8 @@ class Shader : public QObject {
         void setResolution(int width, int height);
         void setTime(double time);
         void setUniformValues();
+
+        void createThumbnail(const QString &thumbnailpath);
 
         int width();
         int height();

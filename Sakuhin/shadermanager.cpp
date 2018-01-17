@@ -44,11 +44,11 @@ bool ShaderManager::previewIsMain() {
 
 void ShaderManager::createShader(QString templatePath) {
     // TODO: DRY this up together with createTransition
-    QString creationTime = QString::number(QDateTime::currentSecsSinceEpoch());
+    QString creationTime = QString::number(QDateTime::currentMSecsSinceEpoch());
     QString shaderPath = "sessions/" + sessionID + "/shaders/" + creationTime + ".glsl";
 
     QFile::copy(templatePath, shaderPath);
-    shaders.append(new Shader("qrc:tmp/llsczl.jpg", shaderPath));
+    shaders.append(new Shader(shaderPath));
     selectShader(shaders.length() - 1);
 
     emit shadersChanged();
@@ -59,6 +59,11 @@ void ShaderManager::selectShader(int index) {
     Shader* selectedShader = (Shader*) shaders.at(index);
 
     if (previewShader != selectedShader) {
+        if (previewShader != nullptr) {
+            QString creationTime = QString::number(QDateTime::currentMSecsSinceEpoch());
+            previewShader->createThumbnail("sessions/" + sessionID + "/shaders/thumbnails/" + creationTime + ".jpg");
+        }
+
         QString sessionFilepath = "sessions/" + sessionID + "/session.glsl";
 
         if (previewShader != nullptr) {
@@ -90,11 +95,11 @@ void ShaderManager::makeCurrent(int index) {
 
 void ShaderManager::createTransition(QString templatePath) {
     // TODO: DRY this up together with createShader
-    QString creationTime = QString::number(QDateTime::currentSecsSinceEpoch());
+    QString creationTime = QString::number(QDateTime::currentMSecsSinceEpoch());
     QString shaderPath = "sessions/" + sessionID + "/transitions/" + creationTime + ".glsl";
 
     QFile::copy(templatePath, shaderPath);
-    transitionShaders.append(new Shader("qrc:tmp/llsczl.jpg", shaderPath));
+    transitionShaders.append(new Shader(shaderPath));
     selectTransition(transitionShaders.length() - 1);
 
     emit transitionShadersChanged();
@@ -105,6 +110,11 @@ void ShaderManager::selectTransition(int index) {
     Shader* selectedShader = (Shader*) transitionShaders.at(index);
 
     if (previewShader != selectedShader) {
+        if (previewShader != nullptr) {
+            QString creationTime = QString::number(QDateTime::currentMSecsSinceEpoch());
+            previewShader->createThumbnail("sessions/" + sessionID + "/transitions/thumbnails/" + creationTime + ".jpg");
+        }
+
         ((Channel*) selectedShader->channels[0])->setShader(mainShader);
         ((Channel*) selectedShader->channels[1])->setShader(previewShader);
 
