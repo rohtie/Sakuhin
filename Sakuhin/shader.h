@@ -51,7 +51,7 @@ class Shader : public QObject {
     private:
         QOpenGLShaderProgram program;
 
-        QString thumbnail;
+        QString thumbnail = "qrc:assets/thumbnail.jpg";
         QList<QObject*> sliders;
 
         bool isPreview = false;
