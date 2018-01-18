@@ -11,6 +11,8 @@
 class Channel : public QObject {
     Q_OBJECT
 
+    Q_PROPERTY(QString thumbnail MEMBER thumbnail NOTIFY thumbnailChanged)
+
     public:
         enum ChannelType {
             NoType,
@@ -31,6 +33,13 @@ class Channel : public QObject {
         Shader* owner;
         ChannelType channelType = NoType;
         Shader* shader = nullptr;
+        QString thumbnail;
+
+    public slots:
+        void fetchShaderThumbnail();
+
+    signals:
+        void thumbnailChanged();
 
     private:
         int channelLocation = 0;

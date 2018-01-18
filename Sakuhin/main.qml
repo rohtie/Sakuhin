@@ -173,6 +173,8 @@ ApplicationWindow {
                         anchors.fill: parent
                         fillMode: Image.PreserveAspectCrop
 
+                        source: model.modelData.thumbnail
+
                         layer.enabled: true
                         layer.effect: OpacityMask {
                             maskSource: Item {
@@ -598,7 +600,6 @@ ApplicationWindow {
                                         var channelID = channelPopup.currentChannelID
 
                                         shadermanager.shaders[shader_grid_view.currentIndex].channels[channel_view.currentIndex].setTexture(filePath)
-                                        channel_view.currentItem.channelImage.source = fileURL
                                         channelPopup.close()
                                     }
                                 }

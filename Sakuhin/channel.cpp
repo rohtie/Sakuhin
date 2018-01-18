@@ -10,11 +10,21 @@ Channel::Channel(int channelLocation, Shader* owner) {
 void Channel::setTexture(const QString &fileUrl) {
     channelType = TextureType;
     texture = new QOpenGLTexture(QImage(fileUrl).mirrored());
+
+    thumbnail = "file:" + fileUrl;
+    emit thumbnailChanged();
 }
 
 void Channel::setShader(Shader* shader) {
+    if (this->shader != nullptr) {
+        disconnect(this->shader, SIGNAL(thumbnailChanged()), 0, 0);
+    }
+    connect(shader, SIGNAL(thumbnailChanged()), this, SLOT(fetchShaderThumbnail()));
+
     channelType = ShaderType;
     this->shader = shader;
+
+    fetchShaderThumbnail();
 }
 
 void Channel::setAudioDevice(QObject* audioDevice) {
@@ -48,4 +58,9 @@ void Channel::bind() {
         }
         return;
     }
+}
+
+void Channel::fetchShaderThumbnail() {
+    thumbnail = shader->thumbnail;
+    emit thumbnailChanged();
 }
