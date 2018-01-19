@@ -484,8 +484,6 @@ ApplicationWindow {
                             height: hardware_grid.cellHeight
 
                             Button {
-                                text: "Audio"
-
                                 anchors.fill: parent
                                 anchors.topMargin: 0
                                 anchors.rightMargin: 5
@@ -499,7 +497,25 @@ ApplicationWindow {
                                     implicitHeight: 40
                                     color: "#69697b"
                                     border.width: 0
-                                    radius: 4
+                                    radius: 5
+
+                                    Image {
+                                        anchors.fill: parent
+                                        source: "qrc:assets/audio_icon.jpg"
+
+                                        layer.enabled: true
+                                        layer.effect: OpacityMask {
+                                            maskSource: Item {
+                                                width: textureGrid.width
+                                                height: textureGrid.height
+
+                                                Rectangle {
+                                                    anchors.fill: parent
+                                                    radius: 5
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
 
                                 Menu {

@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>assets/thumbnail.jpg</file>
+        <file>assets/audio_icon.jpg</file>
         <file>templates/default.glsl</file>
         <file>footer.glsl</file>
         <file>header.glsl</file>

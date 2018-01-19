@@ -31,6 +31,9 @@ void Channel::setAudioDevice(QObject* audioDevice) {
     channelType = AudioType;
     this->audioDevice = (AudioDevice*) audioDevice;
     this->audioDevice->start();
+
+    thumbnail = "qrc:assets/audio_icon.jpg";
+    emit thumbnailChanged();
 }
 
 void Channel::bind() {
