@@ -19,5 +19,7 @@
         <file>qml/StyledMenuItem.qml</file>
         <file>qml/ShaderView.qml</file>
         <file>qml/SectionLabel.qml</file>
+        <file>qml/BalancedGridView.qml</file>
+        <file>qml/RoundImage.qml</file>
     </qresource>
 </RCC>

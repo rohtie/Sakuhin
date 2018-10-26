@@ -9,6 +9,8 @@
 #include "audiomanager.h"
 #include "windowmanager.h"
 
+#include "qmlreloadmanager.h"
+
 int main(int argc, char* argv[]) {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
@@ -20,6 +22,9 @@ int main(int argc, char* argv[]) {
     qmlRegisterType<WindowManager>("sakuhin.windowmanager", 1, 0, "WindowManager");
 
     QQmlApplicationEngine engine("qrc:/main.qml");
+
+    // Allow livereload when editing the actual main.qml file
+    QmlReloadManager reloadManager(&engine);
 
     QObject* qmlRoot = engine.rootObjects()[0];
 

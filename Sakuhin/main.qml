@@ -42,22 +42,26 @@ ApplicationWindow {
 
     ColumnLayout {
         id: column
-        anchors.topMargin: 5
+
         clip: false
-        anchors.bottomMargin: 30
         spacing: 10
+
         anchors.fill: parent
+        anchors.topMargin: 5
+        anchors.bottomMargin: 30
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+
+        Layout.fillWidth: true
 
         Label {
             height: 25
+
             color: "#bbb"
             text: "⚙ Sakuhin 作品"
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            anchors.rightMargin: 10
-            font.pointSize: 11
-            font.family: "Tahoma"
-            anchors.right: parent.right
+
+            font.pointSize: 10
+            font.family: "Arimo"
 
             MouseArea {
                 anchors.fill: parent
@@ -66,7 +70,7 @@ ApplicationWindow {
         }
 
         SectionLabel {
-            text: "Shaders"
+            text: "Visual shaders"
             interactive: true
 
             area.onClicked: {
@@ -86,7 +90,7 @@ ApplicationWindow {
         }
 
         SectionLabel {
-            text: "Transitions"
+            text: "Audio shaders"
             interactive: true
 
             area.onClicked: {
@@ -109,23 +113,8 @@ ApplicationWindow {
             text: "Channels"
         }
 
-        GridView {
+        BalancedGridView {
             id: channel_view
-
-            height: 45
-            clip: true
-            maximumFlickVelocity: 3000
-            flickDeceleration: 1500
-            boundsBehavior: Flickable.StopAtBounds
-            snapMode: GridView.NoSnap
-            cellHeight: 48
-            cellWidth: 48
-
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-
-            anchors.right: parent.right
-            anchors.rightMargin: 2.5
 
             onCountChanged: currentIndex = count - 1
 
@@ -154,58 +143,21 @@ ApplicationWindow {
                     channelPopup.activate(channel_view.currentIndex)
                 }
 
-                property alias channelImage: channelImage
-
-                background: Rectangle {
-                    anchors.fill: parent
-
-                    anchors.topMargin: 0
-                    anchors.rightMargin: 5
-                    anchors.leftMargin: 0
-                    anchors.bottomMargin: 5
-
-                    color: "#69697b"
-                    radius: 2
-
-                    Image {
-                        id: channelImage
-
-                        anchors.fill: parent
-                        fillMode: Image.PreserveAspectCrop
-
-                        source: model.modelData.thumbnail
-
-                        layer.enabled: true
-                        layer.effect: OpacityMask {
-                            maskSource: Item {
-                                width: channelImage.width
-                                height: channelImage.height
-
-                                Rectangle {
-                                    anchors.fill: parent
-                                    radius: 2
-                                }
-                            }
-                        }
-                    }
+                background: RoundImage {
+                    path: model.modelData.thumbnail
                 }
             }
         }
 
         SectionLabel {
-            text: ""
+            text: "Sliders"
         }
 
         ListView {
             id: shaderSliders
 
+            Layout.fillWidth: true
             Layout.fillHeight: true
-
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-
-            anchors.right: parent.right
-            anchors.rightMargin: 0
 
             orientation: ListView.Horizontal
 
@@ -254,7 +206,7 @@ ApplicationWindow {
         color: "#dddddd"
         text: backend.performanceInformation
         horizontalAlignment: Text.AlignRight
-        font.family: "Tahoma"
+        font.family: "Arimo"
         font.pointSize: 7
     }
 
@@ -419,18 +371,24 @@ ApplicationWindow {
 
     Popup {
         id: channelPopup
+
         x: 0
         y: 0
         width: parent.width
         height: parent.height
+
         visible: false
+
         rightPadding: 0
         leftPadding: 0
         bottomPadding: 0
         topPadding: 0
+
         spacing: 0
+
         modal: true
         focus: true
+
         closePolicy: Popup.CloseOnEscape
 
         property int currentChannelID: 0
@@ -444,39 +402,24 @@ ApplicationWindow {
             color: "#111117"
         }
 
-        Rectangle {
-            id: bg
-            width: parent.width
-            height: parent.height
-            color: "#111117"
-        }
-
         Column {
             spacing: 0
+
             anchors.fill: parent
 
-            StackLayout {
+            Item {
                 width: parent.width
                 height: parent.height - bar.height
-                visible: true
-                currentIndex: bar.currentIndex
 
-                Item {
-                    id: hardwareTab
+                StackLayout {
+                    visible: true
+                    currentIndex: bar.currentIndex
 
-                    GridView {
-                        clip: true
-                        maximumFlickVelocity: 3000
-                        flickDeceleration: 1500
-                        boundsBehavior: Flickable.StopAtBounds
-                        snapMode: GridView.NoSnap
-                        cellHeight: 123
-                        cellWidth: 123
+                    anchors.fill: parent
+                    anchors.topMargin: 5
+                    anchors.leftMargin: 5
 
-                        anchors.fill: parent
-                        anchors.topMargin: 5
-                        anchors.leftMargin: 5
-
+                    BalancedGridView {
                         id: hardware_grid
 
                         Item {
@@ -485,38 +428,12 @@ ApplicationWindow {
 
                             Button {
                                 anchors.fill: parent
-                                anchors.topMargin: 0
-                                anchors.rightMargin: 5
-                                anchors.leftMargin: 5
-                                anchors.bottomMargin: 10
+
+                                background: RoundImage {
+                                    path: "qrc:assets/audio_icon.jpg"
+                                }
 
                                 onClicked: audio_menu.open()
-
-                                background: Rectangle {
-                                    implicitWidth: 100
-                                    implicitHeight: 40
-                                    color: "#69697b"
-                                    border.width: 0
-                                    radius: 5
-
-                                    Image {
-                                        anchors.fill: parent
-                                        source: "qrc:assets/audio_icon.jpg"
-
-                                        layer.enabled: true
-                                        layer.effect: OpacityMask {
-                                            maskSource: Item {
-                                                width: textureGrid.width
-                                                height: textureGrid.height
-
-                                                Rectangle {
-                                                    anchors.fill: parent
-                                                    radius: 5
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
 
                                 Menu {
                                     id: audio_menu
@@ -558,24 +475,9 @@ ApplicationWindow {
                             }
                         }
                     }
-                }
 
-                Item {
-                    id: textureTab
-
-                    GridView {
+                    BalancedGridView {
                         id: textureGrid
-                        clip: true
-                        maximumFlickVelocity: 3000
-                        flickDeceleration: 1500
-                        boundsBehavior: Flickable.StopAtBounds
-                        snapMode: GridView.NoSnap
-                        cellHeight: 123
-                        cellWidth: 123
-
-                        anchors.fill: parent
-                        anchors.topMargin: 5
-                        anchors.leftMargin: 5
 
                         model: FolderListModel {
                             folder: "file:data/textures/"
@@ -585,61 +487,25 @@ ApplicationWindow {
                             width: textureGrid.cellWidth
                             height: textureGrid.cellHeight
 
-                            Image {
+                            RoundImage {
+                                path: fileURL
+                            }
+
+                            MouseArea {
                                 anchors.fill: parent
-                                anchors.topMargin: 0
-                                anchors.rightMargin: 2.5
-                                anchors.leftMargin: 2.5
-                                anchors.bottomMargin: 5
 
-                                asynchronous: true
+                                onClicked: {
+                                    var channelID = channelPopup.currentChannelID
 
-                                fillMode: Image.PreserveAspectFit
-                                source: fileURL
-
-                                layer.enabled: true
-                                layer.effect: OpacityMask {
-                                    maskSource: Item {
-                                        width: textureGrid.width
-                                        height: textureGrid.height
-
-                                        Rectangle {
-                                            anchors.fill: parent
-                                            radius: 5
-                                        }
-                                    }
-                                }
-
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        var channelID = channelPopup.currentChannelID
-
-                                        shadermanager.shaders[shader_grid_view.currentIndex].channels[channel_view.currentIndex].setTexture(filePath)
-                                        channelPopup.close()
-                                    }
+                                    shadermanager.shaders[shader_grid_view.currentIndex].channels[channel_view.currentIndex].setTexture(filePath)
+                                    channelPopup.close()
                                 }
                             }
                         }
                     }
-                }
 
-                Item {
-                    id: shaderTab
-
-                    GridView {
+                    BalancedGridView {
                         id: shaderGrid
-                        clip: true
-                        maximumFlickVelocity: 3000
-                        flickDeceleration: 1500
-                        boundsBehavior: Flickable.StopAtBounds
-                        snapMode: GridView.NoSnap
-                        cellHeight: 123
-                        cellWidth: 123
-
-                        anchors.fill: parent
-                        anchors.topMargin: 5
-                        anchors.leftMargin: 5
 
                         model: shadermanager.shaders
 
@@ -647,34 +513,13 @@ ApplicationWindow {
                             width: shaderGrid.cellWidth
                             height: shaderGrid.cellHeight
 
-                            Image {
-                                id: shaderImage
-                                anchors.fill: parent
-                                anchors.topMargin: 0
-                                anchors.rightMargin: 5
-                                anchors.leftMargin: 0
-                                anchors.bottomMargin: 5
-
-                                asynchronous: true
-                                fillMode: Image.PreserveAspectCrop
-                                source: model.modelData.thumbnail
-
-                                layer.enabled: true
-                                layer.effect: OpacityMask {
-                                    maskSource: Item {
-                                        width: shaderImage.width
-                                        height: shaderImage.height
-
-                                        Rectangle {
-                                            anchors.fill: parent
-                                            radius: 2
-                                        }
-                                    }
-                                }
+                            RoundImage {
+                                path: model.modelData.thumbnail
                             }
 
                             MouseArea {
                                 anchors.fill: parent
+
                                 onClicked: {
                                     var channelID = channelPopup.currentChannelID
 
@@ -689,15 +534,19 @@ ApplicationWindow {
 
             TabBar {
                 id: bar
-                height: 40
+
+                Layout.fillHeight: true
+
                 currentIndex: 1
                 spacing: 0
+
                 anchors.right: parent.right
                 anchors.rightMargin: 0
                 anchors.left: parent.left
                 anchors.leftMargin: 0
-                font.family: "Tahoma"
-                font.pointSize: 11
+
+                font.family: "Arimo"
+                font.pointSize: 7
 
                 background: Rectangle {
                     color: "#111117"
@@ -785,7 +634,7 @@ ApplicationWindow {
                                 anchors.rightMargin: 10
                                 anchors.right: parent.right
                                 font.pointSize: 10
-                                font.family: "Tahoma"
+                                font.family: "Arimo"
                                 verticalAlignment: Text.AlignVCenter
                             }
 
@@ -878,7 +727,7 @@ ApplicationWindow {
                                     anchors.leftMargin: 10
                                     anchors.rightMargin: 10
                                     font.pointSize: 7
-                                    font.family: "Tahoma"
+                                    font.family: "Arimo"
                                     anchors.right: parent.right
                                 }
 
@@ -915,7 +764,7 @@ ApplicationWindow {
                                     anchors.leftMargin: 10
                                     anchors.rightMargin: 10
                                     font.pointSize: 7
-                                    font.family: "Tahoma"
+                                    font.family: "Arimo"
                                     anchors.right: parent.right
                                 }
 
@@ -952,7 +801,7 @@ ApplicationWindow {
                                     anchors.leftMargin: 10
                                     anchors.rightMargin: 10
                                     font.pointSize: 7
-                                    font.family: "Tahoma"
+                                    font.family: "Arimo"
                                     anchors.right: parent.right
                                 }
 
@@ -988,14 +837,14 @@ ApplicationWindow {
 
             TabBar {
                 id: settingsBar
-                height: 40
+                height: 30
                 currentIndex: 1
                 spacing: 0
                 anchors.right: parent.right
                 anchors.rightMargin: 0
                 anchors.left: parent.left
                 anchors.leftMargin: 0
-                font.family: "Tahoma"
+                font.family: "Arimo"
                 font.pointSize: 9
 
                 background: Rectangle {
@@ -1004,7 +853,7 @@ ApplicationWindow {
 
                 TabForm {
                     text: qsTr("Session")
-                    font.family: "Tahoma"
+                    font.family: "Arimo"
                 }
                 TabForm {
                     text: qsTr("Windows")
@@ -1032,7 +881,9 @@ ApplicationWindow {
         background: Rectangle {
             implicitWidth: 256
             implicitHeight: 256
+
             anchors.fill: parent
+
             color: "#111117"
         }
 
@@ -1058,6 +909,67 @@ ApplicationWindow {
                     sliderContextMenu.close()
                 }
             }
+        }
+    }
+
+    // Dummy model for debugging purposes
+    ListModel {
+        id: dummyModel
+
+        ListElement {
+            attribute: ""
+        }
+
+        ListElement {
+            attribute: ""
+        }
+
+        ListElement {
+            attribute: ""
+        }
+
+        ListElement {
+            attribute: ""
+        }
+
+        ListElement {
+            attribute: ""
+        }
+
+        ListElement {
+            attribute: ""
+        }
+
+        ListElement {
+            attribute: ""
+        }
+
+        ListElement {
+            attribute: ""
+        }
+
+        ListElement {
+            attribute: ""
+        }
+
+        ListElement {
+            attribute: ""
+        }
+
+        ListElement {
+            attribute: ""
+        }
+
+        ListElement {
+            attribute: ""
+        }
+
+        ListElement {
+            attribute: ""
+        }
+
+        ListElement {
+            attribute: ""
         }
     }
 }

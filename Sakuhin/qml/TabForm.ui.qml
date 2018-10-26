@@ -8,7 +8,7 @@ TabButton {
 
     contentItem: Text {
         text: parent.text
-        font.family: "Tahoma"
+        font.family: "Arimo"
         font.pointSize: 9
         opacity: 1.0
         color: "#ddd"

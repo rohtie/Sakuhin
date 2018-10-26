@@ -10,7 +10,7 @@ MenuItem {
     contentItem: Text {
         text: parent.text
 
-        font.family: "Tahoma"
+        font.family: "Arimo"
         font.pointSize: 8
         font.capitalization: Font.Capitalize
 

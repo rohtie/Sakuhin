@@ -1,1 +1,8 @@
-build*/
+*build*/
+*.qmlc
+moc_*
+*.o
+qrc_qml.cpp
+.qmake.stash
+Makefile
+Sakuhin

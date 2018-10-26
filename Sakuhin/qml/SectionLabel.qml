@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.3
 
 Label {
     property bool interactive: false
@@ -8,12 +9,11 @@ Label {
     height: 10
     color: "#bbb"
     text: "Section Label"
-    anchors.left: parent.left
-    anchors.leftMargin: 10
-    anchors.rightMargin: 10
+
     font.pointSize: 7
-    font.family: "Tahoma"
-    anchors.right: parent.right
+    font.family: "Arimo"
+
+    Layout.fillWidth: true
 
     Label {
         id: shaders_icon
@@ -23,10 +23,8 @@ Label {
         text: interactive ? '+' : '-'
 
         horizontalAlignment: Text.AlignRight
-        anchors.rightMargin: 0
-        anchors.left: parent.left
+
         anchors.right: parent.right
-        anchors.leftMargin: 0
     }
 
     MouseArea {
