@@ -107,7 +107,11 @@ void Window::updateProjectionMapping() {
 
     updateMVPmatrix();
 
-    loadMesh(modelPath, meshVertices, meshUVs);
+    loadMesh(modelPath,
+             // Opengl expanded triangle vertices
+             meshVertices, meshUVs,
+             // Abstract model data
+             vertices, UVs, vertexFaces, UVFaces);
 
     meshVao.create();
     meshVao.bind();

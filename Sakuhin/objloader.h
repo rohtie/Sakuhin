@@ -5,14 +5,47 @@
 #include <QVector3D>
 #include <QVector2D>
 
-bool loadMesh(const QString &filePath, QVector<GLfloat> &openglVertices, QVector<GLfloat> &openglUVs) {
-    QFile meshFile(filePath);
-    meshFile.open(QIODevice::ReadOnly);
 
-    QVector<QVector3D*> vertices;
-    QVector<QVector2D*> UVs;
-    QVector<QVector<int>> vertexFaces;
-    QVector<QVector<int>> UVFaces;
+// Expand abstract model to opengl triangles
+void expandModel(
+    QVector<GLfloat> &openglVertices,
+    QVector<GLfloat> &openglUVs,
+    QVector<QVector3D*> &vertices,
+    QVector<QVector2D*> &UVs,
+    QVector<QVector<int>> &vertexFaces,
+    QVector<QVector<int>> &UVFaces
+) {
+    for (int i = 0; i < vertexFaces.length(); i++) {
+        for (int j = 0; j < 3; j++) {
+            QVector3D* currentVertex = vertices[vertexFaces[i][j]];
+            QVector2D* currentUV = UVs[UVFaces[i][j]];
+
+            openglVertices.append(currentVertex->x());
+            openglVertices.append(currentVertex->y());
+            openglVertices.append(currentVertex->z());
+
+            openglUVs.append(currentUV->x());
+            openglUVs.append(currentUV->y());
+        }
+    }
+}
+
+
+bool loadMesh(
+    const QString &filePath,
+    QVector<GLfloat> &openglVertices,
+    QVector<GLfloat> &openglUVs,
+    QVector<QVector3D*> &vertices,
+    QVector<QVector2D*> &UVs,
+    QVector<QVector<int>> &vertexFaces,
+    QVector<QVector<int>> &UVFaces
+) {
+    QFile meshFile(filePath);
+
+    if (!meshFile.open(QIODevice::ReadOnly)) {
+        qDebug() << filePath << " could not be loaded";
+        return false;
+    }
 
     // Assume that the obj file only has vertices and texture coordinates
     while (!meshFile.atEnd()) {
@@ -55,21 +88,11 @@ bool loadMesh(const QString &filePath, QVector<GLfloat> &openglVertices, QVector
         }
     }
 
-    for (int i = 0; i < vertexFaces.length(); i++) {
-        for (int j = 0; j < 3; j++) {
-            QVector3D* currentVertex = vertices[vertexFaces[i][j]];
-            QVector2D* currentUV = UVs[UVFaces[i][j]];
-
-            openglVertices.append(currentVertex->x());
-            openglVertices.append(currentVertex->y());
-            openglVertices.append(currentVertex->z());
-
-            openglUVs.append(currentUV->x());
-            openglUVs.append(currentUV->y());
-        }
-    }
+    expandModel(openglVertices, openglUVs, vertices, UVs, vertexFaces, UVFaces);
 
     meshFile.close();
+
+    return true;
 }
 
 #endif // OBJLOADER_H

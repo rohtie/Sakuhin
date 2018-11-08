@@ -84,8 +84,16 @@ class Window : public QOpenGLWindow,
         QOpenGLVertexArrayObject meshVao;
         QOpenGLBuffer meshVertexBuffer;
         QOpenGLBuffer meshUVbuffer;
+
+        QVector<QVector3D*> vertices;
+        QVector<QVector2D*> UVs;
+        QVector<QVector<int>> vertexFaces;
+        QVector<QVector<int>> UVFaces;
+
         QVector<GLfloat> meshVertices;
         QVector<GLfloat> meshUVs;
+
+
         QMatrix4x4 modelMatrix;
         QMatrix4x4 viewMatrix;
         QMatrix4x4 projectionMatrix;
