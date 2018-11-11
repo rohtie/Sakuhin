@@ -38,12 +38,19 @@ class Window : public QOpenGLWindow,
 
         void initializeGL();
 
+        void updateMesh();
         void drawRectangle();
+        void drawBillboard(float x, float y);
         void render(Shader* shader);
         void renderScreen(Shader* shader);
         void paintGL();
 
         void keyPressEvent(QKeyEvent* event);
+
+        QVector2D* normalizeCoordinates(float x, float y);
+        void mousePressEvent(QMouseEvent* event);
+        void mouseMoveEvent(QMouseEvent* event);
+
         void updatePerformanceInformation();
         void handleLoggedMessage(const QOpenGLDebugMessage &debugMessage);
 
@@ -66,11 +73,18 @@ class Window : public QOpenGLWindow,
         bool isMaster = false;
         bool isPreview = false;
         bool isProjectionMapping = false;
+        bool isCalibrating = false;
         bool hasLoadedProjectionObject = false;
+
+        // No calibration point selected if -1
+        int selectedCalibrationPoint = -1;
 
         float distanceFromObject = -400.0;
         float projectorHeight = 125.;
         float fieldOfView = 45.2397;
+        float cameraNear = 1.0;
+        float cameraFar = 1000.0;
+
         bool isVertical = false;
         QString modelPath;
         BackEnd* backend;
@@ -80,11 +94,15 @@ class Window : public QOpenGLWindow,
         QOpenGLVertexArrayObject rectangleVao;
         QOpenGLBuffer rectangleVertexBuffer;
 
+        QOpenGLVertexArrayObject calibrationVao;
+        QOpenGLBuffer calibrationVertexBuffer;
+
         QOpenGLShaderProgram meshShader;
         QOpenGLVertexArrayObject meshVao;
         QOpenGLBuffer meshVertexBuffer;
         QOpenGLBuffer meshUVbuffer;
 
+        QVector<QVector2D*> calibrationPoints;
         QVector<QVector3D*> vertices;
         QVector<QVector2D*> UVs;
         QVector<QVector<int>> vertexFaces;
@@ -98,6 +116,13 @@ class Window : public QOpenGLWindow,
         QMatrix4x4 viewMatrix;
         QMatrix4x4 projectionMatrix;
         QMatrix4x4 mvpMatrix;
+
+        QVector3D cameraForward;
+        QVector3D cameraRight;
+        QVector3D cameraUp;
+
+        QOpenGLTexture* calibrationTexture;
+        QMatrix4x4 calibrationMatrix;
 
         QElapsedTimer time;
         int frameCounter;

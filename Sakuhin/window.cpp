@@ -3,6 +3,8 @@
 #include <QString>
 #include <QOpenGLDebugLogger>
 #include <QKeyEvent>
+#include <QMouseEvent>
+#include <QtMath>
 
 #include "objloader.h"
 
@@ -17,6 +19,26 @@ static GLfloat const rectangle[] = {
     -1.0f, -1.0f, 0.0f,
      1.0f,  1.0f, 0.0f,
      1.0f, -1.0f, 0.0f
+};
+
+static GLfloat const calibration[] = {
+    -0.01f,  0.01f, 0.0f,
+     0.01f,  0.01f, 0.0f,
+    -0.01f, -0.01f, 0.0f,
+
+    -0.01f, -0.01f, 0.0f,
+     0.01f,  0.01f, 0.0f,
+     0.01f, -0.01f, 0.0f
+};
+
+static GLfloat const calibrationUVs[] = {
+    0.0f, 1.0f,
+    1.0f, 1.0f,
+    0.0f, 0.0f,
+
+    0.0f, 0.0f,
+    1.0f, 1.0f,
+    1.0f, 0.0f
 };
 
 
@@ -61,6 +83,7 @@ void Window::initializeGL() {
         screenShader.setUniformValue("screenTexture", 0);
     screenShader.release();
 
+    // Used for drawing shaders to the whole screen of a window
     rectangleVao.create();
     rectangleVao.bind();
         rectangleVertexBuffer.create();
@@ -72,6 +95,33 @@ void Window::initializeGL() {
             glVertexAttribPointer((GLuint) 0, 3, GL_FLOAT, GL_TRUE, 0, 0);
         rectangleVertexBuffer.release();
     rectangleVao.release();
+
+    // Used for drawing overlayed sprites
+    QOpenGLBuffer calibrationUVbuffer;
+    calibrationTexture = new QOpenGLTexture(QImage("data/textures/calibrate.png").mirrored());
+    calibrationTexture->setMinMagFilters(QOpenGLTexture::Nearest, QOpenGLTexture::Nearest);
+
+    calibrationVao.create();
+    calibrationVao.bind();
+        calibrationVertexBuffer.create();
+        calibrationVertexBuffer.bind();
+            calibrationVertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+            calibrationVertexBuffer.allocate(calibration, sizeof(calibration));
+
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer((GLuint) 0, 3, GL_FLOAT, GL_TRUE, 0, 0);
+        calibrationVertexBuffer.release();
+
+        calibrationUVbuffer.create();
+        calibrationUVbuffer.bind();
+            calibrationVertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+            calibrationVertexBuffer.allocate(calibrationUVs, sizeof(calibrationUVs));
+
+            glEnableVertexAttribArray(1);
+            glVertexAttribPointer((GLuint) 1, 2, GL_FLOAT, GL_TRUE, 0, 0);
+        calibrationUVbuffer.release();
+    calibrationVao.release();
+
 
     connect(this, SIGNAL(isProjectionMappingChanged()), this, SLOT(updateProjectionMapping()));
     connect(this, SIGNAL(isVerticalChanged()), this, SLOT(updateMVPmatrix()));
@@ -113,11 +163,25 @@ void Window::updateProjectionMapping() {
              // Abstract model data
              vertices, UVs, vertexFaces, UVFaces);
 
+
+    for (int i=0; i<vertices.size(); i++) {
+        QVector3D* vertex = vertices[i];
+
+        QVector3D projected = (*vertex).project(viewMatrix * modelMatrix, projectionMatrix, QRect(0, 0, width(), height()));
+        QVector2D normalized = QVector2D(projected.x() / (float) width(), projected.y() / (float) height());
+        QVector2D* screenSpace = new QVector2D(
+            ((normalized.x() - 0.5) * 2.0) / ((float) height() / (float) width()),
+            (normalized.y() - 0.5) * 2.0
+        );
+
+        calibrationPoints.append(screenSpace);
+    }
+
     meshVao.create();
     meshVao.bind();
         meshVertexBuffer.create();
         meshVertexBuffer.bind();
-            meshVertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+            meshVertexBuffer.setUsagePattern(QOpenGLBuffer::DynamicDraw);
             meshVertexBuffer.allocate(meshVertices.constData(), meshVertices.size() * sizeof(GLfloat));
 
             glEnableVertexAttribArray(0);
@@ -137,20 +201,61 @@ void Window::updateProjectionMapping() {
     hasLoadedProjectionObject = true;
 }
 
+void Window::updateMesh() {
+    meshVertices.clear();
+    meshUVs.clear();
+
+    expandModel(
+        meshVertices,
+        meshUVs,
+        vertices,
+        UVs,
+        vertexFaces,
+        UVFaces
+    );
+
+    meshVertexBuffer.bind();
+        meshVertexBuffer.write(0, meshVertices.constData(), meshVertices.size() * sizeof(GLfloat));
+    meshVertexBuffer.release();
+
+    meshUVbuffer.bind();
+        meshUVbuffer.write(0, meshUVs.constData(), meshUVs.size() * sizeof(GLfloat));
+    meshUVbuffer.release();
+}
+
 void Window::updateMVPmatrix() {
+    // We don't need to transform the model
+    // since it should always be in the origin
+    modelMatrix.setToIdentity();
+
+    // View matrix
+    QVector3D camera(0, projectorHeight, distanceFromObject);
+    QVector3D target(0, projectorHeight, 0);
     QVector3D upVector(0, 1, 0);
+
     if (isVertical) {
         upVector = QVector3D(1, 0, 0);
     }
 
     viewMatrix.setToIdentity();
-    projectionMatrix.setToIdentity();
-    modelMatrix.setToIdentity();
-    mvpMatrix.setToIdentity();
+    viewMatrix.lookAt(camera, target, upVector);
 
-    viewMatrix.lookAt(QVector3D(0, projectorHeight, distanceFromObject), QVector3D(0, projectorHeight, 0), upVector);
-    projectionMatrix.perspective(fieldOfView, (float) width() / (float) height(), 0.1f, 1000.0f);
+    QMatrix4x4 cameraMatrix = viewMatrix.inverted();
+    cameraForward = (cameraMatrix * QVector4D(0., 0., 1., 0.)).toVector3D();
+    cameraRight = (cameraMatrix * QVector4D(1., 0., 0., 0.)).toVector3D();
+    cameraUp = (cameraMatrix * QVector4D(0., 1., 0., 0.)).toVector3D();
+
+    // Projection matrix
+    projectionMatrix.setToIdentity();
+    projectionMatrix.perspective(fieldOfView, (float) width() / (float) height(), cameraNear, cameraFar);
+
+    // MVP matrix sent to the vertex shader
+    mvpMatrix.setToIdentity();
     mvpMatrix = projectionMatrix * viewMatrix * modelMatrix;
+
+    // Matrix used to display calibration points
+    calibrationMatrix.setToIdentity();
+    calibrationMatrix.scale(QVector3D((float) height() / (float) width(), 1, 1));
 }
 
 void Window::resizeGL(int width, int height) {
@@ -161,6 +266,17 @@ void Window::drawRectangle() {
     rectangleVao.bind();
         glDrawArrays(GL_TRIANGLES, 0, 6);
     rectangleVao.release();
+}
+
+void Window::drawBillboard(float x, float y) {
+    calibrationMatrix.translate(QVector3D(x, y, 0.));
+
+    meshShader.setUniformValue("mvpMatrix", calibrationMatrix);
+    calibrationVao.bind();
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    calibrationVao.release();
+
+    calibrationMatrix.translate(QVector3D(-x, -y, 0.));
 }
 
 void Window::render(Shader* shader) {
@@ -208,6 +324,7 @@ void Window::renderScreen(Shader* shader) {
         meshShader.bind();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
             meshShader.setUniformValue("mvpMatrix", mvpMatrix);
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, shader->currentFrame());
@@ -222,7 +339,21 @@ void Window::renderScreen(Shader* shader) {
             meshVao.bind();
                 glDrawArrays(GL_TRIANGLES, 0, meshVertices.size());
             meshVao.release();
+
         meshShader.release();
+
+
+        // Calibration overlay
+        if (isCalibrating) {
+            meshShader.bind();
+                calibrationTexture->bind(0);
+
+                for (int i=0; i<calibrationPoints.size(); i++) {
+                    QVector2D* calibrationPoint = calibrationPoints[i];
+                    drawBillboard(calibrationPoint->x(), calibrationPoint->y());
+                }
+            meshShader.release();
+        }
     }
     else {
         if (shader->currentFbo() == nullptr) {
@@ -277,40 +408,108 @@ void Window::paintGL() {
     update();
 }
 
-void Window::keyPressEvent(QKeyEvent* event) {
-    if (event->key() == Qt::Key_F2) {
-        if ((flags() & Qt::FramelessWindowHint) == 0) {
-            oldGeometry = frameGeometry();
-            oldMargins = frameMargins();
+QVector2D* Window::normalizeCoordinates(float x, float y) {
+    x /= width();
+    y /= height();
 
-            int frameWidth = oldGeometry.width();
-            int frameHeight = oldGeometry.height();
+    x -= 0.5;
+    y -= 0.5;
 
-            QPoint oldPosition = framePosition();
+    x *= 2.0;
+    y *= 2.0;
 
-            setFlags(Qt::Window | Qt::FramelessWindowHint);
+    x /= (float) height() / (float) width();
 
-            setWidth(frameWidth);
-            setHeight(frameHeight);
-            setPosition(oldPosition);
+    return new QVector2D(x, y);
+}
+
+void Window::mousePressEvent(QMouseEvent* event) {
+    if (isCalibrating) {
+        QPointF pos = event->localPos();
+        float x = pos.rx();
+        float y = height() - pos.ry();
+        QVector2D* mousePos = normalizeCoordinates(x, y);
+
+        if (selectedCalibrationPoint > 0) {
+            selectedCalibrationPoint = -1;
         }
         else {
-            setFlags(Qt::Window);
+            for (int i=0; i<calibrationPoints.size(); i++) {
+                QVector2D* calibrationPoint = calibrationPoints[i];
 
-            // TODO: Get the default frame margins when window is already frameless
-            if (oldMargins.top() == 0) {
-                oldGeometry = frameGeometry();
+                if (mousePos->distanceToPoint(*calibrationPoint) < 0.025) {
+                    selectedCalibrationPoint = i;
+                    break;
+                }
             }
-
-            oldGeometry.adjust(
-                oldMargins.left(),
-                oldMargins.top(),
-                -oldMargins.right(),
-                -oldMargins.bottom()
-            );
-
-            setGeometry(oldGeometry);
         }
+    }
+}
+
+void Window::mouseMoveEvent(QMouseEvent* event) {
+    if (isCalibrating) {
+        QPointF pos = event->localPos();
+        float x = pos.rx();
+        float y = height() - pos.ry();
+        QVector2D* mousePos = normalizeCoordinates(x, y);
+
+        if (selectedCalibrationPoint > -1) {
+            QVector2D* calibrationPoint = calibrationPoints[selectedCalibrationPoint];
+            calibrationPoint->setX(mousePos->x());
+            calibrationPoint->setY(mousePos->y());
+
+            // Use the projected depth of the selected vertex to determine
+            // the new position of the vertex in relation to its calibration point
+            QVector3D* vertex = vertices[selectedCalibrationPoint];
+            QVector3D transformedVertex = (*vertex).project(viewMatrix * modelMatrix, projectionMatrix, QRect(0, 0, width(), height()));
+            (*vertex) = QVector3D(x, y, transformedVertex.z()).unproject(viewMatrix * modelMatrix, projectionMatrix, QRect(0, 0, width(), height()));
+
+            updateMesh();
+        }
+    }
+}
+
+
+void Window::keyPressEvent(QKeyEvent* event) {
+    switch (event->key()) {
+        case Qt::Key_F2:
+            if ((flags() & Qt::FramelessWindowHint) == 0) {
+                oldGeometry = frameGeometry();
+                oldMargins = frameMargins();
+
+                int frameWidth = oldGeometry.width();
+                int frameHeight = oldGeometry.height();
+
+                QPoint oldPosition = framePosition();
+
+                setFlags(Qt::Window | Qt::FramelessWindowHint);
+
+                setWidth(frameWidth);
+                setHeight(frameHeight);
+                setPosition(oldPosition);
+            }
+            else {
+                setFlags(Qt::Window);
+
+                // TODO: Get the default frame margins when window is already frameless
+                if (oldMargins.top() == 0) {
+                    oldGeometry = frameGeometry();
+                }
+
+                oldGeometry.adjust(
+                    oldMargins.left(),
+                    oldMargins.top(),
+                    -oldMargins.right(),
+                    -oldMargins.bottom()
+                );
+
+                setGeometry(oldGeometry);
+            }
+            break;
+
+        case Qt::Key_C:
+            isCalibrating = !isCalibrating;
+            break;
     }
 }
 
