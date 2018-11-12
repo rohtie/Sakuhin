@@ -39,6 +39,7 @@ class Window : public QOpenGLWindow,
 
         void initializeGL();
 
+        void updateCalibrationPoints();
         void updateMesh();
         void drawRectangle();
         void drawBillboard(float x, float y);

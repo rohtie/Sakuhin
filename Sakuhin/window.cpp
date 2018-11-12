@@ -137,6 +137,23 @@ void Window::initializeGL() {
     time.start();
 }
 
+void Window::updateCalibrationPoints() {
+    calibrationPoints.clear();
+
+    for (int i=0; i<vertices.size(); i++) {
+        QVector3D* vertex = vertices[i];
+
+        QVector3D projected = (*vertex).project(viewMatrix * modelMatrix, projectionMatrix, QRect(0, 0, width(), height()));
+        QVector2D normalized = QVector2D(projected.x() / (float) width(), projected.y() / (float) height());
+        QVector2D* screenSpace = new QVector2D(
+            ((normalized.x() - 0.5) * 2.0) / ((float) height() / (float) width()),
+            (normalized.y() - 0.5) * 2.0
+        );
+
+        calibrationPoints.append(screenSpace);
+    }
+}
+
 void Window::updateProjectionMapping() {
     // TODO: Figure out how to seamlessly switch between projection view and shader view
     //       without getting black windows
@@ -164,19 +181,7 @@ void Window::updateProjectionMapping() {
              // Abstract model data
              vertices, UVs, vertexFaces, UVFaces);
 
-
-    for (int i=0; i<vertices.size(); i++) {
-        QVector3D* vertex = vertices[i];
-
-        QVector3D projected = (*vertex).project(viewMatrix * modelMatrix, projectionMatrix, QRect(0, 0, width(), height()));
-        QVector2D normalized = QVector2D(projected.x() / (float) width(), projected.y() / (float) height());
-        QVector2D* screenSpace = new QVector2D(
-            ((normalized.x() - 0.5) * 2.0) / ((float) height() / (float) width()),
-            (normalized.y() - 0.5) * 2.0
-        );
-
-        calibrationPoints.append(screenSpace);
-    }
+    updateCalibrationPoints();
 
     meshVao.create();
     meshVao.bind();
@@ -253,6 +258,10 @@ void Window::updateMVPmatrix() {
     // Matrix used to display calibration points
     calibrationMatrix.setToIdentity();
     calibrationMatrix.scale(QVector3D((float) height() / (float) width(), 1, 1));
+
+    // Camera position / rotation may have changed
+    // therefore we need to update the calibration points
+    updateCalibrationPoints();
 }
 
 void Window::resizeGL(int width, int height) {
