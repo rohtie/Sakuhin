@@ -28,6 +28,7 @@ class Window : public QOpenGLWindow,
     Q_PROPERTY(bool isVertical MEMBER isVertical NOTIFY isVerticalChanged)
     Q_PROPERTY(float distanceFromObject MEMBER distanceFromObject NOTIFY distanceFromObjectChanged)
     Q_PROPERTY(float projectorHeight MEMBER projectorHeight NOTIFY projectorHeightChanged)
+    Q_PROPERTY(float objectHeightTarget MEMBER objectHeightTarget NOTIFY objectHeightTargetChanged)
     Q_PROPERTY(float fieldOfView MEMBER fieldOfView NOTIFY fieldOfViewChanged)
 
     public:
@@ -67,6 +68,7 @@ class Window : public QOpenGLWindow,
         void isVerticalChanged();
         void distanceFromObjectChanged();
         void projectorHeightChanged();
+        void objectHeightTargetChanged();
         void fieldOfViewChanged();
 
     private:
@@ -81,7 +83,9 @@ class Window : public QOpenGLWindow,
 
         float distanceFromObject = -400.0;
         float projectorHeight = 125.;
+        float objectHeightTarget = 125.;
         float fieldOfView = 45.2397;
+
         float cameraNear = 1.0;
         float cameraFar = 1000.0;
 

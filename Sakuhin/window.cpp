@@ -127,6 +127,7 @@ void Window::initializeGL() {
     connect(this, SIGNAL(isVerticalChanged()), this, SLOT(updateMVPmatrix()));
     connect(this, SIGNAL(distanceFromObjectChanged()), this, SLOT(updateMVPmatrix()));
     connect(this, SIGNAL(projectorHeightChanged()), this, SLOT(updateMVPmatrix()));
+    connect(this, SIGNAL(objectHeightTargetChanged()), this, SLOT(updateMVPmatrix()));
     connect(this, SIGNAL(fieldOfViewChanged()), this, SLOT(updateMVPmatrix()));
 
     if (isProjectionMapping) {
@@ -226,7 +227,7 @@ void Window::updateMVPmatrix() {
 
     // View matrix
     QVector3D camera(0, projectorHeight, distanceFromObject);
-    QVector3D target(0, projectorHeight, 0);
+    QVector3D target(0, objectHeightTarget, 0);
     QVector3D upVector(0, 1, 0);
 
     if (isVertical) {

@@ -733,7 +733,6 @@ ApplicationWindow {
 
                                 TextField {
                                     text: model.modelData.distanceFromObject
-                                    inputMethodHints: Qt.ImhFormattedNumbersOnly
 
                                     color: "#bbb"
                                     font.pointSize: 7
@@ -749,7 +748,7 @@ ApplicationWindow {
                                         var value = parseFloat(text)
 
                                         if (isNaN(value)) {
-                                            value = 0
+                                            return
                                         }
 
                                         model.modelData.distanceFromObject = value
@@ -770,7 +769,6 @@ ApplicationWindow {
 
                                 TextField {
                                     text: model.modelData.projectorHeight
-                                    inputMethodHints: Qt.ImhFormattedNumbersOnly
 
                                     color: "#bbb"
                                     font.pointSize: 7
@@ -786,10 +784,46 @@ ApplicationWindow {
                                         var value = parseFloat(text)
 
                                         if (isNaN(value)) {
-                                            value = 0
+                                            return
                                         }
 
                                         model.modelData.projectorHeight = value
+                                    }
+                                }
+
+                                Label {
+                                    height: 10
+                                    color: "#bbb"
+                                    text: "Object height target (cm)"
+                                    anchors.left: parent.left
+                                    anchors.leftMargin: 10
+                                    anchors.rightMargin: 10
+                                    font.pointSize: 7
+                                    font.family: "Arimo"
+                                    anchors.right: parent.right
+                                }
+
+                                TextField {
+                                    text: model.modelData.objectHeightTarget
+
+                                    color: "#bbb"
+                                    font.pointSize: 7
+
+                                    background: Rectangle {
+                                        implicitWidth: windowList.width
+                                        implicitHeight: 10
+                                        color: "#333"
+                                        border.width: 0
+                                    }
+
+                                    onTextChanged: {
+                                        var value = parseFloat(text)
+
+                                        if (isNaN(value)) {
+                                            return
+                                        }
+
+                                        model.modelData.objectHeightTarget = value
                                     }
                                 }
 
@@ -807,7 +841,6 @@ ApplicationWindow {
 
                                 TextField {
                                     text: model.modelData.fieldOfView
-                                    inputMethodHints: Qt.ImhFormattedNumbersOnly
 
                                     color: "#bbb"
                                     font.pointSize: 7
@@ -823,7 +856,7 @@ ApplicationWindow {
                                         var value = parseFloat(text)
 
                                         if (isNaN(value)) {
-                                            value = 0
+                                            return
                                         }
 
                                         model.modelData.fieldOfView = value
