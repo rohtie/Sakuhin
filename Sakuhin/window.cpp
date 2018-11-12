@@ -217,10 +217,6 @@ void Window::updateMesh() {
     meshVertexBuffer.bind();
         meshVertexBuffer.write(0, meshVertices.constData(), meshVertices.size() * sizeof(GLfloat));
     meshVertexBuffer.release();
-
-    meshUVbuffer.bind();
-        meshUVbuffer.write(0, meshUVs.constData(), meshUVs.size() * sizeof(GLfloat));
-    meshUVbuffer.release();
 }
 
 void Window::updateMVPmatrix() {
