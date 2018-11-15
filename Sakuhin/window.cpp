@@ -431,12 +431,13 @@ QVector2D* Window::normalizeCoordinates(float x, float y) {
 
 void Window::mousePressEvent(QMouseEvent* event) {
     if (isCalibrating) {
+
         QPointF pos = event->localPos();
         float x = pos.rx();
         float y = height() - pos.ry();
         QVector2D* mousePos = normalizeCoordinates(x, y);
 
-        if (selectedCalibrationPoint > 0) {
+        if (selectedCalibrationPoint != -1) {
             selectedCalibrationPoint = -1;
         }
         else {
