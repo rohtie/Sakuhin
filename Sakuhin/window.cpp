@@ -124,11 +124,11 @@ void Window::initializeGL() {
 
 
     connect(this, SIGNAL(isProjectionMappingChanged()), this, SLOT(updateProjectionMapping()));
-    connect(this, SIGNAL(isVerticalChanged()), this, SLOT(updateMVPmatrix()));
-    connect(this, SIGNAL(distanceFromObjectChanged()), this, SLOT(updateMVPmatrix()));
-    connect(this, SIGNAL(projectorHeightChanged()), this, SLOT(updateMVPmatrix()));
-    connect(this, SIGNAL(objectHeightTargetChanged()), this, SLOT(updateMVPmatrix()));
-    connect(this, SIGNAL(fieldOfViewChanged()), this, SLOT(updateMVPmatrix()));
+    connect(this, SIGNAL(isVerticalChanged()), this, SLOT(updateProjectionMappingSettings()));
+    connect(this, SIGNAL(distanceFromObjectChanged()), this, SLOT(updateProjectionMappingSettings()));
+    connect(this, SIGNAL(projectorHeightChanged()), this, SLOT(updateProjectionMappingSettings()));
+    connect(this, SIGNAL(objectHeightTargetChanged()), this, SLOT(updateProjectionMappingSettings()));
+    connect(this, SIGNAL(fieldOfViewChanged()), this, SLOT(updateProjectionMappingSettings()));
 
     if (isProjectionMapping) {
         updateProjectionMapping();
@@ -138,6 +138,7 @@ void Window::initializeGL() {
 }
 
 void Window::updateCalibrationPoints() {
+
     calibrationPoints.clear();
 
     for (int i=0; i<vertices.size(); i++) {
@@ -151,6 +152,10 @@ void Window::updateCalibrationPoints() {
         );
 
         calibrationPoints.append(screenSpace);
+    }
+
+    if (calibrationPoints.size() > 0) {
+        qDebug() << calibrationPoints[0] << "--" << *calibrationPoints[0];
     }
 }
 
@@ -180,6 +185,11 @@ void Window::updateProjectionMapping() {
              meshVertices, meshUVs,
              // Abstract model data
              vertices, UVs, vertexFaces, UVFaces);
+
+
+    for (int i=0; i<vertices.size(); i++) {
+        originalVertices.append(new QVector3D(*vertices[i]));
+    }
 
     updateCalibrationPoints();
 
@@ -225,6 +235,28 @@ void Window::updateMesh() {
     meshVertexBuffer.release();
 }
 
+void Window::updateProjectionMappingSettings() {
+    // Whenever the projection mapping settings change
+    // we reset the vertices to their original state
+    // so that the model stays true to its orginal form.
+
+
+    // Vertices have to be reset so that our calibration
+    // points will be correct from the current view
+    vertices.clear();
+    for (int i=0; i<originalVertices.size(); i++) {
+        vertices.append(new QVector3D(*originalVertices[i]));
+    }
+
+    updateMesh();
+    updateMVPmatrix();
+
+    // Camera position / rotation has changed
+    // therefore we need to reconstruct the
+    // calibration points
+    updateCalibrationPoints();
+}
+
 void Window::updateMVPmatrix() {
     // We don't need to transform the model
     // since it should always be in the origin
@@ -258,10 +290,6 @@ void Window::updateMVPmatrix() {
     // Matrix used to display calibration points
     calibrationMatrix.setToIdentity();
     calibrationMatrix.scale(QVector3D((float) height() / (float) width(), 1, 1));
-
-    // Camera position / rotation may have changed
-    // therefore we need to update the calibration points
-    updateCalibrationPoints();
 }
 
 void Window::resizeGL(int width, int height) {

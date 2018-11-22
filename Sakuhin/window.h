@@ -60,6 +60,7 @@ class Window : public QOpenGLWindow,
 
     public slots:
         void updateProjectionMapping();
+        void updateProjectionMappingSettings();
         void updateMVPmatrix();
 
     signals:
@@ -108,6 +109,7 @@ class Window : public QOpenGLWindow,
         QOpenGLBuffer meshUVbuffer;
 
         QVector<QVector2D*> calibrationPoints;
+        QVector<QVector3D*> originalVertices;
         QVector<QVector3D*> vertices;
         QVector<QVector2D*> UVs;
         QVector<QVector<int>> vertexFaces;
