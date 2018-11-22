@@ -47,6 +47,7 @@ class Window : public QOpenGLWindow,
         void renderScreen(Shader* shader);
         void paintGL();
 
+        void saveProjectionMappingConfig();
         void keyPressEvent(QKeyEvent* event);
 
         QVector2D* normalizeCoordinates(float x, float y);
@@ -93,6 +94,7 @@ class Window : public QOpenGLWindow,
 
         bool isVertical = false;
         QString modelPath;
+        QString configPath;
         BackEnd* backend;
         ShaderManager* shadermanager;
 

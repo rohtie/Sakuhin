@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QtMath>
+#include <QJsonArray>
 
 #include "objloader.h"
 
@@ -47,6 +48,8 @@ Window::Window() {
 }
 
 void Window::setupMapping(float distanceFromObject, float projectorHeight, float fieldOfView, bool isVertical, const QString &modelPath) {
+    configPath = "data/config/dinzoil_F.json";
+
     this->distanceFromObject = distanceFromObject;
     this->projectorHeight = projectorHeight;
     this->fieldOfView = fieldOfView;
@@ -152,10 +155,6 @@ void Window::updateCalibrationPoints() {
         );
 
         calibrationPoints.append(screenSpace);
-    }
-
-    if (calibrationPoints.size() > 0) {
-        qDebug() << calibrationPoints[0] << "--" << *calibrationPoints[0];
     }
 }
 
@@ -504,6 +503,42 @@ void Window::mouseMoveEvent(QMouseEvent* event) {
     }
 }
 
+void Window::saveProjectionMappingConfig() {
+    QFile configFile(configPath);
+
+    if (!configFile.open(QIODevice::WriteOnly)) {
+        qDebug() << "Couldn't open save file";
+        return;
+    }
+
+
+    QJsonArray jsonCalibrationPoints;
+
+    for (int i=0; i<calibrationPoints.size(); i++) {
+        QVector2D* calibrationPoint = calibrationPoints[i];
+
+        QJsonObject jsonCalibrationPoint;
+        jsonCalibrationPoint["x"] = calibrationPoint->x();
+        jsonCalibrationPoint["y"] = calibrationPoint->y();
+        jsonCalibrationPoints.append(jsonCalibrationPoint);
+    }
+
+
+    QJsonObject config;
+
+    config["calibrationPoints"] = jsonCalibrationPoints;
+    config["modelPath"] = modelPath;
+    config["distanceFromObject"] = distanceFromObject;
+    config["projectorHeight"] = projectorHeight;
+    config["objectHeightTarget"] = objectHeightTarget;
+    config["fieldOfView"] = fieldOfView;
+    config["vertical"] = isVertical;
+
+
+    QJsonDocument configDocument(config);
+    configFile.write(configDocument.toJson());
+    configFile.close();
+}
 
 void Window::keyPressEvent(QKeyEvent* event) {
     switch (event->key()) {
@@ -544,6 +579,12 @@ void Window::keyPressEvent(QKeyEvent* event) {
 
         case Qt::Key_C:
             isCalibrating = !isCalibrating;
+            break;
+
+        case Qt::Key_S:
+            if (isProjectionMapping) {
+                saveProjectionMappingConfig();
+            }
             break;
     }
 }
