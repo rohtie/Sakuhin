@@ -47,14 +47,27 @@ Window::Window() {
 
 }
 
-void Window::setupMapping(float distanceFromObject, float projectorHeight, float fieldOfView, bool isVertical, const QString &modelPath) {
-    configPath = "data/config/dinzoil_F.json";
+void Window::setupMapping(const QString &configPath) {
+    this->configPath = configPath;
 
-    this->distanceFromObject = distanceFromObject;
-    this->projectorHeight = projectorHeight;
-    this->fieldOfView = fieldOfView;
-    this->isVertical = isVertical;
-    this->modelPath = modelPath;
+    QFile configFile(configPath);
+    if (!configFile.open(QIODevice::ReadOnly)) {
+        qDebug() << "Couldn't open config file";
+        return;
+    }
+
+    QByteArray data = configFile.readAll();
+    QJsonDocument document = QJsonDocument::fromJson(data);
+    configFile.close();
+
+
+    this->modelPath = document["modelPath"].toString();
+
+    this->distanceFromObject = document["distanceFromObject"].toDouble();
+    this->projectorHeight = document["projectorHeight"].toDouble();
+    this->fieldOfView = document["fieldOfView"].toDouble();
+    this->isVertical = document["isVertical"].toBool();
+
     this->isProjectionMapping = true;
 }
 

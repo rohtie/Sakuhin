@@ -34,7 +34,7 @@ class Window : public QOpenGLWindow,
     public:
         explicit Window();
 
-        void setupMapping(float distanceFromObject, float projectorHeight, float fieldOfView, bool isVertical, const QString &modelPath);
+        void setupMapping(const QString &configPath);
         void initialize(BackEnd* backend, ShaderManager* shadermanager, bool isMaster, bool isPreview);
 
         void initializeGL();
