@@ -68,6 +68,13 @@ void Window::setupMapping(const QString &configPath) {
     this->fieldOfView = document["fieldOfView"].toDouble();
     this->isVertical = document["isVertical"].toBool();
 
+    QJsonArray jsonCalibrationPoints = document["calibrationPoints"].toArray();
+
+    for (int i=0; i<jsonCalibrationPoints.size(); i++) {
+        QJsonObject jsonCalibrationPoint = jsonCalibrationPoints[i].toObject();
+        calibrationPoints.append(new QVector2D(jsonCalibrationPoint["x"].toDouble(), jsonCalibrationPoint["y"].toDouble()));
+    }
+
     this->isProjectionMapping = true;
 }
 
@@ -203,7 +210,23 @@ void Window::updateProjectionMapping() {
         originalVertices.append(new QVector3D(*vertices[i]));
     }
 
-    updateCalibrationPoints();
+
+    if (calibrationPoints.size() == 0) {
+        updateCalibrationPoints();
+    }
+    else {
+        // Calibrate vertices based on the existing calibration points
+        for (int i=0; i<vertices.size(); i++) {
+            QVector3D* vertex = vertices[i];
+            QVector2D* calibrationPoint = calibrationPoints[i];
+            QVector2D* screenSpace = unNormalizeCoordinates(calibrationPoint->x(), calibrationPoint->y());
+
+            applyVertexCalibration(vertex, screenSpace->x(), screenSpace->y());
+        }
+
+        updateMesh();
+    }
+
 
     meshVao.create();
     meshVao.bind();
@@ -469,6 +492,28 @@ QVector2D* Window::normalizeCoordinates(float x, float y) {
     return new QVector2D(x, y);
 }
 
+QVector2D* Window::unNormalizeCoordinates(float x, float y) {
+    x *= (float) height() / (float) width();
+
+    x /= 2.0;
+    y /= 2.0;
+
+    x += 0.5;
+    y += 0.5;
+
+    x *= width();
+    y *= height();
+
+    return new QVector2D(x, y);
+}
+
+void Window::applyVertexCalibration(QVector3D* vertex, float x, float y) {
+    // Use the projected depth of the selected vertex to determine
+    // the new position of the vertex in relation to its calibration point
+    QVector3D transformedVertex = (*vertex).project(viewMatrix * modelMatrix, projectionMatrix, QRect(0, 0, width(), height()));
+    (*vertex) = QVector3D(x, y, transformedVertex.z()).unproject(viewMatrix * modelMatrix, projectionMatrix, QRect(0, 0, width(), height()));
+}
+
 void Window::mousePressEvent(QMouseEvent* event) {
     if (isCalibrating) {
 
@@ -505,11 +550,8 @@ void Window::mouseMoveEvent(QMouseEvent* event) {
             calibrationPoint->setX(mousePos->x());
             calibrationPoint->setY(mousePos->y());
 
-            // Use the projected depth of the selected vertex to determine
-            // the new position of the vertex in relation to its calibration point
-            QVector3D* vertex = vertices[selectedCalibrationPoint];
-            QVector3D transformedVertex = (*vertex).project(viewMatrix * modelMatrix, projectionMatrix, QRect(0, 0, width(), height()));
-            (*vertex) = QVector3D(x, y, transformedVertex.z()).unproject(viewMatrix * modelMatrix, projectionMatrix, QRect(0, 0, width(), height()));
+
+            applyVertexCalibration(vertices[selectedCalibrationPoint], x, y);
 
             updateMesh();
         }

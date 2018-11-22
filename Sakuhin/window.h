@@ -51,6 +51,9 @@ class Window : public QOpenGLWindow,
         void keyPressEvent(QKeyEvent* event);
 
         QVector2D* normalizeCoordinates(float x, float y);
+        QVector2D* unNormalizeCoordinates(float x, float y);
+        void applyVertexCalibration(QVector3D* vertex, float x, float y);
+
         void mousePressEvent(QMouseEvent* event);
         void mouseMoveEvent(QMouseEvent* event);
 
