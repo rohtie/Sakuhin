@@ -384,6 +384,24 @@ void Window::render(Shader* shader) {
 void Window::renderScreen(Shader* shader) {
     if (isMaster) {
         render(shader);
+
+        if (isRecording) {
+            QOpenGLFramebufferObject* fbo = shader->currentFbo();
+
+            int bufferSize = width() * height() * 4;
+            char* data = new char[bufferSize];
+
+            fbo->bind();
+                glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, data);
+            fbo->release();
+
+            QByteArray error = ffmpeg.readAllStandardError();
+            if (error.size() > 0) {
+                qDebug() << QString(error);
+            }
+
+            ffmpeg.write(data, bufferSize);
+        }
     }
     else if (isPreview && !shadermanager->previewIsMain()) {
         render(shader);
@@ -630,6 +648,58 @@ void Window::keyPressEvent(QKeyEvent* event) {
 
                 setGeometry(oldGeometry);
             }
+            break;
+
+        case Qt::Key_R:
+            if (!isRecording) {
+                QStringList ffmpegOptions;
+
+                QString resolution = QString::number(width()) + QStringLiteral("x") + QString::number(height());
+                QString fps = QString::number(30);
+
+                // Open up a pipe to ffmpeg so that we can send frames to it
+                // which will be sequenced into a video file
+                ffmpegOptions <<
+                    // Tell ffmpeg to flip video vertically since we are passing raw opengl data
+                    "-vf" << "vflip" <<
+
+                    // Output to /tmp it is mounted in memory and thus faster
+                    "/tmp/out.mp4" <<
+
+                    "-y" <<
+
+                    // thread_queue_size is raised to avoid discarded frames
+                    "-thread_queue_size" << "512" <<
+
+                    // Setup ffmpeg to accept raw image data
+                    "-f" << "rawvideo" <<
+                    "-pixel_format" << "rgba" <<
+
+                    // Set resolution
+                    "-video_size" << resolution <<
+
+                    // Set FPS
+                    "-framerate" << fps <<
+
+                    // Set input source to use pipe
+                    "-i" << "-" <<
+
+                    // No audio
+                    "-an" <<
+
+                    // Use mp4 encoder
+                    "-c:v" << "libx264" <<
+
+                    // 18 crf ensures a visually lossless quality
+                    "-crf" << "18";
+
+                ffmpeg.start("ffmpeg", ffmpegOptions);
+            }
+            else {
+                ffmpeg.closeWriteChannel();
+            }
+
+            isRecording = !isRecording;
             break;
 
         case Qt::Key_C:

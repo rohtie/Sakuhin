@@ -13,6 +13,7 @@
 #include <QVector>
 #include <QOpenGLDebugMessage>
 #include <QMatrix4x4>
+#include <QProcess>
 
 #include "backend.h"
 #include "shadermanager.h"
@@ -82,6 +83,7 @@ class Window : public QOpenGLWindow,
         bool isPreview = false;
         bool isProjectionMapping = false;
         bool isCalibrating = false;
+        bool isRecording = false;
         bool hasLoadedProjectionObject = false;
 
         // No calibration point selected if -1
@@ -112,6 +114,8 @@ class Window : public QOpenGLWindow,
         QOpenGLVertexArrayObject meshVao;
         QOpenGLBuffer meshVertexBuffer;
         QOpenGLBuffer meshUVbuffer;
+
+        QProcess ffmpeg;
 
         QVector<QVector2D*> calibrationPoints;
         QVector<QVector3D*> originalVertices;
