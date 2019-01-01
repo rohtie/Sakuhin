@@ -369,7 +369,7 @@ void Window::render(Shader* shader) {
     shader->setResolution(width(), height());
 
     if (isRecording) {
-        shader->setTime(recordingStartTime + (recordingFrame / recordingFPS));
+        shader->setTime(recordingStartTime + (recordingFrame / recordingFramerate));
     }
     else {
         shader->setTime(time.elapsed() / 1000.0f);
@@ -399,19 +399,9 @@ void Window::renderScreen(Shader* shader) {
                 glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, recordingFrameData);
             fbo->release();
 
-            QByteArray error = ffmpeg.readAllStandardError();
-            if (error.size() > 0) {
-                qDebug() << QString(error);
-            }
-
-            ffmpeg.write(recordingFrameData, recordingBufferSize);
+            videoRecorder.write(recordingFrameData, recordingFrame);
 
             recordingFrame += 1;
-
-            if (recordingFrame > 1800) {
-                isRecording = false;
-                ffmpeg.closeWriteChannel();
-            }
         }
     }
     else if (isPreview && !shadermanager->previewIsMain()) {
@@ -663,59 +653,17 @@ void Window::keyPressEvent(QKeyEvent* event) {
 
         case Qt::Key_R:
             if (!isRecording) {
-                QStringList ffmpegOptions;
-
-                QString resolution = QString::number(width()) + QStringLiteral("x") + QString::number(height());
-                QString fps = QString::number(30);
-
-                // Open up a pipe to ffmpeg so that we can send frames to it
-                // which will be sequenced into a video file
-                ffmpegOptions <<
-                    // Tell ffmpeg to flip video vertically since we are passing raw opengl data
-                    "-vf" << "vflip" <<
-
-                    // Output to /tmp it is mounted in memory and thus faster
-                    "/tmp/out.mp4" <<
-
-                    "-y" <<
-
-                    // thread_queue_size is raised to avoid discarded frames
-                    "-thread_queue_size" << "512" <<
-
-                    // Setup ffmpeg to accept raw image data
-                    "-f" << "rawvideo" <<
-                    "-pixel_format" << "rgba" <<
-
-                    // Set resolution
-                    "-video_size" << resolution <<
-
-                    // Set FPS
-                    "-framerate" << fps <<
-
-                    // Set input source to use pipe
-                    "-i" << "-" <<
-
-                    // No audio
-                    "-an" <<
-
-                    // Use mp4 encoder
-                    "-c:v" << "libx264" <<
-
-                    // 18 crf ensures a visually lossless quality
-                    "-crf" << "18";
-
+                videoRecorder.open("/tmp/out.mp4", recordingFramerate, width(), height());
 
                 // Initialize buffer for this resolution
                 recordingBufferSize = width() * height() * 4;
-                recordingFrameData = new char[recordingBufferSize];
-
-                ffmpeg.start("ffmpeg", ffmpegOptions);
+                recordingFrameData = new uint8_t[recordingBufferSize];
 
                 recordingFrame = 0.0;
                 recordingStartTime = time.elapsed() / 1000.0f;
             }
             else {
-                ffmpeg.closeWriteChannel();
+                videoRecorder.close();
             }
 
             isRecording = !isRecording;

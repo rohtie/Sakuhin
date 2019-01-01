@@ -17,6 +17,7 @@
 
 #include "backend.h"
 #include "shadermanager.h"
+#include "videorecorder.h"
 
 class QOpenGLShaderProgram;
 class Window : public QOpenGLWindow,
@@ -98,11 +99,11 @@ class Window : public QOpenGLWindow,
         float cameraFar = 1000.0;
 
 
-        char* recordingFrameData;
-        QByteArray frameData;
+        VideoRecorder videoRecorder;
+        uint8_t* recordingFrameData;
 
         int recordingBufferSize;
-        float recordingFPS = 30.0;
+        float recordingFramerate = 30.0;
         float recordingFrame = 0.0;
         float recordingStartTime = 0.0;
 
@@ -123,8 +124,6 @@ class Window : public QOpenGLWindow,
         QOpenGLVertexArrayObject meshVao;
         QOpenGLBuffer meshVertexBuffer;
         QOpenGLBuffer meshUVbuffer;
-
-        QProcess ffmpeg;
 
         QVector<QVector2D*> calibrationPoints;
         QVector<QVector3D*> originalVertices;

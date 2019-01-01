@@ -1,5 +1,11 @@
 QT += quick multimedia
+
+# fftw3 for spectrum analysis of audio
 LIBS += -lfftw3
+
+# ffmpeg related libraries for recording shaders to video files
+LIBS += -lavcodec -lavutil -lswscale
+
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -24,7 +30,8 @@ SOURCES += \
     audiodevice.cpp \
     windowmanager.cpp \
     slider.cpp \
-    qmlreloadmanager.cpp
+    qmlreloadmanager.cpp \
+    videorecorder.cpp
 
 RESOURCES += qml.qrc
 
@@ -50,7 +57,8 @@ HEADERS += \
     objloader.h \
     windowmanager.h \
     slider.h \
-    qmlreloadmanager.h
+    qmlreloadmanager.h \
+    videorecorder.h
 
 copydata.commands = $(COPY_DIR) $$PWD/data $$OUT_PWD
 first.depends = $(first) copydata

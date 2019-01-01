@@ -5,5 +5,4 @@ moc_*
 qrc_qml.cpp
 .qmake.stash
 Makefile
-Sakuhin
 *.pro.user
