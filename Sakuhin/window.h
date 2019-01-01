@@ -97,6 +97,15 @@ class Window : public QOpenGLWindow,
         float cameraNear = 1.0;
         float cameraFar = 1000.0;
 
+
+        char* recordingFrameData;
+        QByteArray frameData;
+
+        int recordingBufferSize;
+        float recordingFPS = 30.0;
+        float recordingFrame = 0.0;
+        float recordingStartTime = 0.0;
+
         bool isVertical = false;
         QString modelPath;
         QString configPath;

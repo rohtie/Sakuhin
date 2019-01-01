@@ -367,7 +367,14 @@ void Window::render(Shader* shader) {
     shader->setPreview(isPreview);
 
     shader->setResolution(width(), height());
-    shader->setTime(time.elapsed() / 1000.0f);
+
+    if (isRecording) {
+        shader->setTime(recordingStartTime + (recordingFrame / recordingFPS));
+    }
+    else {
+        shader->setTime(time.elapsed() / 1000.0f);
+    }
+
 
     QOpenGLFramebufferObject* fbo = shader->currentFbo();
     fbo->bind();
@@ -388,11 +395,8 @@ void Window::renderScreen(Shader* shader) {
         if (isRecording) {
             QOpenGLFramebufferObject* fbo = shader->currentFbo();
 
-            int bufferSize = width() * height() * 4;
-            char* data = new char[bufferSize];
-
             fbo->bind();
-                glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, data);
+                glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, recordingFrameData);
             fbo->release();
 
             QByteArray error = ffmpeg.readAllStandardError();
@@ -400,7 +404,14 @@ void Window::renderScreen(Shader* shader) {
                 qDebug() << QString(error);
             }
 
-            ffmpeg.write(data, bufferSize);
+            ffmpeg.write(recordingFrameData, recordingBufferSize);
+
+            recordingFrame += 1;
+
+            if (recordingFrame > 1800) {
+                isRecording = false;
+                ffmpeg.closeWriteChannel();
+            }
         }
     }
     else if (isPreview && !shadermanager->previewIsMain()) {
@@ -693,7 +704,15 @@ void Window::keyPressEvent(QKeyEvent* event) {
                     // 18 crf ensures a visually lossless quality
                     "-crf" << "18";
 
+
+                // Initialize buffer for this resolution
+                recordingBufferSize = width() * height() * 4;
+                recordingFrameData = new char[recordingBufferSize];
+
                 ffmpeg.start("ffmpeg", ffmpegOptions);
+
+                recordingFrame = 0.0;
+                recordingStartTime = time.elapsed() / 1000.0f;
             }
             else {
                 ffmpeg.closeWriteChannel();
