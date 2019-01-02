@@ -2,10 +2,10 @@
 #define VIDEORECORDER_H
 
 extern "C" {
+#include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
-#include <libavutil/imgutils.h>
-#include <libavutil/opt.h>
 #include <libswscale/swscale.h>
+#include <libavutil/timestamp.h>
 }
 
 #include <QObject>
@@ -17,25 +17,34 @@ class VideoRecorder : public QObject {
 
     public:
         VideoRecorder();
-        void open(const QString &filename, int framerate, int width, int height);
-        void encodeFrame();
+        void initFormat(const char* filename, int framerate);
+        void initCodec(int width, int height);
+        void initFrame();
+        void initOutputFile(const char* filename);
+        void open(const char* filename, int framerate, int width, int height);
+        void writeFrame();
         void write(uint8_t* pixels, int framenumber);
         void close();
 
     private:
         int ret;
-        int got_output;
+        int gotPacket;
 
-        QFile file;
+        const QString filename;
+        int framerate;
 
-        int buffersize;
+        AVOutputFormat* format;
+        AVFormatContext* formatContext;
 
         AVCodec* codec;
-        AVCodecContext* context;
+        AVCodecContext* codecContext;
+
+        AVStream* stream;
+
         AVPacket* packet;
         AVFrame* frame;
-        struct SwsContext* sws_context;
-        uint8_t* rgb;
+
+        struct SwsContext* swsContext;
 };
 
 #endif // VIDEORECORDER_H

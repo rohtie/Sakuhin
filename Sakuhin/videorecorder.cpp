@@ -4,68 +4,70 @@ VideoRecorder::VideoRecorder() {
 
 }
 
-
-void VideoRecorder::open(const QString &filename, int framerate, int width, int height) {
-    codec = avcodec_find_encoder(AV_CODEC_ID_H264);
-    if (!codec) {
-        qDebug() << "Codec not found";
+void VideoRecorder::initFormat(const char* filename, int framerate) {
+    avformat_alloc_output_context2(&formatContext, NULL, NULL, filename);
+    if (!formatContext) {
         exit(1);
     }
 
+    format = formatContext->oformat;
 
-    context = avcodec_alloc_context3(codec);
-    if (!context) {
+    stream = avformat_new_stream(formatContext, NULL);
+    if (!stream) {
+        qDebug() << "Could not allocate stream";
+        exit(1);
+    }
+
+    stream->time_base = (AVRational){1, framerate};
+}
+
+void VideoRecorder::initCodec(int width, int height) {
+    qDebug() << "Using " << avcodec_get_name(format->video_codec);
+
+    codec = avcodec_find_encoder(format->video_codec);
+    if (!(codec)) {
+        qDebug() << "Could not find encoder for " << avcodec_get_name(format->video_codec);
+        exit(1);
+    }
+
+    codecContext = avcodec_alloc_context3(codec);
+    if (!codecContext) {
         qDebug() << "Could not allocate video codec context";
         exit(1);
     }
 
-    context->width = width;
-    context->height = height;
-    context->pix_fmt = AV_PIX_FMT_YUV420P;
-    context->time_base = (AVRational){1, framerate};
-    context->framerate = (AVRational){framerate, 1};
+    codecContext->width = width;
+    codecContext->height = height;
+    codecContext->pix_fmt = AV_PIX_FMT_YUV420P;
+    codecContext->time_base = stream->time_base;
+    codecContext->bit_rate = 20000000;
+    codecContext->gop_size = 5;
 
-    context->bit_rate = 15000000;
-    context->bit_rate_tolerance = 0;
-    context->rc_max_rate = 0;
-    context->rc_buffer_size = 0;
-    context->gop_size = 40;
-    context->max_b_frames = 3;
-    context->b_frame_strategy = 1;
-    context->coder_type = 1;
-    context->me_cmp = 1;
-    context->me_range = 16;
-    context->qmin = 10;
-    context->qmax = 51;
-    context->scenechange_threshold = 40;
-    context->me_subpel_quality = 5;
-    context->i_quant_factor = 0.71;
-    context->qcompress = 0.6;
-    context->max_qdiff = 4;
+    // Some formats want stream headers to be separate.
+    if (formatContext->oformat->flags & AVFMT_GLOBALHEADER) {
+        codecContext->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
+    }
 
-    buffersize = width * height * 4;
-
-
-    ret = avcodec_open2(context, codec, NULL);
+    ret = avcodec_open2(codecContext, codec, NULL);
     if (ret < 0) {
-        qDebug() << "Could not open codec";
+        qDebug() << "Could not open video codec: " << ret;
         exit(1);
     }
 
-
-    file.setFileName(filename);
-    if (!file.open(QIODevice::WriteOnly)) {
-        qDebug() << "Could not open " << filename;
+    ret = avcodec_parameters_from_context(stream->codecpar, codecContext);
+    if (ret < 0) {
+        qDebug() << "Could not copy the stream parameters";
         exit(1);
     }
+}
 
-
+void VideoRecorder::initFrame() {
+    // Packets holds encoded video frames that are ready for writing
     packet = av_packet_alloc();
     if (!packet) {
         qDebug() << "Could not allocate packet";
         exit(1);
     }
-
 
     frame = av_frame_alloc();
     if (!frame) {
@@ -73,9 +75,9 @@ void VideoRecorder::open(const QString &filename, int framerate, int width, int 
         exit(1);
     }
 
-    frame->format = context->pix_fmt;
-    frame->width  = context->width;
-    frame->height = context->height;
+    frame->format = codecContext->pix_fmt;
+    frame->width  = codecContext->width;
+    frame->height = codecContext->height;
 
     ret = av_frame_get_buffer(frame, 32);
     if (ret < 0) {
@@ -84,65 +86,103 @@ void VideoRecorder::open(const QString &filename, int framerate, int width, int 
     }
 }
 
+void VideoRecorder::initOutputFile(const char* filename) {
+    // Print detailed information about the output format
+    av_dump_format(formatContext, 0, filename, 1);
 
-void VideoRecorder::encodeFrame() {
+    // Open output file
+    ret = avio_open(&formatContext->pb, filename, AVIO_FLAG_WRITE);
+    if (ret < 0) {
+        qDebug() << "Failed open file: " << ret;
+        exit(1);
+    }
+}
+
+
+void VideoRecorder::open(const char* filename, int framerate, int width, int height) {
+    // Container format, eg: .mp4
+    initFormat(filename, framerate);
+
+    // Video codec, eg: h264
+    initCodec(width, height);
+
+    initFrame();
+    initOutputFile(filename);
+
+    // Write the container header
+    ret = avformat_write_header(formatContext, NULL);
+    if (ret < 0) {
+        qDebug() << "Failed writing container header " << ret;
+        exit(1);
+    }
+}
+
+void VideoRecorder::writeFrame() {
     av_init_packet(packet);
     packet->data = NULL;
     packet->size = 0;
 
-    if (frame) {
-        qDebug() << "Encode frame " << frame->pts;
-    }
-
-    ret = avcodec_encode_video2(context, packet, frame, &got_output);
-
+    ret = avcodec_encode_video2(codecContext, packet, frame, &gotPacket);
     if (ret < 0) {
-        qDebug() << "Error encoding frame " << frame->pts;
+        qDebug() << "Error encoding video frame: " << ret;
         exit(1);
     }
 
-    if (got_output) {
-        qDebug() << "Write packet " << packet->pts;
-        file.write((const char*) packet->data, packet->size);
-        av_packet_unref(packet);
+    if (gotPacket) {
+        // Rescale output packet timestamp values from codec to stream timebase
+        av_packet_rescale_ts(packet, codecContext->time_base, stream->time_base);
+
+        ret = av_interleaved_write_frame(formatContext, packet);
+        if (ret < 0) {
+            qDebug() << "Error while writing video frame: " << ret;
+            exit(1);
+        }
     }
 }
 
 void VideoRecorder::write(uint8_t* pixels, int framenumber) {
     frame->pts = framenumber;
 
-    // Convert rgba to yuv420p
-    const int in_linesize[1] = { 4 * context->width };
+    if (av_frame_make_writable(frame) < 0) {
+        exit(1);
+    }
 
-    sws_context = sws_getCachedContext(sws_context,
-        context->width, context->height, AV_PIX_FMT_RGBA,
-        context->width, context->height, AV_PIX_FMT_YUV420P,
+    // Opengl format must be converted to yuv420p so that
+    // it can be encoded in the video stream
+    // Opengl coordinates start in bottom left so the frame
+    // must also be flipped to appear correctly
+    const int in_linesize[1] = { 4 * codecContext->width };
+
+    swsContext = sws_getCachedContext(swsContext,
+        codecContext->width, codecContext->height, AV_PIX_FMT_RGBA,
+        codecContext->width, codecContext->height, AV_PIX_FMT_YUV420P,
         0, NULL, NULL, NULL);
 
-    sws_scale(sws_context,
+    sws_scale(swsContext,
         (const uint8_t * const *)&pixels,
-        in_linesize, 0, context->height,
+        in_linesize, 0, codecContext->height,
         frame->data, frame->linesize);
 
 
-    encodeFrame();
+    writeFrame();
 }
 
 void VideoRecorder::close() {
     // Write the rest of the packages
     frame = NULL;
     do {
-        encodeFrame();
-    } while (got_output);
+        writeFrame();
+    } while (gotPacket);
 
 
-    // Write endcode to end of the file so that it is playable mp4 format
-    uint8_t endcode[] = { 0, 0, 1, 0xb7 };
+    // Finish the video file
+    av_write_trailer(formatContext);
 
-    file.write((const char*) endcode, sizeof(endcode));
-    file.close();
+    // Close and free stuff
+    avio_closep(&formatContext->pb);
 
-    avcodec_free_context(&context);
     av_frame_free(&frame);
-    av_packet_free(&packet);
+    avcodec_free_context(&codecContext);
+    avformat_free_context(formatContext);
+    sws_freeContext(swsContext);
 }

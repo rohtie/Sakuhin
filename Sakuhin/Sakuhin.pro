@@ -4,7 +4,7 @@ QT += quick multimedia
 LIBS += -lfftw3
 
 # ffmpeg related libraries for recording shaders to video files
-LIBS += -lavcodec -lavutil -lswscale
+LIBS += -lavcodec -lavformat -lavutil -lswscale
 
 CONFIG += c++11
 

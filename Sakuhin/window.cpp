@@ -402,6 +402,13 @@ void Window::renderScreen(Shader* shader) {
             videoRecorder.write(recordingFrameData, recordingFrame);
 
             recordingFrame += 1;
+
+            // Record for 1 minute
+            if (recordingFrame > 1800) {
+                isRecording = false;
+                videoRecorder.close();
+            }
+
         }
     }
     else if (isPreview && !shadermanager->previewIsMain()) {

@@ -20,8 +20,8 @@ void WindowManager::initialize(const QSurfaceFormat &format, BackEnd* backend, S
     masterWindow = new Window();
     masterWindow->initialize(backend, shadermanager, true, false);
     masterWindow->setFormat(format);
-    masterWindow->resize(QSize(555, 256));
-    masterWindow->setPosition(256, 512);
+    masterWindow->resize(QSize(768, 768));
+    masterWindow->setPosition(256, 0);
     masterWindow->setFlag(Qt::FramelessWindowHint);
     masterWindow->show();
 
