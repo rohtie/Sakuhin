@@ -16,7 +16,7 @@ ApplicationWindow {
     flags: Qt.FramelessWindowHint
     visible: true
     width: 256
-    height: 512
+    height: 400
     x: 0
     y: 0
     color: "#111117"
@@ -70,7 +70,7 @@ ApplicationWindow {
         }
 
         SectionLabel {
-            text: "Visual shaders"
+            text: "Shaders"
             interactive: true
 
             area.onClicked: {
@@ -89,25 +89,25 @@ ApplicationWindow {
             isViewPreviewed: shadermanager.isPreviewingShader
         }
 
-        SectionLabel {
-            text: "Audio shaders"
-            interactive: true
+        // SectionLabel {
+        //     text: "Audio shaders"
+        //     interactive: true
 
-            area.onClicked: {
-                transitionCreationMenu.x = x + mouse.x
-                transitionCreationMenu.y = y + mouse.y
-                transitionCreationMenu.open()
-            }
-        }
+        //     area.onClicked: {
+        //         transitionCreationMenu.x = x + mouse.x
+        //         transitionCreationMenu.y = y + mouse.y
+        //         transitionCreationMenu.open()
+        //     }
+        // }
 
-        ShaderView {
-            id: transitionGridView
-            model: shadermanager.transitionShaders
-            contextArea.onClicked: transitionContextMenu.openAt(x + mouse.x, y + mouse.y)
-            onShaderActivated: shadermanager.selectTransition(currentIndex)
-            activeIndex: -1
-            isViewPreviewed: !shadermanager.isPreviewingShader
-        }
+        // ShaderView {
+        //     id: transitionGridView
+        //     model: shadermanager.transitionShaders
+        //     contextArea.onClicked: transitionContextMenu.openAt(x + mouse.x, y + mouse.y)
+        //     onShaderActivated: shadermanager.selectTransition(currentIndex)
+        //     activeIndex: -1
+        //     isViewPreviewed: !shadermanager.isPreviewingShader
+        // }
 
         SectionLabel {
             text: "Channels"
