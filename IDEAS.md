@@ -1,145 +1,124 @@
-* Window layout
-    * UI dashboard
-    * Main window
-    * Preview window (same as main window)
+### Intel HD4400 - bug
 
-* When projection mapping we should render the shader once to an offscreen fbo
-  where the size is a power of 2 to get better performance
+Trig functions (sin, cos, tan) lose precision when input is greater than 12865.
 
-* Display shader fbo result with another shader
+Can be prevented by modulating the input time.
 
-* Shader manager
-    * Create shader (left click shaders menu)
-        * New file is created in the shader directory named `unixtime_sec`.glsl
-        * File is populated with chosen template: minimal/feedback/raymarch
-        * The new shader is rendered to the preview window
 
-    * Select shader (left click on shader)
-        * Currently selected shader is saved to shader directory
-        * Selected shader is loaded into session.glsl
-        * Channels and sliders are updated to their last known state
-        * The selected shader is rendered to the preview window
+### Logging slider changes to json seems to add about 2.5 ms / frame
 
-    * Shader context menu (right click on shader area)
-        * Make current
+Consider using something like [spdlog](https://github.com/gabime/spdlog) instead.
 
-    * Create transition (left click transition menu)
-        * Create shader with transition template
-        * The two first channels are populated with placeholder images
-        * Placeholder images are white and black
-        * Current transition is selected and rendered to preview window
+Switch to sqlite for better record-structure and performance
 
-    * Select transition (left click on transition)
-        * Render transition with placeholder images to preview window
 
-    * Transition context menu (right click on transition area)
-        * Transition  1 Sec
-        * Transition  5 Sec
-        * Transition 10 Sec
-        * Transition 20 Sec
-        * Transition 30 Sec
-        * Transition custom
-            * Shows popup where one can choose custom transition time
+### Projection mapping
 
-* Session manager - For replaying the session
-    * Local git repo tracking code changes (using libgit2)
-    * Sqlite tracking system changes
+We should render the shader once to an offscreen fbo
+where the size is a power of 2 to get better performance
 
-    * Tracking details
-        * Currently active main shader
-        * Slider changes for each shader
-        * Channel changes for each shader
-        * Transitions between shaders
-        * Hardware input (audio, webcam, etc)
 
-    * `sessions/` - Directory of sessions
-        * `unixtime_sec`_`day`-`month`-`year`/
+### Sublimetext inline error display
 
-            * `.git` - Git repo
+Might be viable using the phantom API:
 
-            * `session.json` - Metadata about the session
+https://www.sublimetext.com/docs/3/api_reference.html#sublime.Phantom
 
-            * `session.glsl` - Shader code edited by user
 
-            * `shaders/` - directory of shaders created this session
-                * `unixtime_sec`.glsl
-                * `unixtime_sec`.glsl
-                * [...]
-                * `unixtime_sec`.glsl
+### Session manager - For replaying the session
 
-                * `thumbnails/` - directory of thumbnails for the shaders
-                    * `unixtime_sec`.png
-                    * `unixtime_sec`.png
-                    * [...]
-                    * `unixtime_sec`.png
+* Local git repo tracking code changes (using libgit2)
+* Sqlite tracking system changes
 
-            * `transitions/` - directory of transitions created this session
-                * `unixtime_sec`.glsl
-                * `unixtime_sec`.glsl
-                * [...]
-                * `unixtime_sec`.glsl
+Tracking details
 
-                * `thumbnails/` - directory of thumbnails for the shaders
-                    * `unixtime_sec`.png
-                    * `unixtime_sec`.png
-                    * [...]
-                    * `unixtime_sec`.png
+* Currently active main shader
+* Slider changes for each shader
+* Channel changes for each shader
+* Transitions between shaders
+* Hardware input (audio, webcam, etc)
 
-            * `audio/` - directory of audio clips recorded this session
-                * `unixtime_sec`.wav
-                * `unixtime_sec`.wav
-                * [...]
-                * `unixtime_sec`.wav
 
-            * `video/` - video clips recorded this session
-                * `unixtime_sec`.mp4
-                * `unixtime_sec`.mp4
-                * [...]
-                * `unixtime_sec`.mp4
+Directory of sessions - `sessions/`
 
-    * `session.json` - Metadata about the current session
-        ~~~~
-        {
-            "group": "Mary & the merry ferry men",
-            "event": "Døgnfluer",
-            "location": "Ingensteds",
-            "time": unixtime_sec,
-            "media": [
-                "https://vimeo.com/234113971"
+    `unixtime_sec`_`day`-`month`-`year`/
+
+        `.git` - Git repo
+
+        `session.json` - Metadata about the session
+
+        `session.glsl` - Shader code edited by user
+
+        `shaders/` - directory of shaders created this session
+            `unixtime_sec`.glsl
+            `unixtime_sec`.glsl
+            [...]
+            `unixtime_sec`.glsl
+
+            `thumbnails/` - directory of thumbnails for the shaders
+                `unixtime_sec`.png
+                `unixtime_sec`.png
+                [...]
+                `unixtime_sec`.png
+
+        `transitions/` - directory of transitions created this session
+            `unixtime_sec`.glsl
+            `unixtime_sec`.glsl
+            [...]
+            `unixtime_sec`.glsl
+
+            `thumbnails/` - directory of thumbnails for the shaders
+                `unixtime_sec`.png
+                `unixtime_sec`.png
+                [...]
+                `unixtime_sec`.png
+
+        `audio/` - directory of audio clips recorded this session
+            `unixtime_sec`.wav
+            `unixtime_sec`.wav
+            [...]
+            `unixtime_sec`.wav
+
+        `video/` - video clips recorded this session
+            `unixtime_sec`.mp4
+            `unixtime_sec`.mp4
+            [...]
+            `unixtime_sec`.mp4
+
+
+Metadata about the current session - `session.json`
+
+    {
+        "group": "Mary & the merry ferry men",
+        "event": "Døgnfluer",
+        "location": "Ingensteds",
+        "time": unixtime_sec,
+        "media": [
+            "https://vimeo.com/234113971"
+        ],
+        "credits": {
+            "Thor Merlin Lervik": [
+                "visuals",
             ],
-            "credits": {
-                "Thor Merlin Lervik": [
-                    "visuals",
-                ],
 
-                "Signe Krunderup Emmeluth": [
-                    "sax",
-                    "lead vocals",
-                    "keyboard"
-                ],
+            "Signe Krunderup Emmeluth": [
+                "sax",
+                "lead vocals",
+                "keyboard"
+            ],
 
-                "Jon Fosmark": [
-                    "drums",
-                    "congas",
-                    "synth",
-                    "typewriter",
-                    "backing vocals"
-                ],
+            "Jon Fosmark": [
+                "drums",
+                "congas",
+                "synth",
+                "typewriter",
+                "backing vocals"
+            ],
 
-                "Elias Tafjord": [
-                    "drums",
-                    "kalimba",
-                    "backing vocals"
-                ]
-            }
+            "Elias Tafjord": [
+                "drums",
+                "kalimba",
+                "backing vocals"
+            ]
         }
-        ~~~~
-
-* Inline error display through sublime text using its phantom API
-    * https://www.sublimetext.com/docs/3/api_reference.html#sublime.Phantom
-
-* Animation curves can be applied to MIDI controller sliders
-    * Right click on slider -> context menu with different animation curves
-
-* Choose source for spectrum analyser visualization
-    * Right click on it and choose source from context menu
+    }
