@@ -6,3 +6,4 @@ qrc_qml.cpp
 .qmake.stash
 Makefile
 *.pro.user
+sakuhin-*

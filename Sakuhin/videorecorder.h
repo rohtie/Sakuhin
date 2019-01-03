@@ -28,7 +28,6 @@ class VideoRecorder : public QObject {
 
     private:
         int ret;
-        int gotPacket;
 
         const QString filename;
         int framerate;

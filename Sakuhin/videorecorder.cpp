@@ -22,8 +22,6 @@ void VideoRecorder::initFormat(const char* filename, int framerate) {
 }
 
 void VideoRecorder::initCodec(int width, int height) {
-    qDebug() << "Using " << avcodec_get_name(format->video_codec);
-
     codec = avcodec_find_encoder(format->video_codec);
     if (!(codec)) {
         qDebug() << "Could not find encoder for " << avcodec_get_name(format->video_codec);
@@ -122,13 +120,24 @@ void VideoRecorder::writeFrame() {
     packet->data = NULL;
     packet->size = 0;
 
-    ret = avcodec_encode_video2(codecContext, packet, frame, &gotPacket);
+    ret = avcodec_send_frame(codecContext, frame);
     if (ret < 0) {
-        qDebug() << "Error encoding video frame: " << ret;
+        qDebug() << "Error sending a frame for encoding" << ret;
         exit(1);
     }
 
-    if (gotPacket) {
+    ret = 1;
+    while (ret >= 0) {
+        ret = avcodec_receive_packet(codecContext, packet);
+
+        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
+            return;
+        }
+        else if (ret < 0) {
+            qDebug() << "Error during encoding";
+            exit(1);
+        }
+
         // Rescale output packet timestamp values from codec to stream timebase
         av_packet_rescale_ts(packet, codecContext->time_base, stream->time_base);
 
@@ -137,6 +146,8 @@ void VideoRecorder::writeFrame() {
             qDebug() << "Error while writing video frame: " << ret;
             exit(1);
         }
+
+        av_packet_unref(packet);
     }
 }
 
@@ -170,10 +181,7 @@ void VideoRecorder::write(uint8_t* pixels, int framenumber) {
 void VideoRecorder::close() {
     // Write the rest of the packages
     frame = NULL;
-    do {
-        writeFrame();
-    } while (gotPacket);
-
+    writeFrame();
 
     // Finish the video file
     av_write_trailer(formatContext);
