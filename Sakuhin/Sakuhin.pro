@@ -8,6 +8,18 @@ LIBS += -lavcodec -lavformat -lavutil -lswscale
 
 CONFIG += c++11
 
+CONFIG(debug, debug|release) {
+    DESTDIR = ../sakuhin-release
+}
+CONFIG(release, debug|release) {
+    DESTDIR = ../sakuhin-debug
+}
+
+OBJECTS_DIR = $$DESTDIR/.obj
+MOC_DIR = $$DESTDIR/.moc
+RCC_DIR = $$DESTDIR/.qrc
+UI_DIR = $$DESTDIR/.u
+
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -60,7 +72,7 @@ HEADERS += \
     qmlreloadmanager.h \
     videorecorder.h
 
-copydata.commands = $(COPY_DIR) $$PWD/data $$OUT_PWD
+copydata.commands = $(COPY_DIR) $$PWD/data $$DESTDIR/data
 first.depends = $(first) copydata
 export(first.depends)
 export(copydata.commands)
