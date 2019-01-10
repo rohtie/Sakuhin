@@ -396,10 +396,10 @@ void Window::renderScreen(Shader* shader) {
             QOpenGLFramebufferObject* fbo = shader->currentFbo();
 
             fbo->bind();
-                glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, recordingFrameData);
+                glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, videoRecorder.pixels);
             fbo->release();
 
-            videoRecorder.write(recordingFrameData, recordingFrame);
+            videoRecorder.write(recordingFrame);
 
             recordingFrame += 1;
 
@@ -661,10 +661,6 @@ void Window::keyPressEvent(QKeyEvent* event) {
         case Qt::Key_R:
             if (!isRecording) {
                 videoRecorder.open("/tmp/out.mp4", recordingFramerate, width(), height());
-
-                // Initialize buffer for this resolution
-                recordingBufferSize = width() * height() * 4;
-                recordingFrameData = new uint8_t[recordingBufferSize];
 
                 recordingFrame = 0.0;
                 recordingStartTime = time.elapsed() / 1000.0f;

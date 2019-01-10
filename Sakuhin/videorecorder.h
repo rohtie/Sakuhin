@@ -23,8 +23,10 @@ class VideoRecorder : public QObject {
         void initOutputFile(const char* filename);
         void open(const char* filename, int framerate, int width, int height);
         void writeFrame();
-        void write(uint8_t* pixels, int framenumber);
+        void write(int framenumber);
         void close();
+
+        uint8_t* pixels;
 
     private:
         int ret;

@@ -57,6 +57,11 @@ void VideoRecorder::initCodec(int width, int height) {
         qDebug() << "Could not copy the stream parameters";
         exit(1);
     }
+
+    swsContext = sws_getCachedContext(NULL,
+        codecContext->width, codecContext->height, AV_PIX_FMT_RGBA,
+        codecContext->width, codecContext->height, AV_PIX_FMT_YUV420P,
+        0, NULL, NULL, NULL);
 }
 
 void VideoRecorder::initFrame() {
@@ -98,6 +103,9 @@ void VideoRecorder::initOutputFile(const char* filename) {
 
 
 void VideoRecorder::open(const char* filename, int framerate, int width, int height) {
+    // Initialize buffer for this resolution
+    pixels = new uint8_t[width * height * 4];
+
     // Container format, eg: .mp4
     initFormat(filename, framerate);
 
@@ -151,7 +159,7 @@ void VideoRecorder::writeFrame() {
     }
 }
 
-void VideoRecorder::write(uint8_t* pixels, int framenumber) {
+void VideoRecorder::write(int framenumber) {
     frame->pts = framenumber;
 
     if (av_frame_make_writable(frame) < 0) {
@@ -163,11 +171,6 @@ void VideoRecorder::write(uint8_t* pixels, int framenumber) {
     // Opengl coordinates start in bottom left so the frame
     // must also be flipped to appear correctly
     const int in_linesize[1] = { 4 * codecContext->width };
-
-    swsContext = sws_getCachedContext(swsContext,
-        codecContext->width, codecContext->height, AV_PIX_FMT_RGBA,
-        codecContext->width, codecContext->height, AV_PIX_FMT_YUV420P,
-        0, NULL, NULL, NULL);
 
     sws_scale(swsContext,
         (const uint8_t * const *)&pixels,
@@ -188,6 +191,9 @@ void VideoRecorder::close() {
 
     // Close and free stuff
     avio_closep(&formatContext->pb);
+    avcodec_close(codecContext);
+
+    delete[] pixels;
 
     av_frame_free(&frame);
     avcodec_free_context(&codecContext);
