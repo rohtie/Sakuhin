@@ -21,5 +21,6 @@
         <file>qml/SectionLabel.qml</file>
         <file>qml/BalancedGridView.qml</file>
         <file>qml/RoundImage.qml</file>
+        <file>qml/TimelineWindow.qml</file>
     </qresource>
 </RCC>

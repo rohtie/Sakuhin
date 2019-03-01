@@ -2,6 +2,7 @@
 
 QmlReloadManager::QmlReloadManager(QQmlApplicationEngine* engine) {
     fileWatcher.addPath("../Sakuhin/main.qml");
+    fileWatcher.addPath("../Sakuhin/qml/TimelineWindow.qml");
 
     QObject::connect(&fileWatcher, &QFileSystemWatcher::fileChanged,
                      this, &QmlReloadManager::onQmlChange);
