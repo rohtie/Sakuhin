@@ -16,12 +16,11 @@ Window {
     title: "Timeline"
 
     property double zoomProportion: 1.0 / 3.0
-    property double markerPosition: 600
-    property double markerPositionPX: timeline.markerPosition * timeline.zoomProportion
+    property double markerPosition: 0
     property double songDuration: 6250
 
-    property double loopAreaStart: 200
-    property double loopAreaLength: 300
+    property double loopAreaStart: 0
+    property double loopAreaLength: 0
 
     property int dragHandleWidth: 20
 
@@ -257,7 +256,7 @@ Window {
             }
 
             Rectangle {
-                x: timeline.markerPositionPX
+                x: timeline.markerPosition * timeline.zoomProportion
                 y: -10
                 color: "#fff"
                 width: 1
