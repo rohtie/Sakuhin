@@ -47,6 +47,7 @@ class Window : public QOpenGLWindow,
         void drawBillboard(float x, float y);
         void render(Shader* shader);
         void renderScreen(Shader* shader);
+        void processTime();
         void paintGL();
 
         void saveProjectionMappingConfig();
@@ -151,6 +152,7 @@ class Window : public QOpenGLWindow,
         QElapsedTimer time;
         int frameCounter;
         qint64 currentTime = 0;
+        qint64 performanceTime = 0;
         qint64 lastTime = 0;
         QMargins oldMargins;
 

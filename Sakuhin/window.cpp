@@ -492,8 +492,13 @@ void Window::renderScreen(Shader* shader) {
     }
 }
 
-void Window::paintGL() {
+void Window::processTime() {
     currentTime = time.elapsed();
+    performanceTime = currentTime;
+}
+
+void Window::paintGL() {
+    processTime();
 
     if (isMaster) {
         updatePerformanceInformation();
@@ -685,7 +690,7 @@ void Window::keyPressEvent(QKeyEvent* event) {
 }
 
 void Window::updatePerformanceInformation() {
-    double timeSinceLastTime = double(currentTime - lastTime);
+    double timeSinceLastTime = double(performanceTime - lastTime);
     frameCounter++;
 
     if (timeSinceLastTime >= 1000) {
