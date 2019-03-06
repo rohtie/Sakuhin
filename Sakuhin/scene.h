@@ -18,8 +18,8 @@ class Scene : public QObject {
 
         Shader* shader;
         QString name;
-        int length = 500;
-        int originalLength = 500;
+        int length = 20000;
+        int originalLength = 20000;
 
 
     signals:

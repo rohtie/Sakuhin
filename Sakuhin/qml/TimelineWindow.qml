@@ -15,21 +15,16 @@ Window {
     color: "#111117"
     title: "Timeline"
 
-    property double zoomProportion: 1.0 / 3.0
-    property double markerPosition: 0
-    property double songDuration: 6250
-
-    property double loopAreaStart: 0
-    property double loopAreaLength: 0
+    property double zoomProportion: 1.0 / 500.0
 
     property int dragHandleWidth: 20
 
     function adjustZoom(wheel){
         var previousZoomProportion = timeline.zoomProportion
 
-        var newZoomProportion = previousZoomProportion + (wheel.angleDelta.y / 120) * 0.04
+        var newZoomProportion = previousZoomProportion + (wheel.angleDelta.y / 120) * 0.001
 
-        if (newZoomProportion < 0.0135) {
+        if (newZoomProportion < 1.0 / 750.0) {
             newZoomProportion = previousZoomProportion
         }
 
@@ -41,7 +36,7 @@ Window {
     }
 
     function adjustMarker(mouse) {
-        timeline.markerPosition = mouseToTimeline(mouse)
+        scenemanager.skipTo(mouseToTimeline(mouse))
     }
 
     MouseArea {
@@ -69,16 +64,16 @@ Window {
         height: timeline.height
 
         onPressed: {
-            timeline.loopAreaStart = mouseToTimeline(mouse)
-            timeline.loopAreaLength = 0
+            scenemanager.loopAreaStart = mouseToTimeline(mouse)
+            scenemanager.loopAreaLength = 0
         }
 
         onReleased: {
-            timeline.markerPosition = timeline.loopAreaStart
+            scenemanager.skipTo(scenemanager.loopAreaStart)
         }
 
         onPositionChanged: {
-            timeline.loopAreaLength = Math.max(mouseToTimeline(mouse) - timeline.loopAreaStart, 0)
+            scenemanager.loopAreaLength = Math.max(mouseToTimeline(mouse) - scenemanager.loopAreaStart, 0)
         }
     }
 
@@ -92,12 +87,18 @@ Window {
 
         contentWidth: songIndicator.width
 
+        focus: true
+
+        Keys.onSpacePressed: {
+            scenemanager.togglePlay()
+        }
+
         Item {
             Item {
                 id: songIndicator
                 x: 0
                 y: 0
-                width: timeline.songDuration * timeline.zoomProportion
+                width: scenemanager.audioDuration * timeline.zoomProportion
 
                 Rectangle {
                     x: 0
@@ -258,15 +259,15 @@ Window {
             }
 
             Rectangle {
-                x: timeline.loopAreaStart * timeline.zoomProportion
+                x: scenemanager.loopAreaStart * timeline.zoomProportion
                 y: -2
                 color: "#ffff00"
-                width: timeline.loopAreaLength * timeline.zoomProportion
+                width: scenemanager.loopAreaLength * timeline.zoomProportion
                 height: 2
             }
 
             Rectangle {
-                x: timeline.markerPosition * timeline.zoomProportion
+                x: scenemanager.markerPosition * timeline.zoomProportion
                 y: -10
                 color: "#fff"
                 width: 1
