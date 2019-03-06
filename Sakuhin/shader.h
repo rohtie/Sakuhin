@@ -60,6 +60,7 @@ class Shader : public QObject {
         int pingPongIndex = 0;
         int previousPingPongIndex = 1;
 
+        bool justRecompiled = false;
         qint64 lastRenderTime = 0;
         qint64 lastRenderTimePreview = 0;
 

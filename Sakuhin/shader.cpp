@@ -94,6 +94,9 @@ bool Shader::recompile(QByteArray shaderCode) {
         program.setUniformValue("channel3", 3);
         program.setUniformValue("channel4", 4);
     program.release();
+
+    justRecompiled = true;
+
     return true;
 }
 
@@ -160,6 +163,12 @@ void Shader::updatePingPong() {
 }
 
 bool Shader::needsUpdate(qint64 currentTime, bool isPreview) {
+    if (justRecompiled) {
+        justRecompiled = false;
+
+        return true;
+    }
+
     if (isPreview) {
         if (lastRenderTimePreview != currentTime) {
             lastRenderTimePreview = currentTime;
