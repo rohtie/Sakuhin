@@ -1,16 +1,18 @@
 #include "windowmanager.h"
 
+
 WindowManager::WindowManager(QObject *parent) : QObject(parent) {
 
 }
 
-void WindowManager::initialize(const QSurfaceFormat &format, BackEnd* backend, ShaderManager* shadermanager) {
+void WindowManager::initialize(const QSurfaceFormat &format, BackEnd* backend, ShaderManager* shadermanager, SceneManager* scenemanager) {
     this->backend = backend;
     this->shadermanager = shadermanager;
+    this->scenemanager = scenemanager;
 
     Window* previewWindow = new TimelineWindow();
 
-    previewWindow->initialize(backend, shadermanager, false, true);
+    previewWindow->initialize(backend, shadermanager, scenemanager, false, true);
     previewWindow->setFormat(format);
     previewWindow->resize(QSize(256, 256));
     previewWindow->setPosition(0, 400);
@@ -18,7 +20,7 @@ void WindowManager::initialize(const QSurfaceFormat &format, BackEnd* backend, S
     previewWindow->show();
 
     masterWindow = new TimelineWindow();
-    masterWindow->initialize(backend, shadermanager, true, false);
+    masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
     masterWindow->setFormat(format);
     masterWindow->resize(QSize(1920, 1080));
     masterWindow->setPosition(256, 0);

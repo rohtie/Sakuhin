@@ -78,9 +78,10 @@ void Window::setupMapping(const QString &configPath) {
     this->isProjectionMapping = true;
 }
 
-void Window::initialize(BackEnd* backend, ShaderManager* shadermanager, bool isMaster, bool isPreview) {
+void Window::initialize(BackEnd* backend, ShaderManager* shadermanager, SceneManager* scenemanager, bool isMaster, bool isPreview) {
     this->backend = backend;
     this->shadermanager = shadermanager;
+    this->scenemanager = scenemanager;
     this->isMaster = isMaster;
     this->isPreview = isPreview;
 }
@@ -372,7 +373,7 @@ void Window::render(Shader* shader) {
         shader->setTime(recordingStartTime + (recordingFrame / recordingFramerate));
     }
     else {
-        shader->setTime(time.elapsed() / 1000.0f);
+        shader->setTime(currentTime / 1000.0f);
     }
 
 

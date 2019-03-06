@@ -25,18 +25,10 @@ int main(int argc, char* argv[]) {
 
     QQmlApplicationEngine engine("qrc:/main.qml");
 
-    // Allow livereload when editing the actual main.qml file
+    // Allow livereload when editing qml files
     QmlReloadManager reloadManager(&engine);
 
     QObject* qmlRoot = engine.rootObjects()[0];
-
-    BackEnd* backend = qmlRoot->findChild<BackEnd*>();
-    ShaderManager* shadermanager = qmlRoot->findChild<ShaderManager*>();
-    shadermanager->sessionID = backend->getSessionID();
-    backend->shadermanager = shadermanager;
-
-    AudioManager* audiomanager = qmlRoot->findChild<AudioManager*>();
-    audiomanager->initialize();
 
     QSurfaceFormat format;
     format.setRenderableType(QSurfaceFormat::OpenGL);
@@ -49,14 +41,21 @@ int main(int argc, char* argv[]) {
     #endif
 
     // Disable vsync for more accurate performance measures
-    // and getting rid of screen tearing
     format.setSwapInterval(0);
 
-    WindowManager* windowmanager = qmlRoot->findChild<WindowManager*>();
-    shadermanager->initialize(format);
-    windowmanager->initialize(format, backend, shadermanager);
 
+    BackEnd* backend = qmlRoot->findChild<BackEnd*>();
+    AudioManager* audiomanager = qmlRoot->findChild<AudioManager*>();
+    ShaderManager* shadermanager = qmlRoot->findChild<ShaderManager*>();
+    WindowManager* windowmanager = qmlRoot->findChild<WindowManager*>();
     SceneManager* sceneManager = qmlRoot->findChild<SceneManager*>();
+
+    shadermanager->sessionID = backend->getSessionID();
+    backend->shadermanager = shadermanager;
+
+    audiomanager->initialize();
+    shadermanager->initialize(format);
+    windowmanager->initialize(format, backend, shadermanager, sceneManager);
     sceneManager->initialize();
 
     return app.exec();

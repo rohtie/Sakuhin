@@ -17,6 +17,7 @@
 
 #include "backend.h"
 #include "shadermanager.h"
+#include "scenemanager.h"
 #include "videorecorder.h"
 
 class QOpenGLShaderProgram;
@@ -37,7 +38,7 @@ class Window : public QOpenGLWindow,
         explicit Window();
 
         void setupMapping(const QString &configPath);
-        void initialize(BackEnd* backend, ShaderManager* shadermanager, bool isMaster, bool isPreview);
+        void initialize(BackEnd* backend, ShaderManager* shadermanager, SceneManager* scenemanager, bool isMaster, bool isPreview);
 
         void initializeGL();
 
@@ -113,6 +114,7 @@ class Window : public QOpenGLWindow,
         QString configPath;
         BackEnd* backend;
         ShaderManager* shadermanager;
+        SceneManager* scenemanager;
 
         QOpenGLShaderProgram screenShader;
         QOpenGLVertexArrayObject rectangleVao;
