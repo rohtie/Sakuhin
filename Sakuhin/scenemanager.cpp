@@ -17,6 +17,7 @@ void SceneManager::initialize() {
     QObject::connect(&mediaPlayer, &QMediaPlayer::positionChanged,
                      this, &SceneManager::onPositionChanged);
 
+    // Setup mediaplayer to update marker position every milisec
     mediaPlayer.setNotifyInterval(1);
 
 
@@ -64,4 +65,9 @@ void SceneManager::skipTo(double position) {
     mediaPlayer.setPosition((qint64) position);
     markerPosition = position;
     emit markerPositionChanged();
+}
+
+void SceneManager::newScene() {
+    scenes.append(new Scene(QString::number(QDateTime::currentMSecsSinceEpoch())));
+    emit scenesChanged();
 }

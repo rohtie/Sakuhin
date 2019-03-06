@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QMediaPlayer>
+#include <QDateTime>
 
 #include "scene.h"
 
@@ -21,6 +22,7 @@ class SceneManager : public QObject {
         Q_INVOKABLE void swap(int indexA, int indexB);
         Q_INVOKABLE void togglePlay();
         Q_INVOKABLE void skipTo(double position);
+        Q_INVOKABLE void newScene();
 
         double audioDuration = 0;
         double markerPosition = 0;

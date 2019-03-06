@@ -89,8 +89,23 @@ Window {
 
         focus: true
 
-        Keys.onSpacePressed: {
-            scenemanager.togglePlay()
+        Keys.onPressed: {
+            if (event.key == Qt.Key_Space) {
+                scenemanager.togglePlay()
+            }
+            if (event.key == Qt.Key_N) {
+                scenemanager.newScene()
+            }
+            else if(event.key == Qt.Key_F2) {
+                if (sceneContainer.isRenaming) {
+                    sceneContainer.isRenaming = false
+                    flickable.forceActiveFocus()
+                }
+                else {
+                    sceneContainer.isRenaming = true
+                }
+
+            }
         }
 
         Item {
@@ -128,6 +143,8 @@ Window {
             Row {
                 id: sceneContainer
 
+                property bool isRenaming: false
+
                 height: flickable.height
 
                 Repeater {
@@ -148,10 +165,23 @@ Window {
 
                         Text {
                             height: parent.height
+                            width: parent.width
                             text: model.modelData.name
                             leftPadding: 10
                             color: "#111117"
                             verticalAlignment: Text.AlignVCenter
+                            clip: true
+                        }
+
+                        TextField {
+                            visible: sceneContainer.isRenaming
+                            height: parent.height
+                            width: parent.width
+                            text: model.modelData.name
+                            leftPadding: 10
+                            color: "#111117"
+                            verticalAlignment: Text.AlignVCenter
+                            onTextChanged: model.modelData.name = text
                         }
 
                         MouseArea {
