@@ -8,7 +8,7 @@ void WindowManager::initialize(const QSurfaceFormat &format, BackEnd* backend, S
     this->backend = backend;
     this->shadermanager = shadermanager;
 
-    Window* previewWindow = new Window();
+    Window* previewWindow = new TimelineWindow();
 
     previewWindow->initialize(backend, shadermanager, false, true);
     previewWindow->setFormat(format);
@@ -17,10 +17,10 @@ void WindowManager::initialize(const QSurfaceFormat &format, BackEnd* backend, S
     previewWindow->setFlag(Qt::FramelessWindowHint);
     previewWindow->show();
 
-    masterWindow = new Window();
+    masterWindow = new TimelineWindow();
     masterWindow->initialize(backend, shadermanager, true, false);
     masterWindow->setFormat(format);
-    masterWindow->resize(QSize(756, 756));
+    masterWindow->resize(QSize(1920, 1080));
     masterWindow->setPosition(256, 0);
     masterWindow->setFlag(Qt::FramelessWindowHint);
     masterWindow->show();

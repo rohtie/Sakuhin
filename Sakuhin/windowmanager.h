@@ -4,6 +4,8 @@
 #include <QObject>
 
 #include "window.h"
+#include "visualswindow.h"
+#include "timelinewindow.h"
 
 class WindowManager : public QObject {
     Q_OBJECT

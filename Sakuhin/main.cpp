@@ -8,6 +8,7 @@
 #include "shadermanager.h"
 #include "audiomanager.h"
 #include "windowmanager.h"
+#include "scenemanager.h"
 
 #include "qmlreloadmanager.h"
 
@@ -20,6 +21,7 @@ int main(int argc, char* argv[]) {
     qmlRegisterType<ShaderManager>("sakuhin.shadermanager", 1, 0, "ShaderManager");
     qmlRegisterType<AudioManager>("sakuhin.audiomanager", 1, 0, "AudioManager");
     qmlRegisterType<WindowManager>("sakuhin.windowmanager", 1, 0, "WindowManager");
+    qmlRegisterType<SceneManager>("sakuhin.scenemanager", 1, 0, "SceneManager");
 
     QQmlApplicationEngine engine("qrc:/main.qml");
 
@@ -53,6 +55,9 @@ int main(int argc, char* argv[]) {
     WindowManager* windowmanager = qmlRoot->findChild<WindowManager*>();
     shadermanager->initialize(format);
     windowmanager->initialize(format, backend, shadermanager);
+
+    SceneManager* sceneManager = qmlRoot->findChild<SceneManager*>();
+    sceneManager->initialize();
 
     return app.exec();
 }

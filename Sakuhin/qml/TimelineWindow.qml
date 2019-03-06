@@ -63,7 +63,7 @@ Window {
     }
 
     MouseArea {
-        acceptedButtons: Qt.MiddleButton
+        acceptedButtons: Qt.RightButton
 
         width: timeline.width
         height: timeline.height
@@ -130,12 +130,12 @@ Window {
                 height: flickable.height
 
                 Repeater {
-                    model: dummyDummModel
+                    model: scenemanager.scenes
 
                     Rectangle {
                         id: scene
 
-                        width: model.length * timeline.zoomProportion
+                        width: model.modelData.length * timeline.zoomProportion
                         height: parent.height
 
                         color: "#69697b"
@@ -147,7 +147,7 @@ Window {
 
                         Text {
                             height: parent.height
-                            text: model.name
+                            text: model.modelData.name
                             leftPadding: 10
                             color: "#111117"
                             verticalAlignment: Text.AlignVCenter
@@ -166,30 +166,37 @@ Window {
                             property bool hasSwappedLeft: false
                             property bool hasSwappedRight: false
 
+                            property double grabX: 0
+
                             onPressed: {
                                 // Disable interaction so that the timeline is not
                                 // moving while we move the scenes around
                                 flickable.interactive = false
 
-                                model.originalLength = model.length
+                                model.modelData.originalLength = model.modelData.length
 
                                 if (mouse.x < timeline.dragHandleWidth) {
+                                    grabX = mouse.x
+
                                     sceneMouseArea.isAdjustingLeft = true
 
-                                    var previousScene = dummyDummModel.get(index - 1)
+                                    var previousScene = scenemanager.scenes[index - 1]
                                     if (previousScene) {
                                         previousScene.originalLength = previousScene.length
                                     }
                                 }
-                                else if (mouse.x > (model.length * timeline.zoomProportion) - timeline.dragHandleWidth) {
+                                else if (mouse.x > (model.modelData.length * timeline.zoomProportion) - timeline.dragHandleWidth) {
+                                    grabX = mouse.x - (model.modelData.length * timeline.zoomProportion)
+
                                     sceneMouseArea.isAdjustingRight = true
 
-                                    var nextScene = dummyDummModel.get(index + 1)
+                                    var nextScene = scenemanager.scenes[index + 1]
                                     if (nextScene) {
                                         nextScene.originalLength = nextScene.length
                                     }
                                 }
                                 else {
+                                    grabX = 0
                                     isSwapping = true
                                 }
                             }
@@ -207,24 +214,27 @@ Window {
                             }
 
                             onPositionChanged: {
-                                var deltaX = mouse.x / timeline.zoomProportion
+                                var deltaX = (mouse.x - grabX) / timeline.zoomProportion
 
-                                var nextScene = dummyDummModel.get(index + 1)
-                                var previousScene = dummyDummModel.get(index - 1)
+                                var currentScene = scenemanager.scenes[index]
+                                var nextScene = scenemanager.scenes[index + 1]
+                                var previousScene = scenemanager.scenes[index - 1]
 
                                 if (isAdjustingLeft) {
-                                    adjustSizeLeft(model, previousScene, deltaX)
+                                    adjustSizeLeft(currentScene, previousScene, deltaX)
                                 }
                                 else if (isAdjustingRight) {
-                                    adjustSizeRight(model, nextScene, deltaX)
+                                    adjustSizeRight(currentScene, nextScene, deltaX)
                                 }
                                 else if (isSwapping) {
-
+                                    // TODO: figure out how to keep moving the scene after swap
+                                    // as it is currently not possible due to complete refresh
+                                    // of qml objects representing the scenes on scenesChanged signal
                                     if (previousScene && deltaX < -(previousScene.length * 0.25)) {
-                                        dummyDummModel.move(index - 1, index, 1)
+                                        scenemanager.swap(index, index - 1)
                                     }
-                                    else if (nextScene && deltaX > model.length + nextScene.length * 0.25) {
-                                        dummyDummModel.move(index + 1, index, 1)
+                                    else if (nextScene && deltaX > model.modelData.length + nextScene.length * 0.25) {
+                                        scenemanager.swap(index, index + 1)
                                     }
                                 }
                             }
@@ -264,40 +274,4 @@ Window {
             }
         }
     }
-
-    // Dummy model for debugging purposes
-    ListModel {
-        id: dummyDummModel
-
-        ListElement {
-            name: "Intro"
-            length: 1500
-            originalLength: 1500
-        }
-
-        ListElement {
-            name: "Landscape"
-            length: 150
-            originalLength: 150
-        }
-
-        ListElement {
-            name: "Rolling trees"
-            length: 1500
-            originalLength: 1500
-        }
-
-        ListElement {
-            name: "Geometric balls"
-            length: 700
-            originalLength: 700
-        }
-
-        ListElement {
-            name: "Outro"
-            length: 1200
-            originalLength: 1200
-        }
-    }
-
 }

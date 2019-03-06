@@ -47,7 +47,7 @@ class Window : public QOpenGLWindow,
         void drawBillboard(float x, float y);
         void render(Shader* shader);
         void renderScreen(Shader* shader);
-        void processTime();
+        virtual void processTime();
         void paintGL();
 
         void saveProjectionMappingConfig();
@@ -80,7 +80,7 @@ class Window : public QOpenGLWindow,
         void objectHeightTargetChanged();
         void fieldOfViewChanged();
 
-    private:
+    protected:
         bool isMaster = false;
         bool isPreview = false;
         bool isProjectionMapping = false;

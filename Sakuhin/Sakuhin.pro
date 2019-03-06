@@ -43,7 +43,11 @@ SOURCES += \
     windowmanager.cpp \
     slider.cpp \
     qmlreloadmanager.cpp \
-    videorecorder.cpp
+    videorecorder.cpp \
+    visualswindow.cpp \
+    timelinewindow.cpp \
+    scenemanager.cpp \
+    scene.cpp
 
 RESOURCES += qml.qrc
 
@@ -70,7 +74,11 @@ HEADERS += \
     windowmanager.h \
     slider.h \
     qmlreloadmanager.h \
-    videorecorder.h
+    videorecorder.h \
+    visualswindow.h \
+    timelinewindow.h \
+    scenemanager.h \
+    scene.h
 
 copydata.commands = $(COPY_DIR) $$PWD/data $$DESTDIR/data
 first.depends = $(first) copydata
