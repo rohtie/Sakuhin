@@ -66,6 +66,11 @@ void ShaderManager::selectShader(int index) {
 
         QString sessionFilepath = "sessions/" + sessionID + "/session.glsl";
 
+        // Replacing the session file with the selected shader file causes
+        // a recompile of the shader. To prevent this, we must temporarly
+        // remove the file from the filewatcher
+        fileWatcher.removePath(sessionFilepath);
+
         if (previewShader != nullptr) {
             if (QFile::exists(previewShader->filepath)) {
                 QFile::remove(previewShader->filepath);
@@ -77,6 +82,8 @@ void ShaderManager::selectShader(int index) {
             QFile::remove(sessionFilepath);
         }
         QFile::copy(selectedShader->filepath, sessionFilepath);
+
+        fileWatcher.addPath(sessionFilepath);
 
         previewShader = selectedShader;
     }
