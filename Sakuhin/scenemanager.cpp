@@ -46,10 +46,12 @@ void SceneManager::onPositionChanged() {
 }
 
 void SceneManager::onSceneShaderChanged() {
-    Scene* currentScene = (Scene*) scenes.at(currentSceneIndex);
+    if (scenes.count() > 0) {
+        Scene* currentScene = (Scene*) scenes.at(currentSceneIndex);
 
-    if (scenes.count() > 0 && currentScene->shaderIndex != shadermanager->mainIndex) {
-        currentScene->shaderIndex = shadermanager->mainIndex;
+        if (currentScene->shaderIndex != shadermanager->mainIndex) {
+            currentScene->shaderIndex = shadermanager->mainIndex;
+        }
     }
 }
 
