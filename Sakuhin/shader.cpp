@@ -77,8 +77,6 @@ bool Shader::recompile(QByteArray shaderCode) {
     QString code = build(shaderCode);
 
     if (!program.addShaderFromSourceCode(QOpenGLShader::Fragment, code)) {
-        qDebug() << "Shader error:" << program.log();
-
         program.addShader(oldShader);
         program.link();
 

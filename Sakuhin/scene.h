@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "shader.h"
+#include "scenemanager.h"
 
 class Scene : public QObject {
     Q_OBJECT
@@ -14,13 +15,12 @@ class Scene : public QObject {
 
     public:
         explicit Scene(QObject *parent = nullptr);
-        Scene(const QString name);
+        Scene(const QString name, int shaderIndex);
 
-        Shader* shader;
+        int shaderIndex = 0;
         QString name;
         int length = 20000;
         int originalLength = 20000;
-
 
     signals:
         void nameChanged();

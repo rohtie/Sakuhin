@@ -238,6 +238,8 @@ Window {
                                 if (nextScene) {
                                     nextScene.length = nextScene.originalLength - (currentScene.length - currentScene.originalLength)
                                 }
+
+                                scenemanager.recalculateScenes();
                             }
 
                             function adjustSizeLeft(currentScene, previousScene, deltaX) {

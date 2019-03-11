@@ -44,13 +44,14 @@ class Shader : public QObject {
         QString filepath;
         QString thumbnail = "qrc:assets/thumbnail.jpg";
 
+        QOpenGLShaderProgram program;
+
     signals:
         void thumbnailChanged();
         void channelsChanged();
         void slidersChanged();
 
     private:
-        QOpenGLShaderProgram program;
 
         QList<QObject*> sliders;
 

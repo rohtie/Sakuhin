@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
     audiomanager->initialize();
     shadermanager->initialize(format);
     windowmanager->initialize(format, backend, shadermanager, sceneManager);
-    sceneManager->initialize();
+    sceneManager->initialize(shadermanager);
 
     return app.exec();
 }

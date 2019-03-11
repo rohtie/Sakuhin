@@ -16,7 +16,7 @@ class Slider : public QObject {
         explicit Slider(QObject* parent = nullptr);
         Q_INVOKABLE void startEase(int index);
 
-        double value;
+        double value = 0;
 
     public slots:
         void easeSlider();

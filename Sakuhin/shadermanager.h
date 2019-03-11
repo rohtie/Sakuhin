@@ -38,6 +38,7 @@ class ShaderManager : public QObject {
         void startTransition();
 
         QString sessionID;
+        int mainIndex = 0;
 
     public slots:
         void onSessionFileChange(const QString &path);
@@ -49,7 +50,6 @@ class ShaderManager : public QObject {
         void isPreviewingShaderChanged();
 
     private:
-        int mainIndex = 0;
         bool isPreviewingShader = true;
 
         Shader* mainShader = nullptr;
