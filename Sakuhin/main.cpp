@@ -25,9 +25,6 @@ int main(int argc, char* argv[]) {
 
     QQmlApplicationEngine engine("qrc:/main.qml");
 
-    // Allow livereload when editing qml files
-    QmlReloadManager reloadManager(&engine);
-
     QObject* qmlRoot = engine.rootObjects()[0];
 
     QSurfaceFormat format;
@@ -37,6 +34,8 @@ int main(int argc, char* argv[]) {
     format.setDepthBufferSize(24);
 
     #ifdef QT_DEBUG
+    // Allow livereload when editing qml files
+    QmlReloadManager reloadManager(&engine);
     format.setOption(QSurfaceFormat::DebugContext);
     #endif
 

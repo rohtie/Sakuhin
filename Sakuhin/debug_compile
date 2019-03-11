@@ -1,0 +1,1 @@
+qmake CONFIG+=debug && make -j8 && (cd ../sakuhin-debug && ./Sakuhin)

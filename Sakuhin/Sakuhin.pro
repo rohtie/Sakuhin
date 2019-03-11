@@ -9,10 +9,10 @@ LIBS += -lavcodec -lavformat -lavutil -lswscale
 CONFIG += c++11
 
 CONFIG(debug, debug|release) {
-    DESTDIR = ../sakuhin-release
+    DESTDIR = ../sakuhin-debug
 }
 CONFIG(release, debug|release) {
-    DESTDIR = ../sakuhin-debug
+    DESTDIR = ../sakuhin-release
 }
 
 OBJECTS_DIR = $$DESTDIR/.obj
