@@ -36,11 +36,6 @@ void BackEnd::createSession() {
         return;
     }
 
-    if (!rootDirectory.mkpath(sessionPath + "/transitions/thumbnails")) {
-        qDebug() << "Couldn't make path";
-        return;
-    }
-
     QFile sessionFile(sessionPath + "/session.json");
 
     if (!sessionFile.open(QIODevice::WriteOnly)) {

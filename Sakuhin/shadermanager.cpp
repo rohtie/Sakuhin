@@ -43,7 +43,6 @@ bool ShaderManager::previewIsMain() {
 }
 
 void ShaderManager::createShader(QString templatePath) {
-    // TODO: DRY this up together with createTransition
     QString creationTime = QString::number(QDateTime::currentMSecsSinceEpoch());
     QString shaderPath = "sessions/" + sessionID + "/shaders/" + creationTime + ".glsl";
 
@@ -55,7 +54,6 @@ void ShaderManager::createShader(QString templatePath) {
 }
 
 void ShaderManager::selectShader(int index) {
-    // TODO: DRY this up together with selectTransition
     Shader* selectedShader = (Shader*) shaders.at(index);
 
     if (previewShader != selectedShader) {
@@ -98,52 +96,6 @@ void ShaderManager::makeCurrent(int index) {
         mainShader = previewShader;
         emit mainIndexChanged();
     }
-}
-
-void ShaderManager::createTransition(QString templatePath) {
-    // TODO: DRY this up together with createShader
-    QString creationTime = QString::number(QDateTime::currentMSecsSinceEpoch());
-    QString shaderPath = "sessions/" + sessionID + "/transitions/" + creationTime + ".glsl";
-
-    QFile::copy(templatePath, shaderPath);
-    transitionShaders.append(new Shader(shaderPath));
-    selectTransition(transitionShaders.length() - 1);
-
-    emit transitionShadersChanged();
-}
-
-void ShaderManager::selectTransition(int index) {
-    // TODO: DRY this up together with selectShader
-    Shader* selectedShader = (Shader*) transitionShaders.at(index);
-
-    if (previewShader != selectedShader) {
-        if (previewShader != nullptr) {
-            QString creationTime = QString::number(QDateTime::currentMSecsSinceEpoch());
-            previewShader->createThumbnail("sessions/" + sessionID + "/transitions/thumbnails/" + creationTime + ".jpg");
-        }
-
-        ((Channel*) selectedShader->channels[0])->setShader(mainShader);
-        ((Channel*) selectedShader->channels[1])->setShader(previewShader);
-
-        QString sessionFilepath = "sessions/" + sessionID + "/session.glsl";
-
-        if (previewShader != nullptr) {
-            if (QFile::exists(previewShader->filepath)) {
-                QFile::remove(previewShader->filepath);
-            }
-            QFile::copy(sessionFilepath, previewShader->filepath);
-        }
-
-        if (QFile::exists(sessionFilepath)) {
-            QFile::remove(sessionFilepath);
-        }
-        QFile::copy(selectedShader->filepath, sessionFilepath);
-
-        previewShader = selectedShader;
-    }
-
-    isPreviewingShader = false;
-    emit isPreviewingShaderChanged();
 }
 
 void ShaderManager::onSessionFileChange(const QString &path) {

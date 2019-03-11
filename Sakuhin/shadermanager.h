@@ -16,7 +16,6 @@ class ShaderManager : public QObject {
     Q_OBJECT
 
     Q_PROPERTY(QList<QObject*> shaders MEMBER shaders NOTIFY shadersChanged)
-    Q_PROPERTY(QList<QObject*> transitionShaders MEMBER transitionShaders NOTIFY transitionShadersChanged)
 
     Q_PROPERTY(int mainIndex MEMBER mainIndex NOTIFY mainIndexChanged)
     Q_PROPERTY(bool isPreviewingShader MEMBER isPreviewingShader NOTIFY isPreviewingShaderChanged)
@@ -33,10 +32,6 @@ class ShaderManager : public QObject {
         Q_INVOKABLE void selectShader(int index);
         Q_INVOKABLE void makeCurrent(int index);
 
-        Q_INVOKABLE void createTransition(QString templatePath);
-        Q_INVOKABLE void selectTransition(int index);
-        void startTransition();
-
         QString sessionID;
         int mainIndex = 0;
 
@@ -45,7 +40,6 @@ class ShaderManager : public QObject {
 
     signals:
         void shadersChanged();
-        void transitionShadersChanged();
         void mainIndexChanged();
         void isPreviewingShaderChanged();
 
@@ -60,7 +54,6 @@ class ShaderManager : public QObject {
         QDateTime lastSessionModification;
 
         QList<QObject*> shaders;
-        QList<QObject*> transitionShaders;
 
         QOpenGLContext* context;
 };

@@ -30,15 +30,6 @@ https://www.sublimetext.com/docs/3/api_reference.html#sublime.Phantom
 * Local git repo tracking code changes (using libgit2)
 * Sqlite tracking system changes
 
-Tracking details
-
-* Currently active main shader
-* Slider changes for each shader
-* Channel changes for each shader
-* Transitions between shaders
-* Hardware input (audio, webcam, etc)
-
-
 Directory of sessions - `sessions/`
 
     `unixtime_sec`_`day`-`month`-`year`/
@@ -61,34 +52,17 @@ Directory of sessions - `sessions/`
                 [...]
                 `unixtime_sec`.png
 
-        `transitions/` - directory of transitions created this session
-            `unixtime_sec`.glsl
-            `unixtime_sec`.glsl
-            [...]
-            `unixtime_sec`.glsl
-
-            `thumbnails/` - directory of thumbnails for the shaders
-                `unixtime_sec`.png
-                `unixtime_sec`.png
-                [...]
-                `unixtime_sec`.png
-
         `audio/` - directory of audio clips recorded this session
             `unixtime_sec`.wav
             `unixtime_sec`.wav
             [...]
             `unixtime_sec`.wav
 
-        `video/` - video clips recorded this session
-            `unixtime_sec`.mp4
-            `unixtime_sec`.mp4
-            [...]
-            `unixtime_sec`.mp4
-
 
 Metadata about the current session - `session.json`
 
     {
+        "mode": "live",
         "group": "Mary & the merry ferry men",
         "event": "Døgnfluer",
         "location": "Ingensteds",

@@ -100,26 +100,6 @@ ApplicationWindow {
                 isViewPreviewed: shadermanager.isPreviewingShader
             }
 
-            // SectionLabel {
-            //     text: "Audio shaders"
-            //     interactive: true
-
-            //     area.onClicked: {
-            //         transitionCreationMenu.x = x + mouse.x
-            //         transitionCreationMenu.y = y + mouse.y
-            //         transitionCreationMenu.open()
-            //     }
-            // }
-
-            // ShaderView {
-            //     id: transitionGridView
-            //     model: shadermanager.transitionShaders
-            //     contextArea.onClicked: transitionContextMenu.openAt(x + mouse.x, y + mouse.y)
-            //     onShaderActivated: shadermanager.selectTransition(currentIndex)
-            //     activeIndex: -1
-            //     isViewPreviewed: !shadermanager.isPreviewingShader
-            // }
-
             SectionLabel {
                 text: "Channels"
             }
@@ -133,13 +113,6 @@ ApplicationWindow {
                     target: shader_grid_view
                     onShaderActivated: {
                         channel_view.model = shadermanager.shaders[shader_grid_view.currentIndex].channels
-                    }
-                }
-
-                Connections {
-                    target: transitionGridView
-                    onShaderActivated: {
-                        channel_view.model = shadermanager.transitionShaders[transitionGridView.currentIndex].channels
                     }
                 }
 
@@ -192,13 +165,6 @@ ApplicationWindow {
                     target: shader_grid_view
                     onShaderActivated: {
                         shaderSliders.model = shadermanager.shaders[shader_grid_view.currentIndex].sliders
-                    }
-                }
-
-                Connections {
-                    target: transitionGridView
-                    onShaderActivated: {
-                        shaderSliders.model = shadermanager.transitionShaders[transitionGridView.currentIndex].sliders
                     }
                 }
             }
@@ -296,87 +262,6 @@ ApplicationWindow {
                         shaderContextMenu.close()
                     }
                 }
-            }
-        }
-
-        Menu {
-            id: transitionCreationMenu
-            height: transitionCreationList.contentHeight
-
-            ListView {
-                id: transitionCreationList
-
-                anchors.fill: parent
-
-                interactive: false
-
-                model: FolderListModel {
-                    folder: "file:data/transition_templates/"
-                    nameFilters: ["*.glsl"]
-                }
-
-                delegate: StyledMenuItem {
-                    text: fileBaseName
-
-                    onClicked: {
-                        shadermanager.createTransition(filePath)
-                        transitionCreationMenu.close()
-                    }
-                }
-            }
-
-            Rectangle {
-                anchors.fill: parent
-                color: "#111117"
-            }
-        }
-
-        Menu {
-            id: transitionContextMenu
-            height: transitionContextList.contentHeight
-
-            function openAt(x, y) {
-                this.x = x
-                this.y = y
-                open()
-            }
-
-            ListView {
-                id: transitionContextList
-
-                anchors.fill: parent
-                interactive: false
-
-                model: ListModel {
-                    ListElement {
-                        transitionTime: 1
-                    }
-                    ListElement {
-                        transitionTime: 5
-                    }
-                    ListElement {
-                        transitionTime: 10
-                    }
-                    ListElement {
-                        transitionTime: 20
-                    }
-                    ListElement {
-                        transitionTime: 30
-                    }
-                }
-
-                delegate: StyledMenuItem {
-                    text: transitionTime + " sec"
-
-                    onClicked: {
-                        transitionContextMenu.close()
-                    }
-                }
-            }
-
-            Rectangle {
-                anchors.fill: parent
-                color: "#111117"
             }
         }
 
@@ -943,12 +828,7 @@ ApplicationWindow {
                     text: model.modelData
 
                     onClicked: {
-                        if (shadermanager.isPreviewingShader) {
-                            shadermanager.shaders[shader_grid_view.currentIndex].sliders[shaderSliders.currentIndex].startEase(index)
-                        }
-                        else  {
-                            shadermanager.transitionShaders[transitionGridView.currentIndex].sliders[shaderSliders.currentIndex].startEase(index)
-                        }
+                        shadermanager.shaders[shader_grid_view.currentIndex].sliders[shaderSliders.currentIndex].startEase(index)
 
                         sliderContextMenu.close()
                     }
