@@ -56,6 +56,11 @@ ApplicationWindow {
         color: "#111117"
         title: "Sakuhin"
 
+        Shortcut {
+            sequence: "Ctrl+S"
+            onActivated: sessionmanager.saveSession()
+        }
+
 
         ColumnLayout {
             id: column

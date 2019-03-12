@@ -10,6 +10,8 @@ Channel::Channel(int channelLocation, Shader* owner) {
 }
 
 void Channel::setTexture(const QString &fileUrl) {
+    texturePath = fileUrl;
+
     channelType = TextureType;
     texture = new QOpenGLTexture(QImage(fileUrl).mirrored());
 
@@ -17,7 +19,9 @@ void Channel::setTexture(const QString &fileUrl) {
     emit thumbnailChanged();
 }
 
-void Channel::setShader(Shader* shader) {
+void Channel::setShader(QObject* inputShader) {
+    Shader* shader = (Shader*) inputShader;
+
     if (this->shader != nullptr) {
         disconnect(this->shader, SIGNAL(thumbnailChanged()), 0, 0);
     }
@@ -68,4 +72,21 @@ void Channel::bind() {
 void Channel::fetchShaderThumbnail() {
     thumbnail = shader->thumbnail;
     emit thumbnailChanged();
+}
+
+QJsonObject* Channel::toJson() {
+    QJsonObject* jsonChannel = new QJsonObject();
+    (*jsonChannel)["type"] = channelType;
+
+    if (channelType == TextureType) {
+        (*jsonChannel)["filename"] = texturePath;
+    }
+    else if (channelType == AudioType) {
+        (*jsonChannel)["device"] = audioDevice->name;
+    }
+    else if (channelType == ShaderType) {
+        (*jsonChannel)["id"] = shader->filepath;
+    }
+
+    return jsonChannel;
 }

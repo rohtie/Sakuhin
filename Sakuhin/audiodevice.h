@@ -24,12 +24,12 @@ class AudioDevice : public QIODevice {
         qint64 writeData(const char* data, qint64 len) override;
 
         QOpenGLTexture* spectrumTexture();
+        QString name;
 
     signals:
         void nameChanged();
 
     private:
-        QString name;
         QAudioDeviceInfo deviceInfo;
         QAudioInput* audioInput;
         QOpenGLTexture* texture;

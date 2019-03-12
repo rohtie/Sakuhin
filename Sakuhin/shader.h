@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QOpenGLFramebufferObject>
 #include <QOpenGLShaderProgram>
+#include <QJsonObject>
 
 class Shader : public QObject {
     Q_OBJECT
@@ -39,6 +40,8 @@ class Shader : public QObject {
 
         int currentFrame();
         int lastFrame();
+
+        QJsonObject* toJson();
 
         QList<QObject*> channels;
         QString filepath;

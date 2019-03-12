@@ -7,6 +7,7 @@ class AudioDevice;
 #include <QObject>
 #include <QOpenGLTexture>
 #include <QImage>
+#include <QJsonObject>
 
 class Channel : public QObject {
     Q_OBJECT
@@ -27,13 +28,16 @@ class Channel : public QObject {
 
         void bind();
         Q_INVOKABLE void setTexture(const QString &fileUrl);
-        Q_INVOKABLE void setShader(Shader* shader);
+        Q_INVOKABLE void setShader(QObject* inputShader);
         Q_INVOKABLE void setAudioDevice(QObject* audioDevice);
+
+        QJsonObject* toJson();
 
         Shader* owner;
         ChannelType channelType = NoType;
         Shader* shader = nullptr;
         QString thumbnail;
+        QString texturePath;
 
     public slots:
         void fetchShaderThumbnail();

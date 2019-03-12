@@ -10,6 +10,7 @@
 #include <QString>
 
 #include "shadermanager.h"
+#include "shader.h"
 
 SessionManager::SessionManager(QObject *parent) : QObject(parent) {
 
@@ -69,5 +70,20 @@ void SessionManager::loadSession(const QString path) {
 }
 
 void SessionManager::saveSession() {
+    QJsonObject session;
 
+    // Save shaders
+    QJsonArray shaders;
+    for (int i=0; i<(shadermanager->shaders).count(); i++) {
+        Shader* currentShader = (Shader*) shadermanager->shaders.at(i);
+        shaders.append(*(currentShader->toJson()));
+    }
+    session["shaders"] = shaders;
+
+    // Write to json file
+    QFile sessionFile("sessions/" + sessionID + "/session.json");
+    sessionFile.open(QIODevice::WriteOnly);
+    QJsonDocument sessionDocument(session);
+    sessionFile.write(sessionDocument.toJson());
+    sessionFile.close();
 }

@@ -1,7 +1,9 @@
+#include "shader.h"
+
 #include <QString>
 #include <QFile>
+#include <QJsonArray>
 
-#include "shader.h"
 #include "channel.h"
 #include "slider.h"
 
@@ -201,4 +203,19 @@ int Shader::lastFrame() {
     else {
         return fbo[previousPingPongIndex]->texture();
     }
+}
+
+QJsonObject* Shader::toJson() {
+    QJsonObject* jsonShader = new QJsonObject();
+    (*jsonShader)["id"] = filepath;
+
+    QJsonArray* jsonChannels = new QJsonArray();
+    for (int i=0; i<channels.count(); i++) {
+        Channel* currentChannel = (Channel*) channels.at(i);
+        jsonChannels->append(*(currentChannel->toJson()));
+    }
+
+    (*jsonShader)["channels"] = *jsonChannels;
+
+    return jsonShader;
 }

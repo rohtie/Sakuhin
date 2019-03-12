@@ -34,6 +34,7 @@ class ShaderManager : public QObject {
 
         QString sessionID;
         int mainIndex = 0;
+        QList<QObject*> shaders;
 
     public slots:
         void onSessionFileChange(const QString &path);
@@ -53,7 +54,6 @@ class ShaderManager : public QObject {
         QByteArray sessionContents;
         QDateTime lastSessionModification;
 
-        QList<QObject*> shaders;
 
         QOpenGLContext* context;
 };
