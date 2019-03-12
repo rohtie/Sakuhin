@@ -4,7 +4,6 @@
 #include <QObject>
 
 #include "shader.h"
-#include "scenemanager.h"
 
 class Scene : public QObject {
     Q_OBJECT
