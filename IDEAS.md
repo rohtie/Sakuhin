@@ -59,40 +59,174 @@ Directory of sessions - `sessions/`
             `unixtime_sec`.wav
 
 
-Metadata about the current session - `session.json`
+LIVE -- Metadata about the current session - `session.json`
 
     {
         "mode": "live",
-        "group": "Mary & the merry ferry men",
-        "event": "Døgnfluer",
-        "location": "Ingensteds",
+        "group": "Han Gaiden",
+        "event": "Serendipfestivalen 2019",
+        "location": "Kulturhuset",
         "time": unixtime_sec,
         "media": [
-            "https://vimeo.com/234113971"
+            "https://vimeo.com/318410360"
         ],
         "credits": {
             "Thor Merlin Lervik": [
                 "visuals",
             ],
-
-            "Signe Krunderup Emmeluth": [
-                "sax",
-                "lead vocals",
-                "keyboard"
+            "Ragnhild Moan": [
+                "vocals",
+                "synth"
             ],
-
-            "Jon Fosmark": [
-                "drums",
-                "congas",
-                "synth",
-                "typewriter",
-                "backing vocals"
+            "Kristin Myhrvold": [
+                "vocals",
+                "synth"
             ],
-
-            "Elias Tafjord": [
-                "drums",
-                "kalimba",
-                "backing vocals"
+            "Ingrid Skåland Lia": [
+                "vocals",
+                "synth"
             ]
-        }
+        },
+        "shaders": [
+            {
+                "id": 1588299344,
+                "channels": [
+                    {
+                        "type": "audio",
+                        "device": "alsa_output_16pcm"
+                    },
+                    {
+                        "type": "texture",
+                        "filename": "grass.png"
+                    },
+                    {
+                        "type": "shader",
+                        "id": 1588299344
+                    }
+                ]
+            },
+            {
+                "id": 6662323623,
+                "channels": [
+                    {
+                        "type": shader",
+                        "id": 6662323623
+                    },
+                    {
+                        "type": shader",
+                        "id": 1588299344
+                    }
+                ]
+            }
+        ],
+        "windows": [
+            {
+                "type": "master",
+                "x": 1920,
+                "y": 0,
+                "width": 1280,
+                "height": 720,
+                "model": "dinzoil_F"
+            },
+            {
+                "type": "slave",
+                "x": 3200,
+                "y": 0,
+                "width": 1280,
+                "height": 720,
+                "model": "dinzoil_B"
+            },
+            {
+                "type": "preview",
+                "x": 0,
+                "y": 400,
+                "width": 256,
+                "height": 256
+            }
+        ]
+    }
+
+STUDIO -- Metadata about the current session - `session.json`
+
+    {
+        "mode": "studio",
+        "name": "BlackPurpl€$BlackPurpl£ 2"
+        "group": "rohtie",
+        "event": "Revision 2019",
+        "time": unixtime_sec,
+        "credits": {
+            "rohtie": [
+                "code",
+                "graphics"
+            ],
+
+            "Dawg Phaze": [
+                "music"
+            ]
+        },
+        "shaders": [
+            {
+                "id": 1588299344,
+                "channels": [
+                    {
+                        "type": "audio",
+                        "device": "alsa_output_16pcm"
+                    },
+                    {
+                        "type": "texture",
+                        "filename": "grass.png"
+                    },
+                    {
+                        "type": "shader",
+                        "id": 1588299344
+                    }
+                ]
+            },
+            {
+                "id": 6662323623,
+                "channels": [
+                    {
+                        "type": shader",
+                        "id": 6662323623
+                    },
+                    {
+                        "type": shader",
+                        "id": 1588299344
+                    }
+                ]
+            }
+        ],
+        "scenes": [
+            {
+                "name": "Intro",
+                "length": 24000,
+                "shader": 6662323623
+            },
+            {
+                "name": "Cream scene",
+                "length": 13000,
+                "shader": 1588299344
+            },
+            {
+                "name": "Outro",
+                "length": 16500,
+                "shader": 6662323623
+            }
+        ],
+        "windows": [
+            {
+                "type": "master",
+                "x": 0,
+                "y": 400,
+                "width": 256,
+                "height": 256
+            },
+            {
+                "type": "preview",
+                "x": 0,
+                "y": 400,
+                "width": 256,
+                "height": 256
+            }
+        ]
     }
