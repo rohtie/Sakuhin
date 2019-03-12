@@ -1,9 +1,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include <QObject>
+class Shader;
 
-#include "shader.h"
+#include <QObject>
 
 class Scene : public QObject {
     Q_OBJECT

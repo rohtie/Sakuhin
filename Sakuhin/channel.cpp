@@ -1,6 +1,8 @@
 #include <QOpenGLTexture>
 
 #include "channel.h"
+#include "shader.h"
+#include "audiodevice.h"
 
 Channel::Channel(int channelLocation, Shader* owner) {
     this->owner = owner;

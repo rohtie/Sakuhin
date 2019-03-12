@@ -1,12 +1,12 @@
 #ifndef CHANNEL_H
 #define CHANNEL_H
 
+class Shader;
+class AudioDevice;
+
 #include <QObject>
 #include <QOpenGLTexture>
 #include <QImage>
-
-#include "shader.h"
-#include "audiodevice.h"
 
 class Channel : public QObject {
     Q_OBJECT

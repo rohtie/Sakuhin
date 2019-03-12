@@ -2,38 +2,25 @@
 #define BACKEND_H
 
 #include <QObject>
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <QFile>
 #include <QString>
-#include <QStringList>
+#include <QSurfaceFormat>
 
-#include "shadermanager.h"
-
-class BackEnd : public QObject {
+class Backend : public QObject {
     Q_OBJECT
 
     Q_PROPERTY(QString performanceInformation MEMBER performanceInformation NOTIFY performanceInformationChanged)
     Q_PROPERTY(QStringList easingNames MEMBER easingNames NOTIFY easingNamesChanged)
 
     public:
-        explicit BackEnd(QObject* parent = nullptr);
-
-        QString getSessionID();
-
-        Q_INVOKABLE void createSession();
+        explicit Backend(QObject* parent = nullptr);
         void setPerformanceInformation(const QString &performanceInformation);
-
-        ShaderManager* shadermanager;
+        void initialize(const QSurfaceFormat &format, QObject* qmlRoot);
 
     signals:
         void performanceInformationChanged();
         void easingNamesChanged();
 
     private:
-        QString sessionID;
-        QString sessionPath;
-
         QString performanceInformation = "16.66667 ms 60 fps";
         QStringList easingNames;
 };

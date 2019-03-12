@@ -1,11 +1,13 @@
 #include "windowmanager.h"
-
+#include "window.h"
+#include "visualswindow.h"
+#include "timelinewindow.h"
 
 WindowManager::WindowManager(QObject *parent) : QObject(parent) {
 
 }
 
-void WindowManager::initialize(const QSurfaceFormat &format, BackEnd* backend, ShaderManager* shadermanager, SceneManager* scenemanager) {
+void WindowManager::initialize(const QSurfaceFormat &format, Backend* backend, ShaderManager* shadermanager, SceneManager* scenemanager) {
     this->backend = backend;
     this->shadermanager = shadermanager;
     this->scenemanager = scenemanager;
@@ -22,7 +24,7 @@ void WindowManager::initialize(const QSurfaceFormat &format, BackEnd* backend, S
     masterWindow = new TimelineWindow();
     masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
     masterWindow->setFormat(format);
-    masterWindow->resize(QSize(1920, 1080));
+    masterWindow->resize(QSize(512, 512));
     masterWindow->setPosition(256, 0);
     masterWindow->setFlag(Qt::FramelessWindowHint);
     masterWindow->show();

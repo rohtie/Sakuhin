@@ -3,6 +3,7 @@ import QtQuick.Extras 1.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import sakuhin.backend 1.0
+import sakuhin.sessionmanager 1.0
 import sakuhin.shadermanager 1.0
 import sakuhin.audiomanager 1.0
 import sakuhin.windowmanager 1.0
@@ -15,9 +16,16 @@ import "qml"
 
 ApplicationWindow {
     visible: true
+    width: 1
+    height: 1
+    color: "#000000"
 
-    BackEnd {
+    Backend {
         id: backend
+    }
+
+    SessionManager {
+        id: sessionmanager
     }
 
     ShaderManager {
@@ -35,8 +43,6 @@ ApplicationWindow {
     SceneManager {
         id: scenemanager
     }
-
-    Component.onCompleted: backend.createSession();
 
     Window {
         id: root

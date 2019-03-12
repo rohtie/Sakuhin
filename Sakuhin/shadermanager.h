@@ -1,6 +1,8 @@
 #ifndef SHADERMANAGER_H
 #define SHADERMANAGER_H
 
+class Shader;
+
 #include <QQmlContext>
 #include <QObject>
 #include <QOpenGLContext>
@@ -9,8 +11,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDateTime>
-
-#include "shader.h"
 
 class ShaderManager : public QObject {
     Q_OBJECT

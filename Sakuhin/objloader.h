@@ -5,7 +5,6 @@
 #include <QVector3D>
 #include <QVector2D>
 
-
 // Expand abstract model to opengl triangles
 void expandModel(
     QVector<GLfloat> &openglVertices,

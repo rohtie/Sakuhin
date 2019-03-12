@@ -1,11 +1,13 @@
 #ifndef WINDOWMANAGER_H
 #define WINDOWMANAGER_H
 
-#include <QObject>
+class Backend;
+class ShaderManager;
+class SceneManager;
+class Window;
 
-#include "window.h"
-#include "visualswindow.h"
-#include "timelinewindow.h"
+#include <QObject>
+#include <QSurfaceFormat>
 
 class WindowManager : public QObject {
     Q_OBJECT
@@ -14,7 +16,7 @@ class WindowManager : public QObject {
 
     public:
         explicit WindowManager(QObject *parent = nullptr);
-        void initialize(const QSurfaceFormat &format, BackEnd* backend, ShaderManager* shadermanager, SceneManager* scenemanager);
+        void initialize(const QSurfaceFormat &format, Backend* backend, ShaderManager* shadermanager, SceneManager* scenemanager);
         void createWindow();
 
     signals:
@@ -23,7 +25,7 @@ class WindowManager : public QObject {
     public slots:
 
     private:
-        BackEnd* backend;
+        Backend* backend;
         ShaderManager* shadermanager;
         SceneManager* scenemanager;
 

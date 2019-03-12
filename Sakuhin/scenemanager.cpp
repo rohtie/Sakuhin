@@ -1,6 +1,8 @@
 #include "scenemanager.h"
 
 #include <QFileInfo>
+#include "shadermanager.h"
+#include "scene.h"
 
 SceneManager::SceneManager(QObject *parent) : QObject(parent) {
 

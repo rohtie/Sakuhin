@@ -1,12 +1,12 @@
 #ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
 
+class ShaderManager;
+class Scene;
+
 #include <QObject>
 #include <QMediaPlayer>
 #include <QDateTime>
-
-#include "shadermanager.h"
-#include "scene.h"
 
 class SceneManager : public QObject {
     Q_OBJECT

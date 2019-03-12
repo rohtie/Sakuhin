@@ -1,5 +1,7 @@
 #include "timelinewindow.h"
 
+#include "scenemanager.h"
+
 TimelineWindow::TimelineWindow() {
 
 }

@@ -1,16 +1,20 @@
 #include "window.h"
+
 #include <QDebug>
 #include <QString>
 #include <QOpenGLDebugLogger>
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QtMath>
+#include <QJsonDocument>
 #include <QJsonArray>
+#include <QJsonObject>
 
 #include "objloader.h"
-
 #include "backend.h"
 #include "channel.h"
+#include "shader.h"
+#include "shadermanager.h"
 
 static GLfloat const rectangle[] = {
     -1.0f,  1.0f, 0.0f,
@@ -78,7 +82,7 @@ void Window::setupMapping(const QString &configPath) {
     this->isProjectionMapping = true;
 }
 
-void Window::initialize(BackEnd* backend, ShaderManager* shadermanager, SceneManager* scenemanager, bool isMaster, bool isPreview) {
+void Window::initialize(Backend* backend, ShaderManager* shadermanager, SceneManager* scenemanager, bool isMaster, bool isPreview) {
     this->backend = backend;
     this->shadermanager = shadermanager;
     this->scenemanager = scenemanager;

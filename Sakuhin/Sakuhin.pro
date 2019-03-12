@@ -47,7 +47,8 @@ SOURCES += \
     visualswindow.cpp \
     timelinewindow.cpp \
     scenemanager.cpp \
-    scene.cpp
+    scene.cpp \
+    sessionmanager.cpp
 
 RESOURCES += qml.qrc
 
@@ -78,7 +79,8 @@ HEADERS += \
     visualswindow.h \
     timelinewindow.h \
     scenemanager.h \
-    scene.h
+    scene.h \
+    sessionmanager.h
 
 copydata.commands = $(COPY_DIR) $$PWD/data $$DESTDIR/data
 first.depends = $(first) copydata

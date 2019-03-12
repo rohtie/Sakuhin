@@ -1,7 +1,13 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+class Backend;
+class SceneManager;
+class ShaderManager;
+class Shader;
+
 #include <QOpenGLWindow>
+#include <QOpenGLShaderProgram>
 #include <QOpenGLFunctions>
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
@@ -14,13 +20,8 @@
 #include <QOpenGLDebugMessage>
 #include <QMatrix4x4>
 #include <QProcess>
-
-#include "backend.h"
-#include "shadermanager.h"
-#include "scenemanager.h"
 #include "videorecorder.h"
 
-class QOpenGLShaderProgram;
 class Window : public QOpenGLWindow,
                protected QOpenGLFunctions {
     Q_OBJECT
@@ -38,7 +39,7 @@ class Window : public QOpenGLWindow,
         explicit Window();
 
         void setupMapping(const QString &configPath);
-        void initialize(BackEnd* backend, ShaderManager* shadermanager, SceneManager* scenemanager, bool isMaster, bool isPreview);
+        void initialize(Backend* backend, ShaderManager* shadermanager, SceneManager* scenemanager, bool isMaster, bool isPreview);
 
         void initializeGL();
 
@@ -112,7 +113,7 @@ class Window : public QOpenGLWindow,
         bool isVertical = false;
         QString modelPath;
         QString configPath;
-        BackEnd* backend;
+        Backend* backend;
         ShaderManager* shadermanager;
         SceneManager* scenemanager;
 
