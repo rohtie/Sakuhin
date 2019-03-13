@@ -16,18 +16,5 @@ void Backend::setPerformanceInformation(const QString &performanceInformation) {
     emit performanceInformationChanged();
 }
 
-void Backend::initialize(const QSurfaceFormat &format, QObject* qmlRoot) {
-    SessionManager* sessionmanager = qmlRoot->findChild<SessionManager*>();
-    AudioManager* audiomanager = qmlRoot->findChild<AudioManager*>();
-    ShaderManager* shadermanager = qmlRoot->findChild<ShaderManager*>();
-    WindowManager* windowmanager = qmlRoot->findChild<WindowManager*>();
-    SceneManager* scenemanager = qmlRoot->findChild<SceneManager*>();
-
-    sessionmanager->initialize(shadermanager, scenemanager, windowmanager);
-    sessionmanager->createSession();
-
-    audiomanager->initialize();
-    shadermanager->initialize(format);
-    windowmanager->initialize(format, this, shadermanager, scenemanager);
-    scenemanager->initialize(shadermanager);
+void Backend::initialize() {
 }

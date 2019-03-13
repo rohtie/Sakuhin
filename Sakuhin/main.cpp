@@ -45,8 +45,9 @@ int main(int argc, char* argv[]) {
     format.setSwapInterval(0);
 
     QObject* qmlRoot = engine.rootObjects()[0];
-    Backend* backend = qmlRoot->findChild<Backend*>();
-    backend->initialize(format, qmlRoot);
+    SessionManager* sessionmanager = qmlRoot->findChild<SessionManager*>();
+    sessionmanager->initialize(format, qmlRoot);
+
 
     return app.exec();
 }

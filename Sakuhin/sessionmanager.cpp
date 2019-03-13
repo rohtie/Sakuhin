@@ -8,26 +8,43 @@
 #include <QJsonArray>
 #include <QtDebug>
 #include <QString>
+#include <QSurfaceFormat>
 
 #include "shadermanager.h"
 #include "shader.h"
 #include "scenemanager.h"
 #include "scene.h"
+#include "backend.h"
+#include "audiomanager.h"
+#include "windowmanager.h"
 
 SessionManager::SessionManager(QObject *parent) : QObject(parent) {
 
 }
 
-void SessionManager::initialize(ShaderManager* shadermanager, SceneManager* scenemanager, WindowManager* windowmanager) {
-    this->shadermanager = shadermanager;
-    this->scenemanager = scenemanager;
-    this->windowmanager = windowmanager;
+void SessionManager::initialize(const QSurfaceFormat &format, QObject* qmlRoot) {
+    backend = qmlRoot->findChild<Backend*>();
+    audiomanager = qmlRoot->findChild<AudioManager*>();
+    shadermanager = qmlRoot->findChild<ShaderManager*>();
+    windowmanager = qmlRoot->findChild<WindowManager*>();
+    scenemanager = qmlRoot->findChild<SceneManager*>();
+
+    this->format = format;
+
+    backend->initialize();
+    audiomanager->initialize();
+
+    // createSession();
+
+    loadSession("/home/thorml/Projects/BlackPurple");
+
 }
 
 void SessionManager::createSession() {
     QString creationTime = QString::number(QDateTime::currentSecsSinceEpoch());
     sessionID = creationTime;
     sessionPath = "sessions/" + sessionID;
+    shadermanager->sessionPath = sessionPath;
 
     QDir rootDirectory(QDir::currentPath());
 
@@ -49,7 +66,7 @@ void SessionManager::createSession() {
     }
 
     QJsonObject session;
-    session["time"] = creationTime;
+    session["time"] = sessionID;
 
     QJsonDocument sessionDocument(session);
     sessionFile.write(sessionDocument.toJson());
@@ -63,12 +80,28 @@ void SessionManager::createSession() {
     }
     shaderFile.close();
 
-    // TODO: Use initialize?
-    shadermanager->sessionPath = sessionPath;
+    QJsonArray shaders;
+    shadermanager->initialize(format, shaders);
+    windowmanager->initialize(format, backend, shadermanager, scenemanager);
+    scenemanager->initialize(shadermanager);
 }
 
 void SessionManager::loadSession(const QString path) {
+    sessionPath = path;
+    shadermanager->sessionPath = path;
 
+    QFile sessionFile(sessionPath + "/session.json");
+    sessionFile.open(QIODevice::ReadOnly);
+    QByteArray data = sessionFile.readAll();
+    QJsonDocument document = QJsonDocument::fromJson(data);
+    sessionFile.close();
+
+    // Init shaders
+    QJsonArray shaders = document["shaders"].toArray();
+
+    shadermanager->initialize(format, shaders);
+    windowmanager->initialize(format, backend, shadermanager, scenemanager);
+    scenemanager->initialize(shadermanager);
 }
 
 void SessionManager::saveSession() {

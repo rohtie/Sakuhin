@@ -3,12 +3,14 @@
 #include "channel.h"
 
 #include <QOffscreenSurface>
+#include <QJsonObject>
+#include <QJsonArray>
 
 ShaderManager::ShaderManager() {
 
 }
 
-void ShaderManager::initialize(const QSurfaceFormat &format) {
+void ShaderManager::initialize(const QSurfaceFormat &format, const QJsonArray &jsonShaders) {
     fileWatcher.addPath(sessionPath + "/session.glsl");
 
     QObject::connect(&fileWatcher, &QFileSystemWatcher::fileChanged,
@@ -23,8 +25,15 @@ void ShaderManager::initialize(const QSurfaceFormat &format) {
     context->create();
     context->makeCurrent(&surface);
 
-    createShader("data/shader_templates/minimal.glsl");
-    mainShader = previewShader;
+    if (jsonShaders.count() > 0) {
+        fromJson(jsonShaders);
+    }
+    else {
+        createShader("data/shader_templates/minimal.glsl");
+    }
+
+    mainShader = (Shader*) shaders.at(0);
+
 
     emit shadersChanged();
 }
@@ -128,3 +137,17 @@ void ShaderManager::onSessionFileChange(const QString &path) {
         fileWatcher.addPath(path);
     }
 }
+
+void ShaderManager::fromJson(const QJsonArray &jsonShaders) {
+    for (int i=0; i<jsonShaders.count(); i++) {
+        QJsonObject jsonShader = jsonShaders.at(i).toObject();
+
+        QString shaderPath = sessionPath + "/shaders/" + jsonShader["id"].toString() + ".glsl";
+
+        createShaderFromFile(shaderPath, jsonShader["id"].toString());
+    }
+
+
+
+}
+

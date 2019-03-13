@@ -23,7 +23,7 @@ class ShaderManager : public QObject {
     public:
         ShaderManager();
 
-        void initialize(const QSurfaceFormat &format);
+        void initialize(const QSurfaceFormat &format, const QJsonArray &jsonShaders);
 
         Shader* currentShader(bool isPreview);
         bool previewIsMain();
@@ -32,6 +32,7 @@ class ShaderManager : public QObject {
         Q_INVOKABLE void createShaderFromFile(const QString templatePath, const QString id);
         Q_INVOKABLE void selectShader(int index);
         Q_INVOKABLE void makeCurrent(int index);
+        void fromJson(const QJsonArray &jsonShaders);
 
         QString sessionPath;
         int mainIndex = 0;

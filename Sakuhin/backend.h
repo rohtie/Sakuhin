@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QString>
-#include <QSurfaceFormat>
 
 class Backend : public QObject {
     Q_OBJECT
@@ -14,7 +13,7 @@ class Backend : public QObject {
     public:
         explicit Backend(QObject* parent = nullptr);
         void setPerformanceInformation(const QString &performanceInformation);
-        void initialize(const QSurfaceFormat &format, QObject* qmlRoot);
+        void initialize();
 
     signals:
         void performanceInformationChanged();
