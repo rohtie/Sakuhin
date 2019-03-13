@@ -38,6 +38,8 @@ class SceneManager : public QObject {
         double currentSceneMin = 0;
         double currentSceneMax = 0;
 
+        QList<QObject*> scenes;
+
     signals:
         void scenesChanged();
         void audioDurationChanged();
@@ -51,8 +53,6 @@ class SceneManager : public QObject {
         void onSceneShaderChanged();
 
     private:
-        QList<QObject*> scenes;
-
         QMediaPlayer mediaPlayer;
         ShaderManager* shadermanager;
 

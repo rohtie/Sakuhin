@@ -4,6 +4,7 @@
 class Shader;
 
 #include <QObject>
+#include <QJsonObject>
 
 class Scene : public QObject {
     Q_OBJECT
@@ -15,6 +16,7 @@ class Scene : public QObject {
     public:
         explicit Scene(QObject *parent = nullptr);
         Scene(const QString name, int shaderIndex);
+        QJsonObject* toJson();
 
         int shaderIndex = 0;
         QString name;

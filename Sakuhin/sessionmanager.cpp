@@ -11,6 +11,8 @@
 
 #include "shadermanager.h"
 #include "shader.h"
+#include "scenemanager.h"
+#include "scene.h"
 
 SessionManager::SessionManager(QObject *parent) : QObject(parent) {
 
@@ -79,6 +81,14 @@ void SessionManager::saveSession() {
         shaders.append(*(currentShader->toJson()));
     }
     session["shaders"] = shaders;
+
+    // Save scenes
+    QJsonArray scenes;
+    for (int i=0; i<(scenemanager->scenes).count(); i++) {
+        Scene* currentScene = (Scene*) scenemanager->scenes.at(i);
+        scenes.append(*(currentScene->toJson()));
+    }
+    session["scenes"] = scenes;
 
     // Write to json file
     QFile sessionFile("sessions/" + sessionID + "/session.json");
