@@ -9,7 +9,7 @@ ShaderManager::ShaderManager() {
 }
 
 void ShaderManager::initialize(const QSurfaceFormat &format) {
-    fileWatcher.addPath("sessions/" + sessionID + "/session.glsl");
+    fileWatcher.addPath(sessionPath + "/session.glsl");
 
     QObject::connect(&fileWatcher, &QFileSystemWatcher::fileChanged,
                      this, &ShaderManager::onSessionFileChange);
@@ -44,7 +44,7 @@ bool ShaderManager::previewIsMain() {
 
 void ShaderManager::createShader(QString templatePath) {
     QString creationTime = QString::number(QDateTime::currentMSecsSinceEpoch());
-    QString shaderPath = "sessions/" + sessionID + "/shaders/" + creationTime + ".glsl";
+    QString shaderPath = sessionPath + "/shaders/" + creationTime + ".glsl";
 
     QFile::copy(templatePath, shaderPath);
     shaders.append(new Shader(shaderPath, creationTime, shaders.length()));
@@ -59,10 +59,10 @@ void ShaderManager::selectShader(int index) {
     if (previewShader != selectedShader) {
         if (previewShader != nullptr) {
             QString creationTime = QString::number(QDateTime::currentMSecsSinceEpoch());
-            previewShader->createThumbnail("sessions/" + sessionID + "/shaders/thumbnails/" + creationTime + ".jpg");
+            previewShader->createThumbnail(sessionPath + "/shaders/thumbnails/" + creationTime + ".jpg");
         }
 
-        QString sessionFilepath = "sessions/" + sessionID + "/session.glsl";
+        QString sessionFilepath = sessionPath + "/session.glsl";
 
         // Replacing the session file with the selected shader file causes
         // a recompile of the shader. To prevent this, we must temporarly

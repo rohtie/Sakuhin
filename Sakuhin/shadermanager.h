@@ -32,7 +32,7 @@ class ShaderManager : public QObject {
         Q_INVOKABLE void selectShader(int index);
         Q_INVOKABLE void makeCurrent(int index);
 
-        QString sessionID;
+        QString sessionPath;
         int mainIndex = 0;
         QList<QObject*> shaders;
 

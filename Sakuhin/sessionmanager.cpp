@@ -64,7 +64,7 @@ void SessionManager::createSession() {
     shaderFile.close();
 
     // TODO: Use initialize?
-    shadermanager->sessionID = sessionID;
+    shadermanager->sessionPath = sessionPath;
 }
 
 void SessionManager::loadSession(const QString path) {
@@ -91,7 +91,7 @@ void SessionManager::saveSession() {
     session["scenes"] = scenes;
 
     // Write to json file
-    QFile sessionFile("sessions/" + sessionID + "/session.json");
+    QFile sessionFile(sessionPath + "/session.json");
     sessionFile.open(QIODevice::WriteOnly);
     QJsonDocument sessionDocument(session);
     sessionFile.write(sessionDocument.toJson());
