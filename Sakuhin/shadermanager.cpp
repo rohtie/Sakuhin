@@ -53,6 +53,12 @@ void ShaderManager::createShader(QString templatePath) {
     emit shadersChanged();
 }
 
+void ShaderManager::createShaderFromFile(const QString shaderPath, const QString id) {
+    shaders.append(new Shader(shaderPath, id, shaders.length()));
+
+    emit shadersChanged();
+}
+
 void ShaderManager::selectShader(int index) {
     Shader* selectedShader = (Shader*) shaders.at(index);
 

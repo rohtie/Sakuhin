@@ -29,6 +29,7 @@ class ShaderManager : public QObject {
         bool previewIsMain();
 
         Q_INVOKABLE void createShader(QString templatePath);
+        Q_INVOKABLE void createShaderFromFile(const QString templatePath, const QString id);
         Q_INVOKABLE void selectShader(int index);
         Q_INVOKABLE void makeCurrent(int index);
 
