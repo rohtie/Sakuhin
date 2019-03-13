@@ -7,8 +7,10 @@
 #include "channel.h"
 #include "slider.h"
 
-Shader::Shader(QString filepath) {
+Shader::Shader(const QString filepath, const QString id, int index) {
     this->filepath = filepath;
+    this->id = id;
+    this->index = index;
     this->thumbnail = thumbnail;
 
     program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vertex.glsl");
@@ -207,7 +209,7 @@ int Shader::lastFrame() {
 
 QJsonObject* Shader::toJson() {
     QJsonObject* jsonShader = new QJsonObject();
-    (*jsonShader)["id"] = filepath;
+    (*jsonShader)["id"] = id;
 
     QJsonArray* jsonChannels = new QJsonArray();
     for (int i=0; i<channels.count(); i++) {

@@ -14,7 +14,7 @@ class Shader : public QObject {
     Q_PROPERTY(QList<QObject*> sliders MEMBER sliders NOTIFY slidersChanged)
 
     public:
-        Shader(QString filepath);
+        Shader(const QString filepath, const QString id, int index);
 
         void setPreview(bool isPreview);
 
@@ -45,6 +45,8 @@ class Shader : public QObject {
 
         QList<QObject*> channels;
         QString filepath;
+        QString id;
+        int index;
         QString thumbnail = "qrc:assets/thumbnail.jpg";
 
         QOpenGLShaderProgram program;

@@ -47,7 +47,7 @@ void ShaderManager::createShader(QString templatePath) {
     QString shaderPath = "sessions/" + sessionID + "/shaders/" + creationTime + ".glsl";
 
     QFile::copy(templatePath, shaderPath);
-    shaders.append(new Shader(shaderPath));
+    shaders.append(new Shader(shaderPath, creationTime, shaders.length()));
     selectShader(shaders.length() - 1);
 
     emit shadersChanged();

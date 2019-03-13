@@ -85,7 +85,7 @@ QJsonObject* Channel::toJson() {
         (*jsonChannel)["device"] = audioDevice->name;
     }
     else if (channelType == ShaderType) {
-        (*jsonChannel)["id"] = shader->filepath;
+        (*jsonChannel)["shader"] = shader->index;
     }
 
     return jsonChannel;
