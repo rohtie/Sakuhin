@@ -139,6 +139,7 @@ void ShaderManager::onSessionFileChange(const QString &path) {
 }
 
 void ShaderManager::fromJson(const QJsonArray &jsonShaders) {
+    // Create shaders
     for (int i=0; i<jsonShaders.count(); i++) {
         QJsonObject jsonShader = jsonShaders.at(i).toObject();
 
@@ -147,7 +148,29 @@ void ShaderManager::fromJson(const QJsonArray &jsonShaders) {
         createShaderFromFile(shaderPath, jsonShader["id"].toString());
     }
 
+    // Populate shader channels
+    for (int i=0; i<jsonShaders.count(); i++) {
+        QJsonObject jsonShader = jsonShaders.at(i).toObject();
+        Shader* shader = (Shader*) shaders.at(i);
 
+        QJsonArray jsonChannels = jsonShader["channels"].toArray();
 
+        for (int j=0; j<jsonChannels.count(); j++) {
+            QJsonObject jsonChannel = jsonChannels.at(j).toObject();
+            Channel* channel = (Channel*) shader->channels.at(j);
+
+            Channel::ChannelType type = (Channel::ChannelType) jsonChannel["type"].toInt();
+
+            if (type == Channel::TextureType) {
+                channel->setTexture(jsonChannel["filename"].toString());
+            }
+            else if (type == Channel::AudioType) {
+                // TODO: support audio channels
+            }
+            else if (type == Channel::ShaderType) {
+                channel->setShader(shaders.at(jsonChannel["shader"].toInt()));
+            }
+        }
+    }
 }
 
