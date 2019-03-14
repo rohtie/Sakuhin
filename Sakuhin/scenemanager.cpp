@@ -1,6 +1,8 @@
 #include "scenemanager.h"
 
 #include <QFileInfo>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "shadermanager.h"
 #include "scene.h"
 
@@ -8,7 +10,7 @@ SceneManager::SceneManager(QObject *parent) : QObject(parent) {
 
 }
 
-void SceneManager::initialize(ShaderManager* shadermanager) {
+void SceneManager::initialize(ShaderManager* shadermanager, const QJsonArray &jsonScenes) {
     this->shadermanager = shadermanager;
 
     mediaPlayer.setMedia(QUrl::fromLocalFile(QFileInfo("data/audio/BP.mp3").absoluteFilePath()));
@@ -25,6 +27,15 @@ void SceneManager::initialize(ShaderManager* shadermanager) {
 
     // Setup mediaplayer to update marker position every milisec
     mediaPlayer.setNotifyInterval(1);
+
+    for (int i=0; i<jsonScenes.count(); i++) {
+        QJsonObject jsonScene = jsonScenes.at(i).toObject();
+
+        Scene* newScene = new Scene(jsonScene["name"].toString(), jsonScene["shader"].toInt());
+        newScene->length = jsonScene["length"].toInt();
+
+        scenes.append(newScene);
+    }
 
     emit scenesChanged();
 }

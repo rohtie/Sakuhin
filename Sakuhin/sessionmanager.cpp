@@ -80,10 +80,11 @@ void SessionManager::createSession() {
     }
     shaderFile.close();
 
-    QJsonArray shaders;
-    shadermanager->initialize(format, shaders);
+    QJsonArray emptyJsonArray;
+    shadermanager->initialize(format, emptyJsonArray);
+    scenemanager->initialize(shadermanager, emptyJsonArray);
+
     windowmanager->initialize(format, backend, shadermanager, scenemanager);
-    scenemanager->initialize(shadermanager);
 }
 
 void SessionManager::loadSession(const QString path) {
@@ -96,12 +97,16 @@ void SessionManager::loadSession(const QString path) {
     QJsonDocument document = QJsonDocument::fromJson(data);
     sessionFile.close();
 
-    // Init shaders
+    // Load shaders
     QJsonArray shaders = document["shaders"].toArray();
-
     shadermanager->initialize(format, shaders);
+
+    // Load scenes
+    QJsonArray scenes = document["scenes"].toArray();
+    scenemanager->initialize(shadermanager, scenes);
+
+    // TODO: Load windows
     windowmanager->initialize(format, backend, shadermanager, scenemanager);
-    scenemanager->initialize(shadermanager);
 }
 
 void SessionManager::saveSession() {

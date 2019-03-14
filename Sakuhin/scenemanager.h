@@ -7,6 +7,7 @@ class Scene;
 #include <QObject>
 #include <QMediaPlayer>
 #include <QDateTime>
+#include <QJsonArray>
 
 class SceneManager : public QObject {
     Q_OBJECT
@@ -19,7 +20,7 @@ class SceneManager : public QObject {
 
     public:
         explicit SceneManager(QObject *parent = nullptr);
-        void initialize(ShaderManager* shadermanager);
+        void initialize(ShaderManager* shadermanager, const QJsonArray &jsonScenes);
         Q_INVOKABLE void swap(int indexA, int indexB);
         Q_INVOKABLE void togglePlay();
         Q_INVOKABLE void skipTo(double position);
