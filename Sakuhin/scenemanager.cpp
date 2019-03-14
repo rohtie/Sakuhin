@@ -37,6 +37,8 @@ void SceneManager::initialize(ShaderManager* shadermanager, const QJsonArray &js
         scenes.append(newScene);
     }
 
+    recalculateScenes();
+
     emit scenesChanged();
 }
 
