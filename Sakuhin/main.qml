@@ -52,7 +52,7 @@ ApplicationWindow {
         width: 256
         height: 400
         x: 0
-        y: 0
+        y: 720
         color: "#111117"
         title: "Sakuhin"
 

@@ -8,10 +8,10 @@ Window {
 
     flags: Qt.FramelessWindowHint
     visible: true
-    width: 1024
+    width: 960
     height: 100
     x: 0
-    y: 756
+    y: 540
     color: "#111117"
     title: "Timeline"
 
@@ -304,6 +304,16 @@ Window {
                 color: "#fff"
                 width: 1
                 height: timeline.height + 10
+
+                Text {
+                    y: 5
+                    height: parent.height
+                    width: parent.width
+                    text: scenemanager.markerPosition / 1000
+                    leftPadding: 10
+                    color: "#111117"
+                    verticalAlignment: Text.AlignVCenter
+                }
             }
         }
     }
