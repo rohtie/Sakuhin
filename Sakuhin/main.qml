@@ -61,6 +61,11 @@ ApplicationWindow {
             onActivated: sessionmanager.saveSession()
         }
 
+        Shortcut {
+            sequence: "Ctrl+e"
+            onActivated: sessionmanager.exportSession()
+        }
+
 
         ColumnLayout {
             id: column

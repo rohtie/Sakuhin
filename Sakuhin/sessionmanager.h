@@ -20,6 +20,7 @@ class SessionManager : public QObject {
         Q_INVOKABLE void createSession();
         Q_INVOKABLE void loadSession(const QString path);
         Q_INVOKABLE void saveSession();
+        Q_INVOKABLE void exportSession();
 
         Backend* backend;
         AudioManager* audiomanager;
