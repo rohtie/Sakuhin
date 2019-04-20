@@ -9,6 +9,7 @@
 #include <QtDebug>
 #include <QString>
 #include <QSurfaceFormat>
+#include <QRegExp>
 
 #include "shadermanager.h"
 #include "shader.h"
@@ -166,11 +167,51 @@ void SessionManager::exportSession() {
         int currentShaderSize = 0;
 
         while (!inStream.atEnd()) {
-            QString line = inStream.readLine().simplified();
+            QString line = inStream.readLine();
 
-            if (!line.isEmpty() && line.leftRef(2) != "//") {
+            QRegExp indentation("(^\\s+)");
+            indentation.indexIn(line);
+
+
+            line = line.simplified();
+
+            line.replace(" > ", ">");
+            line.replace(" < ", "<");
+            line.replace(" <= ", "<=");
+            line.replace(" >= ", ">=");
+            line.replace(" == ", "==");
+
+            line.replace(" = ", "=");
+
+            line.replace(" + ", "+");
+            line.replace(" - ", "-");
+            line.replace(" * ", "*");
+            line.replace(" / ", "/");
+
+            line.replace(" += ", "+=");
+            line.replace(" -= ", "-=");
+            line.replace(" *= ", "*=");
+            line.replace(" /= ", "/=");
+
+            line.replace(", ", ",");
+            line.replace("; ", ";");
+
+            // Minimize floats
+            line.replace(QRegExp("(\\d+)\\.0(?!\\d)"), "\\1");
+            line.replace(QRegExp("([^\\d])0(\\.\\d+)"), "\\1\\2");
+
+            // Minimize uniforms
+            line.replace(QRegExp("channel(\\d)"), "c\\1");
+            line.replace("time", "it");
+            line.replace("resolution", "ir");
+            line.replace("pixel", "pix");
+
+            if (line.isEmpty()) {
+                shaderCodeStream << "\n";
+            }
+            else if (line.leftRef(2) != "//") {
                 currentShaderSize += line.size();
-                shaderCodeStream << "        db \"" << line << "\"\n";
+                shaderCodeStream << "        db " << indentation.cap(0) << "\"" << line << "\"\n";
             }
         }
         currentShaderFile.close();
