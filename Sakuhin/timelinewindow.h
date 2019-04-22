@@ -7,6 +7,8 @@ class TimelineWindow : public Window {
     public:
         TimelineWindow();
         void processTime();
+        void setupRecordingTime();
+        void handleRecordingTime();
 };
 
 #endif // TIMELINEWINDOW_H

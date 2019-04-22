@@ -50,6 +50,8 @@ class Window : public QOpenGLWindow,
         void render(Shader* shader);
         void renderScreen(Shader* shader);
         virtual void processTime();
+        virtual void setupRecordingTime();
+        virtual void handleRecordingTime();
         void paintGL();
 
         void saveProjectionMappingConfig();
@@ -106,7 +108,7 @@ class Window : public QOpenGLWindow,
         uint8_t* recordingFrameData;
 
         int recordingBufferSize;
-        float recordingFramerate = 30.0;
+        float recordingFramerate = 60.0;
         float recordingFrame = 0.0;
         float recordingStartTime = 0.0;
 

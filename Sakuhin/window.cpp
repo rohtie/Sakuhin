@@ -396,25 +396,6 @@ void Window::render(Shader* shader) {
 void Window::renderScreen(Shader* shader) {
     if (isMaster) {
         render(shader);
-
-        if (isRecording) {
-            QOpenGLFramebufferObject* fbo = shader->currentFbo();
-
-            fbo->bind();
-                glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, videoRecorder.pixels);
-            fbo->release();
-
-            videoRecorder.write(recordingFrame);
-
-            recordingFrame += 1;
-
-            // Record for 1 minute
-            if (recordingFrame > 1800) {
-                isRecording = false;
-                videoRecorder.close();
-            }
-
-        }
     }
     else if (isPreview && !shadermanager->previewIsMain()) {
         render(shader);
@@ -489,10 +470,27 @@ void Window::renderScreen(Shader* shader) {
             screenShader.setUniformValue("resolution", scaledWidth, scaledHeight);
             screenShader.setUniformValue("centerAdjustment", centerX, centerY);
 
+            if (isRecording) {
+                screenShader.setUniformValue("isFlipped", 1.0f);
+            }
+            else {
+                screenShader.setUniformValue("isFlipped", 0.0f);
+            }
+
+
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, shader->currentFrame());
 
             drawRectangle();
+
+
+            if (isRecording) {
+                glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, videoRecorder.pixels);
+
+                videoRecorder.write(recordingFrame);
+
+                handleRecordingTime();
+            }
         screenShader.release();
     }
 }
@@ -500,6 +498,23 @@ void Window::renderScreen(Shader* shader) {
 void Window::processTime() {
     currentTime = time.elapsed();
     performanceTime = currentTime;
+}
+
+
+void Window::setupRecordingTime() {
+    recordingFrame = 0.0;
+    recordingStartTime = time.elapsed() / 1000.0f;
+}
+
+
+void Window::handleRecordingTime() {
+    recordingFrame += 1;
+
+    // Record for 1 minute
+    if (recordingFrame > 1800) {
+        isRecording = false;
+        videoRecorder.close();
+    }
 }
 
 void Window::paintGL() {
@@ -672,8 +687,7 @@ void Window::keyPressEvent(QKeyEvent* event) {
             if (!isRecording) {
                 videoRecorder.open("/tmp/out.mp4", recordingFramerate, width(), height());
 
-                recordingFrame = 0.0;
-                recordingStartTime = time.elapsed() / 1000.0f;
+                setupRecordingTime();
             }
             else {
                 videoRecorder.close();

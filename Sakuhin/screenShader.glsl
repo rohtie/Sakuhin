@@ -2,6 +2,7 @@
 
 uniform vec2 resolution;
 uniform vec2 centerAdjustment;
+uniform float isFlipped;
 
 uniform sampler2D screenTexture;
 
@@ -12,6 +13,8 @@ void main() {
 
     p -= centerAdjustment;
     p /= resolution;
+
+    p.y = mix(p.y, 1. - p.y, isFlipped);
 
     outputColor = texture(screenTexture, p) - (1. - step(max(max(p.y, 1. - p.y), max(p.x, 1. - p.x)), 1.));
 }
