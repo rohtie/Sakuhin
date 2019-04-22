@@ -7,3 +7,4 @@ qrc_qml.cpp
 Makefile
 *.pro.user
 sakuhin-*
+export

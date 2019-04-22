@@ -181,6 +181,8 @@ void SessionManager::exportSession() {
             line.replace(" >= ", ">=");
             line.replace(" == ", "==");
 
+            line.replace(") {", "){");
+
             line.replace(" = ", "=");
 
             line.replace(" + ", "+");
@@ -196,15 +198,25 @@ void SessionManager::exportSession() {
             line.replace(", ", ",");
             line.replace("; ", ";");
 
+            line.replace("if (", "if(");
+            line.replace("for (", "for(");
+
             // Minimize floats
             line.replace(QRegExp("(\\d+)\\.0(?!\\d)"), "\\1");
             line.replace(QRegExp("([^\\d])0(\\.\\d+)"), "\\1\\2");
+            line.replace(QRegExp("(\\d+)\\.(?!\\d)"), "\\1");
 
             // Minimize uniforms
             line.replace(QRegExp("channel(\\d)"), "c\\1");
             line.replace("time", "it");
             line.replace("resolution", "ir");
-            line.replace("pixel", "pix");
+
+            // Minimize well-known functions for better compression
+            line.replace("pixel", "pmm");
+            line.replace("cnoise", "pmi");
+            line.replace("rotate", "rot");
+            line.replace("smin", "mmin");
+            line.replace("hash", "mp");
 
             if (line.isEmpty()) {
                 shaderCodeStream << "\n";

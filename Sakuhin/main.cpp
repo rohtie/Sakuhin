@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
     #endif
 
     // Disable vsync for more accurate performance measures
-    format.setSwapInterval(0);
+    // format.setSwapInterval(0);
 
     QObject* qmlRoot = engine.rootObjects()[0];
     SessionManager* sessionmanager = qmlRoot->findChild<SessionManager*>();
