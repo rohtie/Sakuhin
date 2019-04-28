@@ -36,9 +36,9 @@ void SessionManager::initialize(const QSurfaceFormat &format, QObject* qmlRoot) 
     backend->initialize();
     audiomanager->initialize();
 
-    // createSession();
+    createSession();
 
-    loadSession("/home/thorml/Projects/BlackPurple");
+    // loadSession("/home/thorml/Projects/BlackPurple");
 
 }
 

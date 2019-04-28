@@ -52,7 +52,7 @@ ApplicationWindow {
         width: 256
         height: 400
         x: 0
-        y: 720
+        y: 656
         color: "#111117"
         title: "Sakuhin"
 
@@ -914,8 +914,8 @@ ApplicationWindow {
         }
     }
 
-    TimelineWindow {
-    }
+    // TimelineWindow {
+    // }
 
 
 }

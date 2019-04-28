@@ -483,7 +483,6 @@ void Window::renderScreen(Shader* shader) {
 
             drawRectangle();
 
-
             if (isRecording) {
                 glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, videoRecorder.pixels);
 
@@ -491,6 +490,18 @@ void Window::renderScreen(Shader* shader) {
 
                 handleRecordingTime();
             }
+
+            if (isTakingScreenshot) {
+                uint8_t* pixels = new uint8_t[width() * height() * 4];
+                glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+                QImage screenshot(pixels, width(), height(), QImage::Format_RGBA8888);
+                screenshot.save("screenshot.jpg", "JPG");
+                delete[] pixels;
+
+                isTakingScreenshot = false;
+            }
+
+
         screenShader.release();
     }
 }
@@ -694,6 +705,10 @@ void Window::keyPressEvent(QKeyEvent* event) {
             }
 
             isRecording = !isRecording;
+            break;
+
+        case Qt::Key_F12:
+            isTakingScreenshot = true;
             break;
 
         case Qt::Key_C:

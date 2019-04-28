@@ -12,7 +12,7 @@ void WindowManager::initialize(const QSurfaceFormat &format, Backend* backend, S
     this->shadermanager = shadermanager;
     this->scenemanager = scenemanager;
 
-    /* Visuals mode
+    //* Visuals mode
     Window* previewWindow = new VisualsWindow();
 
     previewWindow->initialize(backend, shadermanager, scenemanager, false, true);
@@ -65,7 +65,7 @@ void WindowManager::initialize(const QSurfaceFormat &format, Backend* backend, S
     windows.append(previewWindow);
     /*--------------------------*/
 
-    // /* Timeline mode
+    /* Timeline mode
     Window* previewWindow = new TimelineWindow();
 
     previewWindow->initialize(backend, shadermanager, scenemanager, false, true);

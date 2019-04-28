@@ -90,6 +90,7 @@ class Window : public QOpenGLWindow,
         bool isProjectionMapping = false;
         bool isCalibrating = false;
         bool isRecording = false;
+        bool isTakingScreenshot = false;
         bool hasLoadedProjectionObject = false;
 
         // No calibration point selected if -1
