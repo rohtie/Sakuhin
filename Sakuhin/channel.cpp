@@ -3,6 +3,7 @@
 #include "channel.h"
 #include "shader.h"
 #include "audiodevice.h"
+#include "videoplayer.h"
 
 Channel::Channel(int channelLocation, Shader* owner) {
     this->owner = owner;
@@ -42,6 +43,11 @@ void Channel::setAudioDevice(QObject* audioDevice) {
     emit thumbnailChanged();
 }
 
+void Channel::setVideo(const QString &fileUrl) {
+    videoPlayer = new VideoPlayer(fileUrl.toStdString().c_str());
+    channelType = VideoType;
+}
+
 void Channel::bind() {
     if (channelType == TextureType) {
         texture->bind(channelLocation);
@@ -65,6 +71,15 @@ void Channel::bind() {
         else {
             glBindTexture(GL_TEXTURE_2D, shader->currentFrame());
         }
+        return;
+    }
+    else if (channelType == VideoType) {
+        QOpenGLTexture* currentFrame = videoPlayer->currentFrame();
+
+        if (currentFrame->isCreated()) {
+            currentFrame->bind(channelLocation);
+        }
+
         return;
     }
 }

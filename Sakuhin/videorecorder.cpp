@@ -177,7 +177,6 @@ void VideoRecorder::write(int framenumber) {
         in_linesize, 0, codecContext->height,
         frame->data, frame->linesize);
 
-
     writeFrame();
 }
 

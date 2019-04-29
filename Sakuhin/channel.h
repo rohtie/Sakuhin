@@ -3,6 +3,7 @@
 
 class Shader;
 class AudioDevice;
+class VideoPlayer;
 
 #include <QObject>
 #include <QOpenGLTexture>
@@ -20,7 +21,8 @@ class Channel : public QObject {
             TextureType,
             ShaderType,
             AudioType,
-            HardwareType
+            HardwareType,
+            VideoType
         };
         Q_ENUM(ChannelType)
 
@@ -30,6 +32,7 @@ class Channel : public QObject {
         Q_INVOKABLE void setTexture(const QString &fileUrl);
         Q_INVOKABLE void setShader(QObject* inputShader);
         Q_INVOKABLE void setAudioDevice(QObject* audioDevice);
+        Q_INVOKABLE void setVideo(const QString &fileUrl);
 
         QJsonObject* toJson();
 
@@ -50,6 +53,7 @@ class Channel : public QObject {
         QOpenGLTexture* texture;
 
         AudioDevice* audioDevice;
+        VideoPlayer* videoPlayer;
 };
 
 #endif // CHANNEL_H

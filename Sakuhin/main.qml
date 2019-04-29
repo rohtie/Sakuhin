@@ -441,6 +441,34 @@ ApplicationWindow {
                                 }
                             }
                         }
+
+                        BalancedGridView {
+                            id: videoGrid
+
+                            model: FolderListModel {
+                                folder: "file:data/videos/"
+                            }
+
+                            delegate: Item {
+                                width: videoGrid.cellWidth
+                                height: videoGrid.cellHeight
+
+                                RoundImage {
+                                    path: "qrc:assets/audio_icon.jpg"
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+
+                                    onClicked: {
+                                        var channelID = channelPopup.currentChannelID
+
+                                        shadermanager.shaders[shader_grid_view.currentIndex].channels[channel_view.currentIndex].setVideo(filePath)
+                                        channelPopup.close()
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -472,6 +500,9 @@ ApplicationWindow {
                     }
                     TabForm {
                         text: qsTr("Shaders")
+                    }
+                    TabForm {
+                        text: qsTr("Videos")
                     }
                 }
             }

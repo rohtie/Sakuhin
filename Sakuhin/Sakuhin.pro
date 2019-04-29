@@ -34,6 +34,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     backend.cpp \
     main.cpp \
+    videoplayer.cpp \
     window.cpp \
     shadermanager.cpp \
     shader.cpp \
@@ -65,6 +66,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     backend.h \
+    videoplayer.h \
     window.h \
     shadermanager.h \
     shader.h \
