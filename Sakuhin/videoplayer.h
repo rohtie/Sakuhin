@@ -10,13 +10,22 @@ extern "C" {
 
 #include <QString>
 #include <QOpenGLTexture>
+#include <QObject>
+#include <QTimer>
 
-class VideoPlayer {
+class VideoPlayer : public QObject {
+    Q_OBJECT
+
     public:
         VideoPlayer(const char* filename);
+        void start();
+        void stop();
         QOpenGLTexture* currentFrame();
 
+
         QOpenGLTexture* texture;
+        QTimer* timer;
+        bool needsUpdate = false;
 
         AVFormatContext* formatContext = NULL;
 
@@ -35,6 +44,10 @@ class VideoPlayer {
         int isFrameComplete = 0;
 
         uint8_t* pixels;
+
+    public slots:
+        void fetchNextFrame();
+
 };
 
 #endif // VIDEOPLAYER_H

@@ -53,7 +53,7 @@ class Channel : public QObject {
         QOpenGLTexture* texture;
 
         AudioDevice* audioDevice;
-        VideoPlayer* videoPlayer;
+        VideoPlayer* videoPlayer = nullptr;
 };
 
 #endif // CHANNEL_H

@@ -17,7 +17,9 @@ VideoPlayer::VideoPlayer(const char* filename) {
         }
     }
 
-    codecContext = formatContext->streams[videoStream]->codec;
+    stream = formatContext->streams[videoStream];
+
+    codecContext = stream->codec;
 
     codec = avcodec_find_decoder(codecContext->codec_id);
     avcodec_open2(codecContext, codec, NULL);
@@ -38,24 +40,51 @@ VideoPlayer::VideoPlayer(const char* filename) {
     texture->setFormat(QOpenGLTexture::RGBA8_UNorm);
     texture->allocateStorage(QOpenGLTexture::RGBA, QOpenGLTexture::UInt8);
     texture->create();
+
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(fetchNextFrame()));
+
+    // Grab first frame so that it isn't filled with garbage
+    fetchNextFrame();
 }
 
-QOpenGLTexture* VideoPlayer::currentFrame() {
+void VideoPlayer::start() {
+    double frametime = 1.0 / av_q2d(stream->r_frame_rate);
+    frametime *= 1000.0;
+
+    timer->start(frametime);
+}
+
+void VideoPlayer::stop() {
+    timer->stop();
+}
+
+void VideoPlayer::fetchNextFrame() {
     if (av_read_frame(formatContext, packet) >= 0) {
         if (packet->stream_index == videoStream) {
             avcodec_decode_video2(codecContext, frame, &isFrameComplete, packet);
 
             if (isFrameComplete) {
-                const int out_linesize[1] = { 4 * codecContext->width };
-
-                sws_scale(swsContext,
-                    frame->data, frame->linesize,
-                    0, codecContext->height,
-                    &pixels, out_linesize);
-
-                texture->setData(QOpenGLTexture::RGBA, QOpenGLTexture::UInt8, pixels);
+                needsUpdate = true;
             }
         }
+    }
+    else {
+        timer->stop();
+    }
+}
+
+QOpenGLTexture* VideoPlayer::currentFrame() {
+    if (needsUpdate) {
+        const int out_linesize[1] = { 4 * codecContext->width };
+
+        sws_scale(swsContext,
+            frame->data, frame->linesize,
+            0, codecContext->height,
+            &pixels, out_linesize);
+
+        texture->setData(QOpenGLTexture::RGBA, QOpenGLTexture::UInt8, pixels);
+        needsUpdate = false;
     }
 
     return texture;

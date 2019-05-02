@@ -44,7 +44,14 @@ void Channel::setAudioDevice(QObject* audioDevice) {
 }
 
 void Channel::setVideo(const QString &fileUrl) {
+    qDebug() << fileUrl;
+
+    if (videoPlayer != nullptr) {
+        videoPlayer->stop();
+    }
+
     videoPlayer = new VideoPlayer(fileUrl.toStdString().c_str());
+    videoPlayer->start();
     channelType = VideoType;
 }
 
