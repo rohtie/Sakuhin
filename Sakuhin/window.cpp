@@ -69,6 +69,7 @@ void Window::setupMapping(const QString &configPath) {
 
     this->distanceFromObject = document["distanceFromObject"].toDouble();
     this->projectorHeight = document["projectorHeight"].toDouble();
+    this->objectHeightTarget = document["objectHeightTarget"].toDouble();
     this->fieldOfView = document["fieldOfView"].toDouble();
     this->isVertical = document["isVertical"].toBool();
 
