@@ -12,7 +12,7 @@ void WindowManager::initialize(const QSurfaceFormat &format, Backend* backend, S
     this->shadermanager = shadermanager;
     this->scenemanager = scenemanager;
 
-    //* Visuals mode
+    /* Visuals mode
     Window* previewWindow = new VisualsWindow();
 
     previewWindow->initialize(backend, shadermanager, scenemanager, false, true);
@@ -34,32 +34,32 @@ void WindowManager::initialize(const QSurfaceFormat &format, Backend* backend, S
     windows.append(previewWindow);
     /*--------------------------*/
 
-    /* Visuals projection mapping mode
+    //* Visuals projection mapping mode
     masterWindow = new VisualsWindow();
-    masterWindow->setupMapping("data/config/dinzoil_F.json");
-    masterWindow->initialize(backend, shadermanager, true, false);
+    masterWindow->setupMapping("data/config/lang.json");
+    masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
     masterWindow->setFormat(format);
-    masterWindow->resize(QSize(555, 256));
-    masterWindow->setPosition(256, 512);
+    masterWindow->resize(QSize(1280, 720));
+    masterWindow->setPosition(0, 0);
     masterWindow->setFlag(Qt::FramelessWindowHint);
     masterWindow->show();
     windows.append(masterWindow);
 
-    Window* slaveWindow = new VisualsWindow();
-    slaveWindow->setupMapping("data/config/dinzoil_B.json");
-    slaveWindow->initialize(backend, shadermanager, false, false);
-    slaveWindow->setFormat(format);
-    slaveWindow->resize(QSize(555, 256));
-    slaveWindow->setPosition(811, 512);
-    slaveWindow->setFlag(Qt::FramelessWindowHint);
-    slaveWindow->show();
-    windows.append(slaveWindow);
+    // Window* slaveWindow = new VisualsWindow();
+    // slaveWindow->setupMapping("data/config/lang.json");
+    // slaveWindow->initialize(backend, shadermanager, false, false);
+    // slaveWindow->setFormat(format);
+    // slaveWindow->resize(QSize(555, 256));
+    // slaveWindow->setPosition(811, 512);
+    // slaveWindow->setFlag(Qt::FramelessWindowHint);
+    // slaveWindow->show();
+    // windows.append(slaveWindow);
 
     Window* previewWindow = new VisualsWindow();
-    previewWindow->initialize(backend, shadermanager, false, true);
+    previewWindow->initialize(backend, shadermanager, scenemanager, false, true);
     previewWindow->setFormat(format);
-    previewWindow->resize(QSize(256, 256));
-    previewWindow->setPosition(0, 512);
+    previewWindow->resize(QSize(512, 512));
+    previewWindow->setPosition(0, 0);
     previewWindow->setFlag(Qt::FramelessWindowHint);
     previewWindow->show();
     windows.append(previewWindow);
