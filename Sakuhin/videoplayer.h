@@ -8,6 +8,8 @@ extern "C" {
 #include <libavutil/timestamp.h>
 }
 
+class VideoGroup;
+
 #include <QString>
 #include <QOpenGLTexture>
 #include <QObject>
@@ -17,11 +19,16 @@ class VideoPlayer : public QObject {
     Q_OBJECT
 
     public:
-        VideoPlayer(const char* filename);
+        VideoPlayer(VideoGroup* parent, const QString &filename);
+        void create();
+        void destroy();
         void start();
         void stop();
         QOpenGLTexture* currentFrame();
 
+    private:
+        VideoGroup* parent;
+        QString filename;
 
         QOpenGLTexture* texture;
         QTimer* timer;

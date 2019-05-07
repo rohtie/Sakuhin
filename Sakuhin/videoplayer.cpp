@@ -1,12 +1,18 @@
 #include "videoplayer.h"
+#include "videogroup.h"
 
 #include <QString>
 #include <QDebug>
 
-VideoPlayer::VideoPlayer(const char* filename) {
+VideoPlayer::VideoPlayer(VideoGroup* parent, const QString &filename) {
+    this->parent = parent;
+    this->filename = filename;
+}
+
+void VideoPlayer::create() {
     av_register_all();
 
-    avformat_open_input(&formatContext, filename, NULL, NULL);
+    avformat_open_input(&formatContext, filename.toStdString().c_str(), NULL, NULL);
     avformat_find_stream_info(formatContext, NULL);
 
     // Only get video stream
@@ -48,6 +54,22 @@ VideoPlayer::VideoPlayer(const char* filename) {
     fetchNextFrame();
 }
 
+void VideoPlayer::destroy() {
+    texture->destroy();
+
+    delete[] pixels;
+
+    av_frame_free(&frame);
+
+    av_packet_free(&packet);
+
+    avcodec_close(codecContext);
+
+    avformat_close_input(&formatContext);
+
+    sws_freeContext(swsContext);
+}
+
 void VideoPlayer::start() {
     double frametime = 1.0 / av_q2d(stream->r_frame_rate);
     frametime *= 1000.0;
@@ -71,6 +93,7 @@ void VideoPlayer::fetchNextFrame() {
     }
     else {
         timer->stop();
+        parent->childHasFinishedPlaying();
     }
 }
 

@@ -3,7 +3,7 @@
 #include "channel.h"
 #include "shader.h"
 #include "audiodevice.h"
-#include "videoplayer.h"
+#include "videomanager.h"
 
 Channel::Channel(int channelLocation, Shader* owner) {
     this->owner = owner;
@@ -46,12 +46,14 @@ void Channel::setAudioDevice(QObject* audioDevice) {
 void Channel::setVideo(const QString &fileUrl) {
     qDebug() << fileUrl;
 
-    if (videoPlayer != nullptr) {
-        videoPlayer->stop();
+    if (videomanager != nullptr && videomanager->isPlaying) {
+        // We need to stop the current videomanager
+        // Before we create a new one
+        videomanager->destroy();
     }
 
-    videoPlayer = new VideoPlayer(fileUrl.toStdString().c_str());
-    videoPlayer->start();
+    videomanager = new VideoManager(fileUrl);
+    videomanager->next(false);
     channelType = VideoType;
 }
 
@@ -81,10 +83,12 @@ void Channel::bind() {
         return;
     }
     else if (channelType == VideoType) {
-        QOpenGLTexture* currentFrame = videoPlayer->currentFrame();
+        if (videomanager->isPlaying) {
+            QOpenGLTexture* currentFrame = videomanager->currentFrame();
 
-        if (currentFrame->isCreated()) {
-            currentFrame->bind(channelLocation);
+            if (currentFrame->isCreated()) {
+                currentFrame->bind(channelLocation);
+            }
         }
 
         return;

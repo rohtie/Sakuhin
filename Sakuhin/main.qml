@@ -447,6 +447,7 @@ ApplicationWindow {
 
                             model: FolderListModel {
                                 folder: "file:data/videos/"
+                                showDirsFirst: true
                             }
 
                             delegate: Item {
@@ -454,7 +455,26 @@ ApplicationWindow {
                                 height: videoGrid.cellHeight
 
                                 RoundImage {
-                                    path: "qrc:assets/audio_icon.jpg"
+                                    path: fileIsDir ? "qrc:assets/thumbnail.jpg" : "qrc:assets/audio_icon.jpg"
+                                }
+
+                                Label {
+                                    visible: fileIsDir
+
+                                    anchors.fill: parent
+                                    anchors.topMargin: 0
+                                    anchors.rightMargin: 5
+                                    anchors.leftMargin: 0
+                                    anchors.bottomMargin: 5
+
+                                    color: "#fff"
+                                    text: fileName
+                                    font.pointSize: shader_view.cellWidth * 0.45
+                                    font.family: "Arimo"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    style: Text.Outline
+                                    styleColor: "#000"
                                 }
 
                                 MouseArea {

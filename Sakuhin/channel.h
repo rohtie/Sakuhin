@@ -3,7 +3,7 @@
 
 class Shader;
 class AudioDevice;
-class VideoPlayer;
+class VideoManager;
 
 #include <QObject>
 #include <QOpenGLTexture>
@@ -53,7 +53,7 @@ class Channel : public QObject {
         QOpenGLTexture* texture;
 
         AudioDevice* audioDevice;
-        VideoPlayer* videoPlayer = nullptr;
+        VideoManager* videomanager = nullptr;
 };
 
 #endif // CHANNEL_H
