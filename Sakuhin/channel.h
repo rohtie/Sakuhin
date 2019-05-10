@@ -35,6 +35,8 @@ class Channel : public QObject {
         Q_INVOKABLE void setVideo(const QString &fileUrl);
 
         QJsonObject* toJson();
+        
+        void interruptQueueNext();
 
         Shader* owner;
         ChannelType channelType = NoType;

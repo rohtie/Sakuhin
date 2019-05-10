@@ -70,6 +70,10 @@ VideoGroup* VideoGroup::next(bool isInterrupt) {
         currentVideo = nullptr;
     }
 
+    if (isInterrupt && (mode == RandomLoopMode || mode == SequenceLoopMode)) {
+        return parent->next(false);
+    }
+
     index++;
 
     if (index >= children.count()) {

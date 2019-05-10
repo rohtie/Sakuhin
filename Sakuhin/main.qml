@@ -66,6 +66,11 @@ ApplicationWindow {
             onActivated: sessionmanager.exportSession()
         }
 
+        Shortcut {
+            sequence: "Ctrl+Right"
+            onActivated: shadermanager.shaders[shader_grid_view.currentIndex].interruptQueueNext()
+        }
+
 
         ColumnLayout {
             id: column

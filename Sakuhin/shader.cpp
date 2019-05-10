@@ -221,3 +221,10 @@ QJsonObject* Shader::toJson() {
 
     return jsonShader;
 }
+
+void Shader::interruptQueueNext() {
+    for (int i=0; i<channels.count(); i++) {
+        Channel* currentChannel = (Channel*) channels.at(i);
+        currentChannel->interruptQueueNext();
+    }    
+}

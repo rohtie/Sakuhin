@@ -116,3 +116,9 @@ QJsonObject* Channel::toJson() {
 
     return jsonChannel;
 }
+
+void Channel::interruptQueueNext() {
+    if (videomanager != nullptr) {
+        videomanager->next(true);
+    }
+}

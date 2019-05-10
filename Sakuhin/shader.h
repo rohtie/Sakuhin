@@ -41,6 +41,8 @@ class Shader : public QObject {
         int currentFrame();
         int lastFrame();
 
+        Q_INVOKABLE void interruptQueueNext();
+
         QJsonObject* toJson();
 
         QList<QObject*> channels;
