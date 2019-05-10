@@ -29,6 +29,8 @@ class VideoGroup : public QObject {
         QOpenGLTexture* currentFrame();
         void childHasFinishedPlaying();
 
+        void togglePlay();
+
     private:
         int index = -1;
         VideoManager* videomanager = nullptr;

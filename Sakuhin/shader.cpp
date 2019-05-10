@@ -228,3 +228,10 @@ void Shader::interruptQueueNext() {
         currentChannel->interruptQueueNext();
     }    
 }
+
+void Shader::toggleQueuePlay() {
+    for (int i=0; i<channels.count(); i++) {
+        Channel* currentChannel = (Channel*) channels.at(i);
+        currentChannel->toggleQueuePlay();
+    }    
+}

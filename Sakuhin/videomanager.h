@@ -16,6 +16,8 @@ class VideoManager : public QObject {
         void previous();
         void interruptNext();
         void interruptPrevious();
+        
+        void togglePlay();
 
 
         QOpenGLTexture* currentFrame();

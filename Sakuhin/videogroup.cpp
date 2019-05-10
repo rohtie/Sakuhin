@@ -160,6 +160,12 @@ VideoGroup* VideoGroup::previous() {
     return this;
 }
 
+void VideoGroup::togglePlay() {
+    if (currentVideo != nullptr) {
+        currentVideo->togglePlay();
+    }
+}
+
 void VideoGroup::childHasFinishedPlaying() {
     // The video has finished playing.
     // Tell videomanager to grab the next video or group
@@ -169,3 +175,6 @@ void VideoGroup::childHasFinishedPlaying() {
 QOpenGLTexture* VideoGroup::currentFrame() {
     return currentVideo->currentFrame();
 }
+
+
+

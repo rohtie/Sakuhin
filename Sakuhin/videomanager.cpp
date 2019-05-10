@@ -43,6 +43,10 @@ void VideoManager::interruptNext() {
     next(true);
 }
 
+void VideoManager::togglePlay() {
+    currentGroup->togglePlay();
+}
+
 QOpenGLTexture* VideoManager::currentFrame() {
     return currentGroup->currentFrame();
 }

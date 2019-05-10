@@ -24,7 +24,11 @@ class VideoPlayer : public QObject {
         void destroy();
         void start();
         void stop();
+
+        void togglePlay();
+        
         QOpenGLTexture* currentFrame();
+
 
     private:
         VideoGroup* parent;

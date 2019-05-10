@@ -42,6 +42,7 @@ class Shader : public QObject {
         int lastFrame();
 
         Q_INVOKABLE void interruptQueueNext();
+        Q_INVOKABLE void toggleQueuePlay();
 
         QJsonObject* toJson();
 

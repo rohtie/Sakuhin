@@ -81,6 +81,15 @@ void VideoPlayer::stop() {
     timer->stop();
 }
 
+void VideoPlayer::togglePlay() {
+    if (timer->isActive()) {
+        timer->stop();
+    }
+    else {
+        timer->start();
+    }
+}
+
 void VideoPlayer::fetchNextFrame() {
     if (av_read_frame(formatContext, packet) >= 0) {
         if (packet->stream_index == videoStream) {

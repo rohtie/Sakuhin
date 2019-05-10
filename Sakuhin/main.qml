@@ -71,6 +71,11 @@ ApplicationWindow {
             onActivated: shadermanager.shaders[shader_grid_view.currentIndex].interruptQueueNext()
         }
 
+        Shortcut {
+            sequence: "Ctrl+Space"
+            onActivated: shadermanager.shaders[shader_grid_view.currentIndex].toggleQueuePlay()
+        }
+
 
         ColumnLayout {
             id: column

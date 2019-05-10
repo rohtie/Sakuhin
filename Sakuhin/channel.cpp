@@ -122,3 +122,9 @@ void Channel::interruptQueueNext() {
         videomanager->next(true);
     }
 }
+
+void Channel::toggleQueuePlay() {
+    if (videomanager != nullptr) {
+        videomanager->togglePlay();
+    }    
+}

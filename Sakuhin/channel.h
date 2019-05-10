@@ -37,6 +37,7 @@ class Channel : public QObject {
         QJsonObject* toJson();
         
         void interruptQueueNext();
+        void toggleQueuePlay();
 
         Shader* owner;
         ChannelType channelType = NoType;
