@@ -35,8 +35,13 @@ void WindowManager::initialize(const QSurfaceFormat &format, Backend* backend, S
     /*--------------------------*/
 
     //* Visuals projection mapping mode
+
+
+
+    // SCULPTURE
+
     masterWindow = new VisualsWindow();
-    masterWindow->setupMapping("data/config/lang.json");
+    masterWindow->setupMapping("data/config/sculpture.json");
     masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
     masterWindow->setFormat(format);
     masterWindow->resize(QSize(1280, 720));
@@ -44,6 +49,41 @@ void WindowManager::initialize(const QSurfaceFormat &format, Backend* backend, S
     masterWindow->setFlag(Qt::FramelessWindowHint);
     masterWindow->show();
     windows.append(masterWindow);
+
+    Window* slaveWindow = new VisualsWindow();
+    slaveWindow->setupMapping("data/config/sculpture_back.json");
+    slaveWindow->initialize(backend, shadermanager, scenemanager, false, false);
+    slaveWindow->setFormat(format);
+    slaveWindow->resize(QSize(1280, 720));
+    slaveWindow->setPosition(0, 0);
+    slaveWindow->setFlag(Qt::FramelessWindowHint);
+    slaveWindow->show();
+    windows.append(slaveWindow);
+
+
+    // CUBES
+
+    // masterWindow = new VisualsWindow();
+    // masterWindow->setupMapping("data/config/cubes.json");
+    // masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
+    // masterWindow->setFormat(format);
+    // masterWindow->resize(QSize(1280, 720));
+    // masterWindow->setPosition(0, 0);
+    // masterWindow->setFlag(Qt::FramelessWindowHint);
+    // masterWindow->show();
+    // windows.append(masterWindow);
+
+
+    // masterWindow = new VisualsWindow();
+    // masterWindow->setupMapping("data/config/lang.json");
+    // masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
+    // masterWindow->setFormat(format);
+    // masterWindow->resize(QSize(1280, 720));
+    // masterWindow->setPosition(0, 0);
+    // masterWindow->setFlag(Qt::FramelessWindowHint);
+    // masterWindow->show();
+    // windows.append(masterWindow);
+
 
     // Window* slaveWindow = new VisualsWindow();
     // slaveWindow->setupMapping("data/config/lang.json");
