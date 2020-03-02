@@ -1,6 +1,7 @@
 #include "windowmanager.h"
 #include "window.h"
 #include "visualswindow.h"
+#include "mappingwindow.h"
 #include "timelinewindow.h"
 
 WindowManager::WindowManager(QObject *parent) : QObject(parent) {
@@ -12,7 +13,8 @@ void WindowManager::initialize(const QSurfaceFormat &format, Backend* backend, S
     this->shadermanager = shadermanager;
     this->scenemanager = scenemanager;
 
-    /* Visuals mode
+    // Visuals mode
+    // --------------------------
     Window* previewWindow = new VisualsWindow();
 
     previewWindow->initialize(backend, shadermanager, scenemanager, false, true);
@@ -32,39 +34,13 @@ void WindowManager::initialize(const QSurfaceFormat &format, Backend* backend, S
 
     windows.append(masterWindow);
     windows.append(previewWindow);
-    /*--------------------------*/
-
-    //* Visuals projection mapping mode
+    // --------------------------
 
 
-
-    // SCULPTURE
-
-    masterWindow = new VisualsWindow();
-    masterWindow->setupMapping("data/config/sculpture.json");
-    masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
-    masterWindow->setFormat(format);
-    masterWindow->resize(QSize(1280, 720));
-    masterWindow->setPosition(0, 0);
-    masterWindow->setFlag(Qt::FramelessWindowHint);
-    masterWindow->show();
-    windows.append(masterWindow);
-
-    Window* slaveWindow = new VisualsWindow();
-    slaveWindow->setupMapping("data/config/sculpture_back.json");
-    slaveWindow->initialize(backend, shadermanager, scenemanager, false, false);
-    slaveWindow->setFormat(format);
-    slaveWindow->resize(QSize(1280, 720));
-    slaveWindow->setPosition(0, 0);
-    slaveWindow->setFlag(Qt::FramelessWindowHint);
-    slaveWindow->show();
-    windows.append(slaveWindow);
-
-
-    // CUBES
-
-    // masterWindow = new VisualsWindow();
-    // masterWindow->setupMapping("data/config/cubes.json");
+    // Projection mapping mode
+    // --------------------------
+    // masterWindow = new MappingWindow();
+    // ((MappingWindow*) masterWindow)->setupMapping("data/config/sculpture.json");
     // masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
     // masterWindow->setFormat(format);
     // masterWindow->resize(QSize(1280, 720));
@@ -73,59 +49,49 @@ void WindowManager::initialize(const QSurfaceFormat &format, Backend* backend, S
     // masterWindow->show();
     // windows.append(masterWindow);
 
-
-    // masterWindow = new VisualsWindow();
-    // masterWindow->setupMapping("data/config/lang.json");
-    // masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
-    // masterWindow->setFormat(format);
-    // masterWindow->resize(QSize(1280, 720));
-    // masterWindow->setPosition(0, 0);
-    // masterWindow->setFlag(Qt::FramelessWindowHint);
-    // masterWindow->show();
-    // windows.append(masterWindow);
-
-
-    // Window* slaveWindow = new VisualsWindow();
-    // slaveWindow->setupMapping("data/config/lang.json");
-    // slaveWindow->initialize(backend, shadermanager, false, false);
+    // Window* slaveWindow = new MappingWindow();
+    // ((MappingWindow*) slaveWindow)->setupMapping("data/config/sculpture_back.json");
+    // slaveWindow->initialize(backend, shadermanager, scenemanager, false, false);
     // slaveWindow->setFormat(format);
-    // slaveWindow->resize(QSize(555, 256));
-    // slaveWindow->setPosition(811, 512);
+    // slaveWindow->resize(QSize(1280, 720));
+    // slaveWindow->setPosition(0, 0);
     // slaveWindow->setFlag(Qt::FramelessWindowHint);
     // slaveWindow->show();
     // windows.append(slaveWindow);
 
-    Window* previewWindow = new VisualsWindow();
-    previewWindow->initialize(backend, shadermanager, scenemanager, false, true);
-    previewWindow->setFormat(format);
-    previewWindow->resize(QSize(512, 512));
-    previewWindow->setPosition(0, 0);
-    previewWindow->setFlag(Qt::FramelessWindowHint);
-    previewWindow->show();
-    windows.append(previewWindow);
-    /*--------------------------*/
+    // Window* previewWindow = new VisualsWindow();
+    // previewWindow->initialize(backend, shadermanager, scenemanager, false, true);
+    // previewWindow->setFormat(format);
+    // previewWindow->resize(QSize(512, 512));
+    // previewWindow->setPosition(0, 0);
+    // previewWindow->setFlag(Qt::FramelessWindowHint);
+    // previewWindow->show();
+    // windows.append(previewWindow);
+    // --------------------------
 
-    /* Timeline mode
-    Window* previewWindow = new TimelineWindow();
 
-    previewWindow->initialize(backend, shadermanager, scenemanager, false, true);
-    previewWindow->setFormat(format);
-    previewWindow->resize(QSize(256, 256));
-    previewWindow->setPosition(256, 820);
-    previewWindow->setFlag(Qt::FramelessWindowHint);
-    previewWindow->show();
+    // Timeline mode
+    // --------------------------
+    // Window* previewWindow = new TimelineWindow();
 
-    masterWindow = new TimelineWindow();
-    masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
-    masterWindow->setFormat(format);
-    masterWindow->resize(QSize(960, 540));
-    masterWindow->setPosition(0, 0);
-    masterWindow->setFlag(Qt::FramelessWindowHint);
-    masterWindow->show();
+    // previewWindow->initialize(backend, shadermanager, scenemanager, false, true);
+    // previewWindow->setFormat(format);
+    // previewWindow->resize(QSize(256, 256));
+    // previewWindow->setPosition(256, 820);
+    // previewWindow->setFlag(Qt::FramelessWindowHint);
+    // previewWindow->show();
 
-    windows.append(masterWindow);
-    windows.append(previewWindow);
-    /*--------------------------*/
+    // masterWindow = new TimelineWindow();
+    // masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
+    // masterWindow->setFormat(format);
+    // masterWindow->resize(QSize(960, 540));
+    // masterWindow->setPosition(0, 0);
+    // masterWindow->setFlag(Qt::FramelessWindowHint);
+    // masterWindow->show();
+
+    // windows.append(masterWindow);
+    // windows.append(previewWindow);
+    // --------------------------
 
     emit windowsChanged();
 }

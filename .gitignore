@@ -5,6 +5,6 @@ moc_*
 qrc_qml.cpp
 .qmake.stash
 Makefile
-*.pro.user
+*.pro.user*
 sakuhin-*
 export

@@ -48,6 +48,7 @@ SOURCES += \
     qmlreloadmanager.cpp \
     videorecorder.cpp \
     visualswindow.cpp \
+    mappingwindow.cpp \
     timelinewindow.cpp \
     scenemanager.cpp \
     scene.cpp \
@@ -83,6 +84,7 @@ HEADERS += \
     qmlreloadmanager.h \
     videorecorder.h \
     visualswindow.h \
+    mappingwindow.h \
     timelinewindow.h \
     scenemanager.h \
     scene.h \
