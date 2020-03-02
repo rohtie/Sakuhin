@@ -1,12 +1,19 @@
-#ifndef OBJLOADER_H
-#define OBJLOADER_H
+#include "wavefrontobjectloader.h"
 
 #include <QVector>
 #include <QVector3D>
 #include <QVector2D>
+#include <QFile>
+#include <QDebug>
+
+
+WavefrontObjectLoader::WavefrontObjectLoader() {
+
+}
+
 
 // Expand abstract model to opengl triangles
-void expandModel(
+void WavefrontObjectLoader::expandModel(
     QVector<GLfloat> &openglVertices,
     QVector<GLfloat> &openglUVs,
     QVector<QVector3D*> &vertices,
@@ -30,7 +37,7 @@ void expandModel(
 }
 
 
-bool loadMesh(
+bool WavefrontObjectLoader::loadMesh(
     const QString &filePath,
     QVector<GLfloat> &openglVertices,
     QVector<GLfloat> &openglUVs,
@@ -57,12 +64,21 @@ bool loadMesh(
             stream >> command;
 
             if (command == 't') {
-                double t1 = 0.0, t2 = 0.0;
-                stream >> t1 >> t2;
+                // UV
+                double vt1 = 0.0, vt2 = 0.0;
+                stream >> vt1 >> vt2;
 
-                UVs.append(new QVector2D(t1, t2));
+                UVs.append(new QVector2D(vt1, vt2));
+            }
+            else if (command == 'n') {
+                // TODO: support normals
+                // double vn1 = 0.0, vn2 = 0.0, vn3 = 0.0;
+                // stream >> vn1 >> vn2 >> vn3;
+
+                // normals.append(new QVector3D(vn1, vn2, vn3));
             }
             else {
+                // Verticies
                 double v1 = 0.0, v2 = 0.0, v3 = 0.0;
                 stream >> v1 >> v2 >> v3;
 
@@ -94,4 +110,16 @@ bool loadMesh(
     return true;
 }
 
-#endif // OBJLOADER_H
+bool WavefrontObjectLoader::loadMesh(
+    const QString &filePath,
+    QVector<GLfloat> &openglVertices,
+    QVector<GLfloat> &openglUVs
+) {
+
+    QVector<QVector3D*> vertices;
+    QVector<QVector2D*> UVs;
+    QVector<QVector<int>> vertexFaces;
+    QVector<QVector<int>> UVFaces;
+
+    return loadMesh(filePath, openglVertices, openglUVs, vertices, UVs, vertexFaces, UVFaces);
+}

@@ -45,6 +45,7 @@ SOURCES += \
     audiodevice.cpp \
     windowmanager.cpp \
     slider.cpp \
+    wavefrontobjectloader.cpp \
     qmlreloadmanager.cpp \
     videorecorder.cpp \
     visualswindow.cpp \
@@ -81,6 +82,7 @@ HEADERS += \
     objloader.h \
     windowmanager.h \
     slider.h \
+    wavefrontobjectloader.h \
     qmlreloadmanager.h \
     videorecorder.h \
     visualswindow.h \

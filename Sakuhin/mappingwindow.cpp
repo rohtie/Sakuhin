@@ -5,7 +5,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
-#include "objloader.h"
+#include "wavefrontobjectloader.h"
 #include "shader.h"
 #include "shadermanager.h"
 
@@ -192,7 +192,7 @@ void MappingWindow::updateProjectionMapping() {
 
     updateMVPmatrix();
 
-    loadMesh(modelPath,
+    WavefrontObjectLoader::loadMesh(modelPath,
              // Opengl expanded triangle vertices
              meshVertices, meshUVs,
              // Abstract model data
@@ -249,7 +249,7 @@ void MappingWindow::updateMesh() {
     meshVertices.clear();
     meshUVs.clear();
 
-    expandModel(
+    WavefrontObjectLoader::expandModel(
         meshVertices,
         meshUVs,
         vertices,
