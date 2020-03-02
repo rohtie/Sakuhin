@@ -614,7 +614,7 @@ ApplicationWindow {
                                 Switch {
                                     id: projectionSwitch
                                     text: qsTr("Projection mapping")
-                                    checked: model.modelData.isProjectionMapping
+                                    checked: model.modelData.isProjectionMapping || false
                                     onClicked: model.modelData.isProjectionMapping = checked
                                     font.pointSize: 7
 
@@ -657,7 +657,7 @@ ApplicationWindow {
                                     Switch {
                                         id: verticalSwitch
                                         text: qsTr("Vertical")
-                                        checked: model.modelData.isVertical
+                                        checked: model.modelData.isVertical || false
                                         onClicked: model.modelData.isVertical = checked
                                         font.pointSize: 7
 
@@ -705,7 +705,7 @@ ApplicationWindow {
                                     }
 
                                     TextField {
-                                        text: model.modelData.distanceFromObject
+                                        text: model.modelData.distanceFromObject || ''
 
                                         color: "#bbb"
                                         font.pointSize: 7
@@ -741,7 +741,7 @@ ApplicationWindow {
                                     }
 
                                     TextField {
-                                        text: model.modelData.projectorHeight
+                                        text: model.modelData.projectorHeight || ''
 
                                         color: "#bbb"
                                         font.pointSize: 7
@@ -777,7 +777,7 @@ ApplicationWindow {
                                     }
 
                                     TextField {
-                                        text: model.modelData.objectHeightTarget
+                                        text: model.modelData.objectHeightTarget || ''
 
                                         color: "#bbb"
                                         font.pointSize: 7
@@ -813,7 +813,7 @@ ApplicationWindow {
                                     }
 
                                     TextField {
-                                        text: model.modelData.fieldOfView
+                                        text: model.modelData.fieldOfView || ''
 
                                         color: "#bbb"
                                         font.pointSize: 7
