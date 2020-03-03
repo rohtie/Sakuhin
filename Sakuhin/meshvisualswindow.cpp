@@ -1,6 +1,7 @@
 #include "meshvisualswindow.h"
 
 #include <QtMath>
+#include <QDir>
 #include <QOpenGLFramebufferObject>
 
 #include "wavefrontobjectloader.h"
@@ -47,28 +48,27 @@ void MeshVisualsWindow::loadObjects() {
     // Load objects
     Mesh mesh;
 
-    QVector<QString> texturePaths;
-    texturePaths.append("data/objects/test.png");
-    texturePaths.append("data/objects/test2.png");
+    QDir textureDirectory("data/objects/texture/");
+    QStringList textureNames = textureDirectory.entryList(QDir::Files);
 
-    QVector<QString> meshPaths;
-    meshPaths.append("data/objects/test.obj");
-    meshPaths.append("data/objects/test2.obj");
+    QDir meshDirectory("data/objects/mesh/");
+    QStringList meshNames = meshDirectory.entryList(QDir::Files);
+
 
     QVector<GLfloat> meshVertices;
     QVector<GLfloat> meshUVs;
 
-    for (int i=0; i<texturePaths.length(); i++) {
+    for (int i=0; i<textureNames.length(); i++) {
         meshVertices.clear();
         meshUVs.clear();
 
         // Load texture
-        mesh.texture = new QOpenGLTexture(QImage(texturePaths[i]).mirrored());
+        mesh.texture = new QOpenGLTexture(QImage("data/objects/texture/" + textureNames[i]).mirrored());
         mesh.texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
         mesh.texture->setMagnificationFilter(QOpenGLTexture::Linear);
 
         // Load mesh
-        WavefrontObjectLoader::loadMesh(meshPaths[i], meshVertices, meshUVs);
+        WavefrontObjectLoader::loadMesh("data/objects/mesh/" + meshNames[i], meshVertices, meshUVs);
         mesh.vertexCount = meshVertices.length();
 
         mesh.vao = new QOpenGLVertexArrayObject();
