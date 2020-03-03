@@ -24,6 +24,7 @@ class Shader : public QObject {
         void bind();
         void release();
 
+        void enableDepth();
         void setResolution(int width, int height);
         void setTime(double time);
         void setUniformValues();
@@ -72,6 +73,8 @@ class Shader : public QObject {
         bool justRecompiled = false;
         qint64 lastRenderTime = 0;
         qint64 lastRenderTimePreview = 0;
+
+        bool isDepthEnabled = false;
 
         QOpenGLFramebufferObject** fbo;
         QOpenGLFramebufferObject* previewFbo[2] = {nullptr};

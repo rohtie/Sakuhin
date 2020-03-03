@@ -50,6 +50,7 @@ SOURCES += \
     videorecorder.cpp \
     visualswindow.cpp \
     mappingwindow.cpp \
+    meshvisualswindow.cpp \
     timelinewindow.cpp \
     scenemanager.cpp \
     scene.cpp \
@@ -87,6 +88,7 @@ HEADERS += \
     videorecorder.h \
     visualswindow.h \
     mappingwindow.h \
+    meshvisualswindow.h \
     timelinewindow.h \
     scenemanager.h \
     scene.h \

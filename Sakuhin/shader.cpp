@@ -115,9 +115,18 @@ void Shader::release() {
     program.release();
 }
 
+void Shader::enableDepth() {
+    isDepthEnabled = true;
+}
+
 void Shader::setResolution(int width, int height) {
     if (fbo[pingPongIndex] == nullptr || (width != this->width() || height != this->height())) {
-        fbo[pingPongIndex] = new QOpenGLFramebufferObject(width, height);
+        if (isDepthEnabled) {
+            fbo[pingPongIndex] = new QOpenGLFramebufferObject(width, height, QOpenGLFramebufferObject::CombinedDepthStencil);
+        }
+        else {
+            fbo[pingPongIndex] = new QOpenGLFramebufferObject(width, height);
+        }
     }
 }
 
@@ -226,12 +235,12 @@ void Shader::interruptQueueNext() {
     for (int i=0; i<channels.count(); i++) {
         Channel* currentChannel = (Channel*) channels.at(i);
         currentChannel->interruptQueueNext();
-    }    
+    }
 }
 
 void Shader::toggleQueuePlay() {
     for (int i=0; i<channels.count(); i++) {
         Channel* currentChannel = (Channel*) channels.at(i);
         currentChannel->toggleQueuePlay();
-    }    
+    }
 }

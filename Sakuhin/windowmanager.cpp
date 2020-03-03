@@ -2,6 +2,7 @@
 #include "window.h"
 #include "visualswindow.h"
 #include "mappingwindow.h"
+#include "meshvisualswindow.h"
 #include "timelinewindow.h"
 
 WindowManager::WindowManager(QObject *parent) : QObject(parent) {
@@ -24,7 +25,7 @@ void WindowManager::initialize(const QSurfaceFormat &format, Backend* backend, S
     previewWindow->setFlag(Qt::FramelessWindowHint);
     previewWindow->show();
 
-    masterWindow = new VisualsWindow();
+    masterWindow = new MeshVisualsWindow();
     masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
     masterWindow->setFormat(format);
     masterWindow->resize(QSize(512, 512));

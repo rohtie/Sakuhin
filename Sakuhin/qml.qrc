@@ -10,6 +10,7 @@
         <file>meshVertex.glsl</file>
         <file>meshShader.glsl</file>
         <file>screenShader.glsl</file>
+        <file>postprocessingShader.glsl</file>
         <file>qml/SliderController.qml</file>
         <file>qml/SliderControllerForm.ui.qml</file>
         <file>qml/Channel.qml</file>
