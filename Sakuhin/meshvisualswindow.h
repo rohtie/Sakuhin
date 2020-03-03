@@ -6,6 +6,13 @@
 #include "window.h"
 
 class MeshVisualsWindow : public Window {
+
+    struct Mesh {
+        QOpenGLVertexArrayObject* vao;
+        QOpenGLTexture* texture;
+        int vertexCount;
+    };
+
     public:
         MeshVisualsWindow();
 
@@ -24,17 +31,12 @@ class MeshVisualsWindow : public Window {
 
     protected:
         QOpenGLShaderProgram postprocessingShader;
-
         QOpenGLShaderProgram meshShader;
 
-        QOpenGLVertexArrayObject meshVao;
+        QVector<Mesh> meshes;
+
         QOpenGLBuffer meshVertexBuffer;
         QOpenGLBuffer meshUVbuffer;
-
-        QOpenGLTexture* meshTexture;
-
-        QVector<GLfloat> meshVertices;
-        QVector<GLfloat> meshUVs;
 
         QMatrix4x4 viewMatrix;
         QMatrix4x4 projectionMatrix;

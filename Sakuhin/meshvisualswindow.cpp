@@ -44,34 +44,60 @@ void MeshVisualsWindow::loadObjects() {
         meshShader.setUniformValue("mainTexture", 0);
     meshShader.release();
 
-    // Load textures
-    meshTexture = new QOpenGLTexture(QImage("data/objects/test2.png").mirrored());
-    meshTexture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
-    meshTexture->setMagnificationFilter(QOpenGLTexture::Linear);
-
     // Load objects
-    WavefrontObjectLoader::loadMesh("data/objects/test2.obj", meshVertices, meshUVs);
+    Mesh mesh;
 
-    meshVao.create();
-    meshVao.bind();
-        meshVertexBuffer.create();
-        meshVertexBuffer.bind();
-            meshVertexBuffer.setUsagePattern(QOpenGLBuffer::DynamicDraw);
-            meshVertexBuffer.allocate(meshVertices.constData(), meshVertices.size() * sizeof(GLfloat));
+    QVector<QString> texturePaths;
+    texturePaths.append("data/objects/test.png");
+    texturePaths.append("data/objects/test2.png");
 
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer((GLuint) 0, 3, GL_FLOAT, GL_TRUE, 0, 0);
-        meshVertexBuffer.release();
+    QVector<QString> meshPaths;
+    meshPaths.append("data/objects/test.obj");
+    meshPaths.append("data/objects/test2.obj");
 
-        meshUVbuffer.create();
-        meshUVbuffer.bind();
-            meshUVbuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-            meshUVbuffer.allocate(meshUVs.constData(), meshUVs.size() * sizeof(GLfloat));
+    QVector<GLfloat> meshVertices;
+    QVector<GLfloat> meshUVs;
 
-            glEnableVertexAttribArray(1);
-            glVertexAttribPointer((GLuint) 1, 2, GL_FLOAT, GL_TRUE, 0, 0);
-        meshUVbuffer.release();
-    meshVao.release();
+    for (int i=0; i<texturePaths.length(); i++) {
+        meshVertices.clear();
+        meshUVs.clear();
+
+        // Load texture
+        mesh.texture = new QOpenGLTexture(QImage(texturePaths[i]).mirrored());
+        mesh.texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+        mesh.texture->setMagnificationFilter(QOpenGLTexture::Linear);
+
+        // Load mesh
+        WavefrontObjectLoader::loadMesh(meshPaths[i], meshVertices, meshUVs);
+        mesh.vertexCount = meshVertices.length();
+
+        mesh.vao = new QOpenGLVertexArrayObject();
+        mesh.vao->create();
+        mesh.vao->bind();
+            meshVertexBuffer.create();
+            meshVertexBuffer.bind();
+                meshVertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+                meshVertexBuffer.allocate(meshVertices.constData(), meshVertices.size() * sizeof(GLfloat));
+
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer((GLuint) 0, 3, GL_FLOAT, GL_TRUE, 0, 0);
+            meshVertexBuffer.release();
+
+            meshUVbuffer.create();
+            meshUVbuffer.bind();
+                meshUVbuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+                meshUVbuffer.allocate(meshUVs.constData(), meshUVs.size() * sizeof(GLfloat));
+
+                glEnableVertexAttribArray(1);
+                glVertexAttribPointer((GLuint) 1, 2, GL_FLOAT, GL_TRUE, 0, 0);
+            meshUVbuffer.release();
+        mesh.vao->release();
+
+        meshVertexBuffer.destroy();
+        meshUVbuffer.destroy();
+
+        meshes.append(mesh);
+    }
 
     hasLoadedObjects = true;
 }
@@ -116,20 +142,24 @@ void MeshVisualsWindow::renderScreen(Shader* shader) {
             meshShader.bind();
                 glClear(GL_DEPTH_BUFFER_BIT);
 
-                modelMatrix.setToIdentity();
-                modelMatrix.translate( qSin(time.elapsed() * 0.001) * 3.0, 0, 0);
-                modelMatrix.rotate(time.elapsed() * 0.05, QVector3D(1., 0.2, 0.7));
-                meshShader.setUniformValue("mvpMatrix", viewProjectionMatrix * modelMatrix);
+                for (int i=0; i<meshes.length(); i++) {
+                    Mesh mesh = meshes[i];
 
-                meshTexture->bind(0);
+                    modelMatrix.setToIdentity();
+                    modelMatrix.translate( qSin(time.elapsed() * 0.001) * (3.0 - i * 2.0), 0, 0);
+                    modelMatrix.scale(0.2 + i * 0.8, 1, 1);
+                    modelMatrix.rotate(time.elapsed() * 0.05 + i, QVector3D(1., 0.2 + i * 0.8, 0.7));
+                    meshShader.setUniformValue("mvpMatrix", viewProjectionMatrix * modelMatrix);
 
-                meshVao.bind();
-                    glDrawArrays(GL_TRIANGLES, 0, meshVertices.size());
-                meshVao.release();
+                    mesh.texture->bind(0);
+
+                    mesh.vao->bind();
+                        glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);
+                    mesh.vao->release();
+                }
 
             meshShader.release();
         }
-
     fbo->release();
 
     postprocessingShader.bind();
