@@ -32,6 +32,7 @@ class MeshVisualsWindow : public Window {
     public slots:
         void onShaderFileChange(const QString &path);
         void changeMeshes();
+        void changeQuietMesh();
 
     signals:
 
@@ -40,6 +41,7 @@ class MeshVisualsWindow : public Window {
 
         QOpenGLShaderProgram postprocessingShader;
         QOpenGLShaderProgram meshShader;
+        QOpenGLShaderProgram quietMeshShader;
 
         QVector<Mesh> meshes;
 
@@ -65,6 +67,10 @@ class MeshVisualsWindow : public Window {
         int meshIndex = 0;
         int targetNumberOfVisibleObjects = 2;
         int meshChangeInterval = 60000;
+
+        QTimer quietMeshTimer;
+        int quietMeshIndex = 0;
+        int quietMeshChangeInterval = 60000;
 
         QDateTime lastPostprocessingModification;
         QDateTime lastMeshVertexModification;

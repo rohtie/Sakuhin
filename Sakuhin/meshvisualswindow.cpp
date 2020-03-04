@@ -1,5 +1,7 @@
 #include "meshvisualswindow.h"
 
+#include <math.h>
+
 #include <QtMath>
 #include <QDir>
 #include <QOpenGLFramebufferObject>
@@ -35,9 +37,12 @@ void MeshVisualsWindow::initializeGL() {
     QObject::connect(&fileWatcher, &QFileSystemWatcher::fileChanged,
                      this, &MeshVisualsWindow::onShaderFileChange);
 
-    // Setup mesh timer
+    // Setup mesh timers
     connect(&meshTimer, &QTimer::timeout, this, &MeshVisualsWindow::changeMeshes);
     meshTimer.start(meshChangeInterval);
+
+    connect(&quietMeshTimer, &QTimer::timeout, this, &MeshVisualsWindow::changeQuietMesh);
+    quietMeshTimer.start(quietMeshChangeInterval);
 
     // Create postprocessing shader
     postprocessingShader.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vertex.glsl");
@@ -68,6 +73,16 @@ void MeshVisualsWindow::loadObjects() {
     meshShader.bind();
         meshShader.setUniformValue("mainTexture", 0);
     meshShader.release();
+
+    // Create another mesh shader which is not to be altered
+    quietMeshShader.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/meshVertex.glsl");
+    quietMeshShader.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/meshShader.glsl");
+    quietMeshShader.link();
+
+    quietMeshShader.bind();
+        quietMeshShader.setUniformValue("mainTexture", 0);
+    quietMeshShader.release();
+
 
     // Load objects
     Mesh mesh;
@@ -188,6 +203,10 @@ void MeshVisualsWindow::changeMeshes() {
     meshIndex += targetNumberOfVisibleObjects;
 }
 
+void MeshVisualsWindow::changeQuietMesh() {
+    quietMeshIndex = (quietMeshIndex + 1) % meshes.length();
+}
+
 void MeshVisualsWindow::updateViewProjectionmatrix() {
     // View matrix
     QVector3D camera(0, 0, 10);
@@ -225,6 +244,8 @@ void MeshVisualsWindow::renderScreen(Shader* shader) {
 
     fbo->bind();
         if (hasLoadedObjects) {
+            float timeInSeconds = time.elapsed() / 1000.0f;
+
             meshShader.bind();
                 glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -238,7 +259,7 @@ void MeshVisualsWindow::renderScreen(Shader* shader) {
                     modelMatrix.translate(qSin(distributionStep * (numberOfDrawnObjects + 1)) * 2.75, 0, 0);
 
                     meshShader.setUniformValue("mvpMatrix", viewProjectionMatrix * modelMatrix);
-                    meshShader.setUniformValue("time", (GLfloat) (time.elapsed() / 1000.0f));
+                    meshShader.setUniformValue("time", (GLfloat) (timeInSeconds));
 
                     mesh.texture->bind(0);
 
@@ -250,6 +271,22 @@ void MeshVisualsWindow::renderScreen(Shader* shader) {
                 }
 
             meshShader.release();
+
+            quietMeshShader.bind();
+                glClear(GL_DEPTH_BUFFER_BIT);
+                Mesh quietMesh = meshes[quietMeshIndex];
+
+                modelMatrix.setToIdentity();
+                modelMatrix.translate(-10.0 + fmod(timeInSeconds, 20.), qSin(timeInSeconds * 0.5) * 3., 0);
+                modelMatrix.rotate(time.elapsed() * 0.05, QVector3D(1., 0.2, 0.7));
+                meshShader.setUniformValue("mvpMatrix", viewProjectionMatrix * modelMatrix);
+
+                quietMesh.texture->bind(0);
+
+                quietMesh.vao->bind();
+                    glDrawArrays(GL_TRIANGLES, 0, quietMesh.vertexCount);
+                quietMesh.vao->release();
+            quietMeshShader.release();
         }
     fbo->release();
 
