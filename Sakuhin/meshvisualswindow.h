@@ -4,6 +4,7 @@
 #include <QOpenGLTexture>
 #include <QFileSystemWatcher>
 #include <QDateTime>
+#include <QTimer>
 
 #include "window.h"
 
@@ -30,6 +31,7 @@ class MeshVisualsWindow : public Window {
 
     public slots:
         void onShaderFileChange(const QString &path);
+        void changeMeshes();
 
     signals:
 
@@ -59,8 +61,10 @@ class MeshVisualsWindow : public Window {
 
         bool hasLoadedObjects = false;
 
+        QTimer meshTimer;
         int meshIndex = 0;
-        int targetNumberOfVisibleObjects = 1;
+        int targetNumberOfVisibleObjects = 2;
+        int meshChangeInterval = 60000;
 
         QDateTime lastPostprocessingModification;
         QDateTime lastMeshVertexModification;

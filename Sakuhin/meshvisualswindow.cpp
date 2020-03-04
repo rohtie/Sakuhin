@@ -35,6 +35,9 @@ void MeshVisualsWindow::initializeGL() {
     QObject::connect(&fileWatcher, &QFileSystemWatcher::fileChanged,
                      this, &MeshVisualsWindow::onShaderFileChange);
 
+    // Setup mesh timer
+    connect(&meshTimer, &QTimer::timeout, this, &MeshVisualsWindow::changeMeshes);
+    meshTimer.start(meshChangeInterval);
 
     // Create postprocessing shader
     postprocessingShader.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vertex.glsl");
@@ -181,6 +184,10 @@ void MeshVisualsWindow::onShaderFileChange(const QString &path) {
     }
 }
 
+void MeshVisualsWindow::changeMeshes() {
+    meshIndex += targetNumberOfVisibleObjects;
+}
+
 void MeshVisualsWindow::updateViewProjectionmatrix() {
     // View matrix
     QVector3D camera(0, 0, 10);
@@ -222,11 +229,15 @@ void MeshVisualsWindow::renderScreen(Shader* shader) {
                 glClear(GL_DEPTH_BUFFER_BIT);
 
                 int numberOfDrawnObjects = 0;
+                float distributionStep = (1. / targetNumberOfVisibleObjects) * 360.;
                 while (numberOfDrawnObjects < targetNumberOfVisibleObjects) {
                     int currentMeshIndex = (meshIndex + numberOfDrawnObjects) % meshes.length();
                     Mesh mesh = meshes[currentMeshIndex];
 
-                    meshShader.setUniformValue("mvpMatrix", viewProjectionMatrix);
+                    modelMatrix.setToIdentity();
+                    modelMatrix.translate(qSin(distributionStep * (numberOfDrawnObjects + 1)) * 2.75, 0, 0);
+
+                    meshShader.setUniformValue("mvpMatrix", viewProjectionMatrix * modelMatrix);
                     meshShader.setUniformValue("time", (GLfloat) (time.elapsed() / 1000.0f));
 
                     mesh.texture->bind(0);

@@ -7,7 +7,14 @@ uniform float time;
 
 out vec2 uv;
 
+mat2 rotate(float a) {
+    return mat2(-sin(a), cos(a),
+                 cos(a), sin(a));
+}
+
 void main() {
-    gl_Position = mvpMatrix * vec4(position, 1.0);
+    vec3 p = position;
+
+    gl_Position = mvpMatrix * vec4(p, 1.0);
     uv = vertexUV;
 }
