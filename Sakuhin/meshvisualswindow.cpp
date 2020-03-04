@@ -16,6 +16,27 @@ MeshVisualsWindow::MeshVisualsWindow() {
 void MeshVisualsWindow::initializeGL() {
     Window::initializeGL();
 
+    // Watch postprocessing shader and vertex shader for changes
+    QFile postProcessingShaderFile(":/postprocessingShader.glsl");
+    if (!postProcessingShaderFile.copy(shadermanager->sessionPath + "/postprocessing.glsl")) {
+        return;
+    }
+    postProcessingShaderFile.close();
+
+    QFile meshVertexShaderFile(":/liveMeshVertex.glsl");
+    if (!meshVertexShaderFile.copy(shadermanager->sessionPath + "/meshVertex.glsl")) {
+        return;
+    }
+    meshVertexShaderFile.close();
+
+    fileWatcher.addPath(shadermanager->sessionPath + "/postprocessing.glsl");
+    fileWatcher.addPath(shadermanager->sessionPath + "/meshVertex.glsl");
+
+    QObject::connect(&fileWatcher, &QFileSystemWatcher::fileChanged,
+                     this, &MeshVisualsWindow::onShaderFileChange);
+
+
+    // Create postprocessing shader
     postprocessingShader.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vertex.glsl");
     postprocessingShader.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/postprocessingShader.glsl");
     postprocessingShader.link();
@@ -102,6 +123,64 @@ void MeshVisualsWindow::loadObjects() {
     hasLoadedObjects = true;
 }
 
+void MeshVisualsWindow::RecompileShader(QOpenGLShaderProgram &program, const QString &path, bool isVertexShader) {
+    QFile file(path);
+    file.open(QIODevice::ReadOnly);
+    QByteArray code = file.readAll();
+    file.close();
+
+    if (code.size() > 0) {
+        QOpenGLShader* vertexShader = program.shaders()[0];
+        QOpenGLShader* fragmentShader = program.shaders()[1];
+
+        program.removeShader(vertexShader);
+        program.removeShader(fragmentShader);
+
+        if (isVertexShader) {
+            if (!program.addShaderFromSourceCode(QOpenGLShader::Vertex, code)) {
+                program.addShader(vertexShader);
+            }
+
+            program.addShader(fragmentShader);
+
+            program.link();
+        }
+        else {
+            program.addShader(vertexShader);
+
+            if (!program.addShaderFromSourceCode(QOpenGLShader::Fragment, code)) {
+                program.addShader(fragmentShader);
+            }
+
+            program.link();
+        }
+    }
+}
+
+void MeshVisualsWindow::onShaderFileChange(const QString &path) {
+
+    QFileInfo fileInfo(path);
+
+    if (path == shadermanager->sessionPath + "/postprocessing.glsl") {
+        if (fileInfo.lastModified() > lastPostprocessingModification) {
+            lastPostprocessingModification = fileInfo.lastModified();
+            RecompileShader(postprocessingShader, path, false);
+        }
+    }
+    else if (path == shadermanager->sessionPath + "/meshVertex.glsl") {
+        if (fileInfo.lastModified() > lastMeshVertexModification) {
+            lastMeshVertexModification = fileInfo.lastModified();
+            RecompileShader(meshShader, path, true);
+        }
+    }
+
+    // On some systems, files are replaced by an entirely new file when
+    // modified. thus we need to add it to the file watcher again.
+    if (!fileWatcher.files().contains(path) && fileInfo.exists()) {
+        fileWatcher.addPath(path);
+    }
+}
+
 void MeshVisualsWindow::updateViewProjectionmatrix() {
     // View matrix
     QVector3D camera(0, 0, 10);
@@ -142,20 +221,21 @@ void MeshVisualsWindow::renderScreen(Shader* shader) {
             meshShader.bind();
                 glClear(GL_DEPTH_BUFFER_BIT);
 
-                for (int i=0; i<meshes.length(); i++) {
-                    Mesh mesh = meshes[i];
+                int numberOfDrawnObjects = 0;
+                while (numberOfDrawnObjects < targetNumberOfVisibleObjects) {
+                    int currentMeshIndex = (meshIndex + numberOfDrawnObjects) % meshes.length();
+                    Mesh mesh = meshes[currentMeshIndex];
 
-                    modelMatrix.setToIdentity();
-                    modelMatrix.translate( qSin(time.elapsed() * 0.001) * (3.0 - i * 2.0), 0, 0);
-                    modelMatrix.scale(0.2 + i * 0.8, 1, 1);
-                    modelMatrix.rotate(time.elapsed() * 0.05 + i, QVector3D(1., 0.2 + i * 0.8, 0.7));
-                    meshShader.setUniformValue("mvpMatrix", viewProjectionMatrix * modelMatrix);
+                    meshShader.setUniformValue("mvpMatrix", viewProjectionMatrix);
+                    meshShader.setUniformValue("time", (GLfloat) (time.elapsed() / 1000.0f));
 
                     mesh.texture->bind(0);
 
                     mesh.vao->bind();
                         glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);
                     mesh.vao->release();
+
+                    numberOfDrawnObjects++;
                 }
 
             meshShader.release();

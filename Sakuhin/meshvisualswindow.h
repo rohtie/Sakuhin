@@ -2,6 +2,8 @@
 #define MESHVISUALSWINDOW_H
 
 #include <QOpenGLTexture>
+#include <QFileSystemWatcher>
+#include <QDateTime>
 
 #include "window.h"
 
@@ -19,6 +21,7 @@ class MeshVisualsWindow : public Window {
         void initializeGL();
 
         void loadObjects();
+        void RecompileShader(QOpenGLShaderProgram &program, const QString &path, bool isVertexShader);
         void updateViewProjectionmatrix();
         void renderScreen(Shader* shader);
 
@@ -26,10 +29,13 @@ class MeshVisualsWindow : public Window {
 
 
     public slots:
+        void onShaderFileChange(const QString &path);
 
     signals:
 
     protected:
+        QFileSystemWatcher fileWatcher;
+
         QOpenGLShaderProgram postprocessingShader;
         QOpenGLShaderProgram meshShader;
 
@@ -52,6 +58,12 @@ class MeshVisualsWindow : public Window {
         float cameraFar = 1000.0;
 
         bool hasLoadedObjects = false;
+
+        int meshIndex = 0;
+        int targetNumberOfVisibleObjects = 1;
+
+        QDateTime lastPostprocessingModification;
+        QDateTime lastMeshVertexModification;
 };
 
 #endif // MESHVISUALSWINDOW_H

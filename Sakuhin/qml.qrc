@@ -8,6 +8,7 @@
         <file>header.glsl</file>
         <file>vertex.glsl</file>
         <file>meshVertex.glsl</file>
+        <file>liveMeshVertex.glsl</file>
         <file>meshShader.glsl</file>
         <file>screenShader.glsl</file>
         <file>postprocessingShader.glsl</file>
