@@ -38,6 +38,7 @@ QT5:
     libQt5Qml
     libQt5Gui
     libQt5Multimedia
+    libQt5Serialport
 
 Opengl:
 

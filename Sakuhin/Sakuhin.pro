@@ -1,4 +1,6 @@
-QT += quick multimedia
+QT += quick
+QT += multimedia
+QT += serialport
 
 # fftw3 for spectrum analysis of audio
 LIBS += -lfftw3
@@ -52,6 +54,7 @@ SOURCES += \
     mappingwindow.cpp \
     meshvisualswindow.cpp \
     timelinewindow.cpp \
+    queuewindow.cpp \
     scenemanager.cpp \
     scene.cpp \
     sessionmanager.cpp
@@ -90,6 +93,7 @@ HEADERS += \
     mappingwindow.h \
     meshvisualswindow.h \
     timelinewindow.h \
+    queuewindow.h \
     scenemanager.h \
     scene.h \
     sessionmanager.h
