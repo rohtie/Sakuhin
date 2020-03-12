@@ -14,6 +14,7 @@
 #include "shadermanager.h"
 #include "shader.h"
 #include "scenemanager.h"
+#include "queuemanager.h"
 #include "scene.h"
 #include "channel.h"
 #include "backend.h"
@@ -30,15 +31,16 @@ void SessionManager::initialize(const QSurfaceFormat &format, QObject* qmlRoot) 
     shadermanager = qmlRoot->findChild<ShaderManager*>();
     windowmanager = qmlRoot->findChild<WindowManager*>();
     scenemanager = qmlRoot->findChild<SceneManager*>();
+    queuemanager = qmlRoot->findChild<QueueManager*>();
 
     this->format = format;
 
     backend->initialize();
     audiomanager->initialize();
 
-    createSession();
+    // createSession();
 
-    // loadSession("/home/thorml/Projects/BlackPurple");
+    loadSession("/home/thorml/Projects/Soddjazz");
 
 }
 
@@ -85,6 +87,7 @@ void SessionManager::createSession() {
     QJsonArray emptyJsonArray;
     shadermanager->initialize(format, emptyJsonArray);
     scenemanager->initialize(shadermanager, emptyJsonArray);
+    queuemanager->initialize(shadermanager, emptyJsonArray);
 
     windowmanager->initialize(format, backend, shadermanager, scenemanager);
 }
@@ -106,6 +109,10 @@ void SessionManager::loadSession(const QString path) {
     // Load scenes
     QJsonArray scenes = document["scenes"].toArray();
     scenemanager->initialize(shadermanager, scenes);
+
+    // Load queue
+    QJsonArray queue = document["queue"].toArray();
+    queuemanager->initialize(shadermanager, queue);
 
     // TODO: Load windows
     windowmanager->initialize(format, backend, shadermanager, scenemanager);
@@ -129,6 +136,14 @@ void SessionManager::saveSession() {
         scenes.append(*(currentScene->toJson()));
     }
     session["scenes"] = scenes;
+
+    // Save queue
+    QJsonArray queue;
+    for (int i=0; i<(queuemanager->queue).count(); i++) {
+        Scene* currentScene = (Scene*) queuemanager->queue.at(i);
+        queue.append(*(currentScene->toJson()));
+    }
+    session["queue"] = queue;
 
     // Write to json file
     QFile sessionFile(sessionPath + "/session.json");

@@ -5,6 +5,7 @@ class Backend;
 class AudioManager;
 class ShaderManager;
 class SceneManager;
+class QueueManager;
 class WindowManager;
 
 #include <QObject>
@@ -26,6 +27,7 @@ class SessionManager : public QObject {
         AudioManager* audiomanager;
         ShaderManager* shadermanager;
         SceneManager* scenemanager;
+        QueueManager* queuemanager;
         WindowManager* windowmanager;
 
         QString sessionID;

@@ -56,6 +56,7 @@ SOURCES += \
     timelinewindow.cpp \
     queuewindow.cpp \
     scenemanager.cpp \
+    queuemanager.cpp \
     scene.cpp \
     sessionmanager.cpp
 
@@ -95,6 +96,7 @@ HEADERS += \
     timelinewindow.h \
     queuewindow.h \
     scenemanager.h \
+    queuemanager.h \
     scene.h \
     sessionmanager.h
 

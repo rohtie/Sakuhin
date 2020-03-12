@@ -13,7 +13,7 @@ SceneManager::SceneManager(QObject *parent) : QObject(parent) {
 void SceneManager::initialize(ShaderManager* shadermanager, const QJsonArray &jsonScenes) {
     this->shadermanager = shadermanager;
 
-    mediaPlayer.setMedia(QUrl::fromLocalFile(QFileInfo("data/audio/BP.mp3").absoluteFilePath()));
+    mediaPlayer.setMedia(QUrl::fromLocalFile(QFileInfo("data/audio/kalle_kulturhuset.mp3").absoluteFilePath()));
 
     QObject::connect(&mediaPlayer, &QMediaPlayer::durationChanged,
                      this, &SceneManager::onMediaLoaded);

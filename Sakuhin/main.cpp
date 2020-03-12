@@ -10,6 +10,7 @@
 #include "audiomanager.h"
 #include "windowmanager.h"
 #include "scenemanager.h"
+#include "queuemanager.h"
 
 #include "qmlreloadmanager.h"
 
@@ -24,6 +25,7 @@ int main(int argc, char* argv[]) {
     qmlRegisterType<AudioManager>("sakuhin.audiomanager", 1, 0, "AudioManager");
     qmlRegisterType<WindowManager>("sakuhin.windowmanager", 1, 0, "WindowManager");
     qmlRegisterType<SceneManager>("sakuhin.scenemanager", 1, 0, "SceneManager");
+    qmlRegisterType<QueueManager>("sakuhin.queuemanager", 1, 0, "QueueManager");
 
     QQmlApplicationEngine engine("qrc:/main.qml");
 

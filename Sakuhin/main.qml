@@ -8,6 +8,7 @@ import sakuhin.shadermanager 1.0
 import sakuhin.audiomanager 1.0
 import sakuhin.windowmanager 1.0
 import sakuhin.scenemanager 1.0
+import sakuhin.queuemanager 1.0
 import Qt.labs.folderlistmodel 2.2
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.2
@@ -42,6 +43,10 @@ ApplicationWindow {
 
     SceneManager {
         id: scenemanager
+    }
+
+    QueueManager {
+        id: queuemanager
     }
 
     Window {
@@ -978,5 +983,6 @@ ApplicationWindow {
     // TimelineWindow {
     // }
 
-
+    QueueWindow {
+    }
 }
