@@ -29,6 +29,7 @@ Shader::Shader(const QString filepath, const QString id, int index) {
         program.setUniformValue("channel2", 2);
         program.setUniformValue("channel3", 3);
         program.setUniformValue("channel4", 4);
+        program.setUniformValue("globalFeedback", 5);
     program.release();
 
     for (int i = 0; i < 5; i++) {
@@ -95,6 +96,7 @@ bool Shader::recompile(QByteArray shaderCode) {
         program.setUniformValue("channel2", 2);
         program.setUniformValue("channel3", 3);
         program.setUniformValue("channel4", 4);
+        program.setUniformValue("globalFeedback", 5);        
     program.release();
 
     justRecompiled = true;

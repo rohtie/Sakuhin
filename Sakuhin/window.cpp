@@ -103,13 +103,22 @@ void Window::render(Shader* shader) {
         shader->setTime(currentTime / 1000.0f);
     }
 
-
     QOpenGLFramebufferObject* fbo = shader->currentFbo();
     fbo->bind();
         glClear(GL_COLOR_BUFFER_BIT);
 
         shader->bind();
             shader->setUniformValues();
+
+            // Give every shader access to the current shader's frame
+            // to be used for more consistent feedback based effects
+            glActiveTexture(GL_TEXTURE0 + 5);
+            if (shader == shadermanager->currentShader(isPreview)) {
+                glBindTexture(GL_TEXTURE_2D, shadermanager->currentShader(isPreview)->lastFrame());                
+            }
+            else {
+                glBindTexture(GL_TEXTURE_2D, shadermanager->currentShader(isPreview)->currentFrame());                
+            }
 
             drawRectangle();
         shader->release();
