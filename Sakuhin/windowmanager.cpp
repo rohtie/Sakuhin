@@ -26,7 +26,7 @@ void WindowManager::initialize(const QSurfaceFormat &format, Backend* backend, S
     previewWindow->setFlag(Qt::FramelessWindowHint);
     previewWindow->show();
 
-    masterWindow = new QueueWindow();
+    masterWindow = new VisualsWindow();
     masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
     masterWindow->setFormat(format);
     masterWindow->resize(QSize(512, 512));
@@ -37,6 +37,30 @@ void WindowManager::initialize(const QSurfaceFormat &format, Backend* backend, S
     windows.append(masterWindow);
     windows.append(previewWindow);
     // --------------------------
+
+    // Queue mode
+    // --------------------------
+    // Window* previewWindow = new VisualsWindow();
+
+    // previewWindow->initialize(backend, shadermanager, scenemanager, false, true);
+    // previewWindow->setFormat(format);
+    // previewWindow->resize(QSize(256, 256));
+    // previewWindow->setPosition(0, 400);
+    // previewWindow->setFlag(Qt::FramelessWindowHint);
+    // previewWindow->show();
+
+    // masterWindow = new QueueWindow();
+    // masterWindow->initialize(backend, shadermanager, scenemanager, true, false);
+    // masterWindow->setFormat(format);
+    // masterWindow->resize(QSize(512, 512));
+    // masterWindow->setPosition(256, 0);
+    // masterWindow->setFlag(Qt::FramelessWindowHint);
+    // masterWindow->show();
+
+    // windows.append(masterWindow);
+    // windows.append(previewWindow);
+    // --------------------------
+
 
 
     // Projection mapping mode

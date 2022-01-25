@@ -38,9 +38,9 @@ void SessionManager::initialize(const QSurfaceFormat &format, QObject* qmlRoot) 
     backend->initialize();
     audiomanager->initialize();
 
-    // createSession();
+    createSession();
 
-    loadSession("/home/thorml/Projects/Soddjazz");
+    // loadSession("/home/thorml/Projects/Soddjazz");
 
 }
 

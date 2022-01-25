@@ -188,10 +188,14 @@ void Window::renderScreen(Shader* shader) {
         }
 
         if (isTakingScreenshot) {
+            screenshotNumber += 1;
+
             uint8_t* pixels = new uint8_t[width() * height() * 4];
             glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, pixels);
             QImage screenshot(pixels, width(), height(), QImage::Format_RGBA8888);
-            screenshot.save("screenshot.jpg", "JPG");
+
+            QString screenshotFilename = QString("screenshot_%1_%2.jpg").arg(shadermanager->currentShader(isPreview)->id).arg(screenshotNumber, 4, 10, QLatin1Char('0'));
+            screenshot.save(screenshotFilename, "JPG");
             delete[] pixels;
 
             isTakingScreenshot = false;

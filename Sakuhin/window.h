@@ -58,6 +58,7 @@ class Window : public QOpenGLWindow,
 
         bool isRecording = false;
         bool isTakingScreenshot = false;
+        int screenshotNumber = 0;
 
         VideoRecorder videoRecorder;
         uint8_t* recordingFrameData;
