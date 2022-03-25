@@ -4,6 +4,7 @@
 class Backend;
 class ShaderManager;
 class SceneManager;
+class QueueManager;
 class Window;
 
 #include <QObject>
@@ -16,7 +17,7 @@ class WindowManager : public QObject {
 
     public:
         explicit WindowManager(QObject *parent = nullptr);
-        void initialize(const QSurfaceFormat &format, Backend* backend, ShaderManager* shadermanager, SceneManager* scenemanager);
+        void initialize(const QSurfaceFormat &format, Backend* backend, ShaderManager* shadermanager, SceneManager* scenemanager, QueueManager* queuemanager);
         void createWindow();
 
     signals:
@@ -28,6 +29,7 @@ class WindowManager : public QObject {
         Backend* backend;
         ShaderManager* shadermanager;
         SceneManager* scenemanager;
+        QueueManager* queuemanager;
 
         Window* masterWindow;
         QList<QObject*> windows;

@@ -10,7 +10,6 @@ class QueueWindow : public Window {
         QueueWindow();
         void initializeGL();
 
-
     private slots:
         void readSerial();
 

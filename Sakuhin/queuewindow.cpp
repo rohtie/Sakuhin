@@ -1,4 +1,5 @@
 #include "queuewindow.h"
+#include "queuemanager.h"
 
 QueueWindow::QueueWindow() {
 
@@ -23,7 +24,13 @@ void QueueWindow::readSerial() {
         char buffer[1024];
 
         if (serialPort.readLine(buffer, sizeof(buffer)) != -1) {
-            qDebug() << "[" << buffer << "]";
+            int signal = (QString(buffer).toInt() == 1);
+
+            if (signal == 1) {
+                queuemanager->nextScene();
+            }
+
+            qDebug() << "[" << signal << "]";
         }
     }
 }

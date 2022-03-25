@@ -1,3 +1,4 @@
+QT += core
 QT += quick
 QT += multimedia
 QT += serialport
@@ -6,7 +7,7 @@ QT += serialport
 LIBS += -lfftw3
 
 # ffmpeg related libraries for recording shaders to video files
-LIBS += -lavcodec -lavformat -lavutil -lswscale
+#LIBS += -lavcodec -lavformat -lavutil -lswscale
 
 CONFIG += c++11
 
@@ -36,9 +37,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     backend.cpp \
     main.cpp \
-    videogroup.cpp \
-    videomanager.cpp \
-    videoplayer.cpp \
+#    videogroup.cpp \
+#    videomanager.cpp \
+#    videoplayer.cpp \
     window.cpp \
     shadermanager.cpp \
     shader.cpp \
@@ -49,7 +50,7 @@ SOURCES += \
     slider.cpp \
     wavefrontobjectloader.cpp \
     qmlreloadmanager.cpp \
-    videorecorder.cpp \
+#    videorecorder.cpp \
     visualswindow.cpp \
     mappingwindow.cpp \
     meshvisualswindow.cpp \
@@ -75,9 +76,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     backend.h \
-    videogroup.h \
-    videomanager.h \
-    videoplayer.h \
+    #videogroup.h \
+    #videomanager.h \
+    #videoplayer.h \
     window.h \
     shadermanager.h \
     shader.h \
@@ -89,7 +90,7 @@ HEADERS += \
     slider.h \
     wavefrontobjectloader.h \
     qmlreloadmanager.h \
-    videorecorder.h \
+    #videorecorder.h \
     visualswindow.h \
     mappingwindow.h \
     meshvisualswindow.h \

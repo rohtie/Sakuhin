@@ -38,9 +38,9 @@ void SessionManager::initialize(const QSurfaceFormat &format, QObject* qmlRoot) 
     backend->initialize();
     audiomanager->initialize();
 
-    createSession();
+    // createSession();
 
-    // loadSession("/home/thorml/Projects/Soddjazz");
+    loadSession("/home/thorml/Projects/Soddjazz");
 
 }
 
@@ -89,7 +89,7 @@ void SessionManager::createSession() {
     scenemanager->initialize(shadermanager, emptyJsonArray);
     queuemanager->initialize(shadermanager, emptyJsonArray);
 
-    windowmanager->initialize(format, backend, shadermanager, scenemanager);
+    windowmanager->initialize(format, backend, shadermanager, scenemanager, queuemanager);
 }
 
 void SessionManager::loadSession(const QString path) {
@@ -115,7 +115,7 @@ void SessionManager::loadSession(const QString path) {
     queuemanager->initialize(shadermanager, queue);
 
     // TODO: Load windows
-    windowmanager->initialize(format, backend, shadermanager, scenemanager);
+    windowmanager->initialize(format, backend, shadermanager, scenemanager, queuemanager);
 }
 
 void SessionManager::saveSession() {

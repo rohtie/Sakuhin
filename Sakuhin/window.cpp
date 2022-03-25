@@ -25,10 +25,11 @@ Window::Window() {
 
 }
 
-void Window::initialize(Backend* backend, ShaderManager* shadermanager, SceneManager* scenemanager, bool isMaster, bool isPreview) {
+void Window::initialize(Backend* backend, ShaderManager* shadermanager, SceneManager* scenemanager, QueueManager* queuemanager, bool isMaster, bool isPreview) {
     this->backend = backend;
     this->shadermanager = shadermanager;
     this->scenemanager = scenemanager;
+    this->queuemanager = queuemanager;
     this->isMaster = isMaster;
     this->isPreview = isPreview;
 }
@@ -180,9 +181,9 @@ void Window::renderScreen(Shader* shader) {
         drawRectangle();
 
         if (isRecording) {
-            glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, videoRecorder.pixels);
+            // glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, videoRecorder.pixels);
 
-            videoRecorder.write(recordingFrame);
+            // videoRecorder.write(recordingFrame);
 
             handleRecordingTime();
         }
@@ -222,7 +223,7 @@ void Window::handleRecordingTime() {
     // Record for 1 minute
     if (recordingFrame > 1800) {
         isRecording = false;
-        videoRecorder.close();
+        // videoRecorder.close();
     }
 }
 
@@ -276,12 +277,12 @@ void Window::keyPressEvent(QKeyEvent* event) {
 
         case Qt::Key_R:
             if (!isRecording) {
-                videoRecorder.open("/tmp/out.mp4", recordingFramerate, width(), height());
+                // videoRecorder.open("/tmp/out.mp4", recordingFramerate, width(), height());
 
-                setupRecordingTime();
+                // setupRecordingTime();
             }
             else {
-                videoRecorder.close();
+                // videoRecorder.close();
             }
 
             isRecording = !isRecording;

@@ -8,7 +8,7 @@ Window {
 
     flags: Qt.FramelessWindowHint
     visible: true
-    width: 960
+    width: 1920
     height: 100
     x: 0
     y: 540

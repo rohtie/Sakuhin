@@ -4,6 +4,7 @@
 class Backend;
 class SceneManager;
 class ShaderManager;
+class QueueManager;
 class Shader;
 
 #include <QOpenGLWindow>
@@ -15,7 +16,7 @@ class Shader;
 #include <QElapsedTimer>
 #include <QOpenGLDebugMessage>
 
-#include "videorecorder.h"
+// #include "videorecorder.h"
 
 class Window : public QOpenGLWindow,
                protected QOpenGLFunctions {
@@ -28,7 +29,7 @@ class Window : public QOpenGLWindow,
     public:
         explicit Window();
 
-        void initialize(Backend* backend, ShaderManager* shadermanager, SceneManager* scenemanager, bool isMaster, bool isPreview);
+        void initialize(Backend* backend, ShaderManager* shadermanager, SceneManager* scenemanager, QueueManager* queuemanager, bool isMaster, bool isPreview);
 
         virtual void initializeGL();
 
@@ -60,7 +61,7 @@ class Window : public QOpenGLWindow,
         bool isTakingScreenshot = false;
         int screenshotNumber = 0;
 
-        VideoRecorder videoRecorder;
+        // VideoRecorder videoRecorder;
         uint8_t* recordingFrameData;
 
         int recordingBufferSize;
@@ -71,6 +72,7 @@ class Window : public QOpenGLWindow,
         Backend* backend;
         ShaderManager* shadermanager;
         SceneManager* scenemanager;
+        QueueManager* queuemanager;
 
         QOpenGLShaderProgram screenShader;
         QOpenGLVertexArrayObject rectangleVao;

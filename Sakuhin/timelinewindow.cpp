@@ -27,6 +27,6 @@ void TimelineWindow::handleRecordingTime() {
     // Record until end of demo
     if (recordingFrame * msPerFrame > scenemanager->audioDuration) {
         isRecording = false;
-        videoRecorder.close();
+        // videoRecorder.close();
     }
 }

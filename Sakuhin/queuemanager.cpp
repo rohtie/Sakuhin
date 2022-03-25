@@ -62,7 +62,12 @@ void QueueManager::selectScene(int index) {
 }
 
 void QueueManager::previousScene() {
-    selectScene((sceneIndex - 1) % queue.count());
+    int a = sceneIndex - 1;
+    int b = queue.count();
+
+    int negativeModulus = (b + (a%b)) % b;
+
+    selectScene(negativeModulus);
 }
 
 void QueueManager::nextScene() {

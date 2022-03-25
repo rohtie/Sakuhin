@@ -3,7 +3,7 @@
 #include "channel.h"
 #include "shader.h"
 #include "audiodevice.h"
-#include "videomanager.h"
+// #include "videomanager.h"
 
 Channel::Channel(int channelLocation, Shader* owner) {
     this->owner = owner;
@@ -46,14 +46,14 @@ void Channel::setAudioDevice(QObject* audioDevice) {
 void Channel::setVideo(const QString &fileUrl) {
     qDebug() << fileUrl;
 
-    if (videomanager != nullptr && videomanager->isPlaying) {
-        // We need to stop the current videomanager
-        // Before we create a new one
-        videomanager->destroy();
-    }
+    // if (videomanager != nullptr && videomanager->isPlaying) {
+    //     // We need to stop the current videomanager
+    //     // Before we create a new one
+    //     videomanager->destroy();
+    // }
 
-    videomanager = new VideoManager(fileUrl);
-    videomanager->next(false);
+    // videomanager = new VideoManager(fileUrl);
+    // videomanager->next(false);
     channelType = VideoType;
 }
 
@@ -83,13 +83,13 @@ void Channel::bind() {
         return;
     }
     else if (channelType == VideoType) {
-        if (videomanager->isPlaying) {
-            QOpenGLTexture* currentFrame = videomanager->currentFrame();
+        // if (videomanager->isPlaying) {
+        //     QOpenGLTexture* currentFrame = videomanager->currentFrame();
 
-            if (currentFrame->isCreated()) {
-                currentFrame->bind(channelLocation);
-            }
-        }
+        //     if (currentFrame->isCreated()) {
+        //         currentFrame->bind(channelLocation);
+        //     }
+        // }
 
         return;
     }
@@ -118,13 +118,13 @@ QJsonObject* Channel::toJson() {
 }
 
 void Channel::interruptQueueNext() {
-    if (videomanager != nullptr) {
-        videomanager->next(true);
-    }
+    // if (videomanager != nullptr) {
+    //     videomanager->next(true);
+    // }
 }
 
 void Channel::toggleQueuePlay() {
-    if (videomanager != nullptr) {
-        videomanager->togglePlay();
-    }    
+    // if (videomanager != nullptr) {
+    //     videomanager->togglePlay();
+    // }
 }
