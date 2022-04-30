@@ -85,7 +85,7 @@ HEADERS += \
     channel.h \
     audiomanager.h \
     audiodevice.h \
-    objloader.h \
+    #objloader.h \
     windowmanager.h \
     slider.h \
     wavefrontobjectloader.h \
@@ -106,3 +106,7 @@ first.depends = $(first) copydata
 export(first.depends)
 export(copydata.commands)
 QMAKE_EXTRA_TARGETS += first copydata
+
+
+QDEP_DEPENDS += Skycoder42/QHotkey
+!load(qdep):error("Failed to load qdep feature")

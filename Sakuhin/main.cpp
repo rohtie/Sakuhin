@@ -14,6 +14,8 @@
 
 #include "qmlreloadmanager.h"
 
+#include <QHotkey>
+
 int main(int argc, char* argv[]) {
     QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
     QGuiApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
@@ -49,6 +51,17 @@ int main(int argc, char* argv[]) {
     QObject* qmlRoot = engine.rootObjects()[0];
     SessionManager* sessionmanager = qmlRoot->findChild<SessionManager*>();
     sessionmanager->initialize(format, qmlRoot);
+
+    QueueManager* queuemanager = qmlRoot->findChild<QueueManager*>();
+
+    QHotkey hotkey(QKeySequence("Alt+F9"), true, &app); //The hotkey will be automatically registered
+    qDebug() << "Is segistered:" << hotkey.isRegistered();
+
+    QObject::connect(&hotkey, &QHotkey::activated, qApp, [&](){
+        qDebug() << "Hotkey Activated - the application will quit now";
+        // qApp->quit();
+        queuemanager->nextScene();
+    });
 
 
     return app.exec();
