@@ -980,9 +980,9 @@ ApplicationWindow {
         }
     }
 
-    // TimelineWindow {
-    // }
-
-    QueueWindow {
+    TimelineWindow {
     }
+
+    // QueueWindow {
+    // }
 }

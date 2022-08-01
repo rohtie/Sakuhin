@@ -40,7 +40,8 @@ void SessionManager::initialize(const QSurfaceFormat &format, QObject* qmlRoot) 
 
     // createSession();
 
-    loadSession("/home/thorml/Projects/Soddjazz");
+    loadSession("/home/rohtie/Storage/Work/HVCKER");
+    // loadSession("/home/rohtie/Demoscene/solskogen2020");
 
 }
 

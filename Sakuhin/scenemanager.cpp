@@ -13,7 +13,22 @@ SceneManager::SceneManager(QObject *parent) : QObject(parent) {
 void SceneManager::initialize(ShaderManager* shadermanager, const QJsonArray &jsonScenes) {
     this->shadermanager = shadermanager;
 
-    mediaPlayer.setMedia(QUrl::fromLocalFile(QFileInfo("data/audio/kalle_kulturhuset.mp3").absoluteFilePath()));
+    mediaPlayer.setMedia(QUrl::fromLocalFile(QFileInfo("data/audio/hvcker-backingtrack.mp3").absoluteFilePath()));
+
+    connect(&mediaPlayer, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error),
+    [=](QMediaPlayer::Error error){ 
+        qDebug() << "MEDIA ERROR: " << error; 
+    });
+
+    // XXX: Not sure why, but playing the media right after it is loaded is necessary to buffer and
+    // being able to play it... I'll research this further at a different time
+    connect(&mediaPlayer, QOverload<QMediaPlayer::MediaStatus>::of(&QMediaPlayer::mediaStatusChanged),
+    [=](QMediaPlayer::MediaStatus status){ 
+
+        if (status == QMediaPlayer::LoadedMedia) {
+            mediaPlayer.play();
+        }
+    });    
 
     QObject::connect(&mediaPlayer, &QMediaPlayer::durationChanged,
                      this, &SceneManager::onMediaLoaded);
@@ -45,6 +60,8 @@ void SceneManager::initialize(ShaderManager* shadermanager, const QJsonArray &js
 void SceneManager::onMediaLoaded() {
     audioDuration = (double) mediaPlayer.duration();
     audioDurationChanged();
+
+    mediaPlayer.pause();
 }
 
 void SceneManager::onPositionChanged() {
